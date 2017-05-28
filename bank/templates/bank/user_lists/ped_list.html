@@ -12,9 +12,6 @@
     {% for u in accounts %}
     <tr>
         <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a></td>
-
-
-        </td>
     </tr>
 
     {% endfor %}

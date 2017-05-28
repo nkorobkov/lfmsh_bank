@@ -26,9 +26,9 @@
     {% for t in in_trans %}
 
 
-    {% if t.type.group1 = 'fee' %}
+    {% if t.type.group1 == 'fee' %}
     <tr class="success">
-    {% elif t.type.group1 = 'fine' %}
+    {% elif t.type.group1 == 'fine' %}
     <tr class="danger">
     {%else%}
     <tr class="warning">

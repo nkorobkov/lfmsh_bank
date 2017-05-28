@@ -14,8 +14,8 @@ from .forms import *
 from django_tables2 import RequestConfig
 from .tables import *
 from django.utils import timezone
-import helper_functions as hf
-from constants import *
+from . import helper_functions as hf
+from .constants import *
 import time
 import pprint
 
@@ -25,7 +25,7 @@ import pprint
 @login_required
 def index(request):
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    print request.user.account
+    print(request.user.account)
     if user_group_name == 'pioner':
         lec_pen = hf.lec_pen(request.user.account.lec_missed)
 
@@ -55,7 +55,7 @@ def all_pioner_accounts(request):
 
     table = []
 
-    for i in xrange(NUMBER_OF_OTR):
+    for i in range(NUMBER_OF_OTR):
         table.append(
             PionerOtrTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
         RequestConfig(request).configure(table[i])
@@ -74,7 +74,7 @@ def all_ped_accounts(request):
 
 @login_required
 def show_my_trans(request):
-    print request.user.account
+    print(request.user.account)
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
     out_trans = Transaction.objects.filter(creator=request.user).exclude(type__group1='attend').order_by(
@@ -95,7 +95,7 @@ def show_my_trans(request):
 
 @login_required
 def show_my_att(request):
-    print request.user.account
+    print(request.user.account)
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
     if user_group_name == 'pioner':
@@ -143,9 +143,9 @@ def add_special(request):
 
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_mass_special(request):
-    print request.user.account
+    print(request.user.account)
     if request.method == "POST":
-        print request.POST['type']
+        print(request.POST['type'])
 
         fac_attendants = []
         form = SprecialTransForm(request.POST)
@@ -162,7 +162,7 @@ def add_mass_special(request):
         description = request.POST['description']
         type = TransactionType.objects.get(pk=request.POST['type'])
 
-        print type
+        print(type)
         status = TransactionStatus.objects.get(name='PR')
         new_transactions = []
         for u, s in fac_attendants:
@@ -194,7 +194,7 @@ def add_mass_special(request):
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_exam(request, meta_link_pk=None):
     if request.method == "POST":
-        print request.POST
+        print(request.POST)
 
         exam_attendants = []
         sum_score = 0
@@ -213,7 +213,7 @@ def add_exam(request, meta_link_pk=None):
         description = request.POST['description']
         type = TransactionType.objects.get(name='lec')
 
-        print type
+        print(type)
         status = TransactionStatus.objects.get(name='PR')
         new_transactions = []
         meta_link = Transaction.create_trans(recipient=None, value=BUDGET*num_of_attendants, creator=creator,
@@ -251,7 +251,7 @@ def add_exam(request, meta_link_pk=None):
 
         else:
             creation_dict = {}
-        print creation_dict
+        print(creation_dict)
         c_d = {}
         for user_pk in range(1000):
             if str(user_pk) in creation_dict and creation_dict[str(user_pk)][0]:
@@ -263,8 +263,8 @@ def add_exam(request, meta_link_pk=None):
 
 
 
-        print 'users pk', users_pk
-        print 'creation dict',c_d
+        print('users pk', users_pk)
+        print('creation dict',c_d)
         form = SprecialTransForm()
 
         return render(request, 'bank/add_trans/trans_add_exam.html',
@@ -316,7 +316,7 @@ def add_zaryadka(request, meta_link_pk=None):
         # render table with info from metatrans (pk = meta_pk).creation_dict
 
         table = []
-        for i in xrange(4):
+        for i in range(4):
             table.append(
                 ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
             RequestConfig(request).configure(table[i])
@@ -337,7 +337,7 @@ def add_zaryadka(request, meta_link_pk=None):
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_lec(request):
     if request.method == "POST":
-        print request.POST
+        print(request.POST)
 
         lec_missers = []
         description = request.POST['description']
@@ -355,7 +355,7 @@ def add_lec(request):
                 a = Transaction.create_trans(recipient=u, value=att_val, creator=creator, description=description,
                                              type=att_type, status=status)
                 attends.append(a)
-                print u.username
+                print(u.username)
 
         if not lec_missers:
             return redirect(reverse('bank:index'))
@@ -375,7 +375,7 @@ def add_lec(request):
     else:
 
         table = []
-        for i in xrange(4):
+        for i in range(4):
             table.append(
                 LecTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
             RequestConfig(request).configure(table[i])
@@ -387,7 +387,7 @@ def add_lec(request):
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_fac(request):
     if request.method == "POST":
-        print request.POST
+        print(request.POST)
 
         fac_attendants = []
 
@@ -480,12 +480,12 @@ def add_activity(request):
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_sem(request):
     if request.method == "POST":
-        print request.POST
+        print(request.POST)
         form = SeminarTransForm(request.POST)
         if form.is_valid():
 
             score = 0
-            for i in xrange(9):
+            for i in range(9):
                 score += int(request.POST['m' + str(i + 1)])
 
             value = hf.seminar(score)
@@ -498,7 +498,7 @@ def add_sem(request):
             att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (
                 int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(
                 request.POST['block'])
-            print att_val
+            print(att_val)
             att_type = TransactionType.objects.get(name='sem_attend')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
@@ -518,7 +518,7 @@ def add_sem(request):
                           {'transactions': [new_trans], 'attends': attends})
         else:
             table = []
-        for i in xrange(4):
+        for i in range(4):
             table.append(
                 ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
             RequestConfig(request).configure(table[i])
@@ -531,7 +531,7 @@ def add_sem(request):
 
     else:
         table = []
-        for i in xrange(4):
+        for i in range(4):
             table.append(
                 ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
             RequestConfig(request).configure(table[i])
@@ -544,7 +544,7 @@ def add_sem(request):
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_fac_att(request):
     if request.method == "POST":
-        print request.POST
+        print(request.POST)
         form = FacAttTransForm(request.POST)
         if form.is_valid():
 
@@ -563,13 +563,13 @@ def add_fac_att(request):
                     a = Transaction.create_trans(recipient=u, value=att_val, creator=creator,
                                                  description=description,
                                                  type=att_type, status=status)
-                    print u.username + 'check'
+                    print(u.username + 'check')
                     attends.append(a)
 
             return render(request, 'bank/add_trans/trans_add_ok.html', {'attends': attends})
         else:
             table = []
-        for i in xrange(4):
+        for i in range(4):
             table.append(
                 ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
             RequestConfig(request).configure(table[i])
@@ -582,7 +582,7 @@ def add_fac_att(request):
 
     else:
         table = []
-        for i in xrange(4):
+        for i in range(4):
             table.append(
                 ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
             RequestConfig(request).configure(table[i])
@@ -679,14 +679,14 @@ def add_p2p(request):
         form = P2PTransForm(int((request.user.account.balance - hf.p2p_buf)))
         form.fields['recipient'].queryset = form.fields['recipient'].queryset.exclude(user=request.user)
 
-        print form.fields['value'].max_value
+        print(form.fields['value'].max_value)
 
         return render(request, 'bank/add_trans/trans_add_p2p.html', {'form': form})
 
 
 @login_required()
 def dec_trans(request, trans_id):
-    print 'decline page'
+    print('decline page')
 
     trans = Transaction.objects.get(pk=trans_id)
     if not trans.recipient:
@@ -716,7 +716,7 @@ def dec_trans_ok(request, trans_id):
     else:
         st = TransactionStatus.objects.get(name='DC')
     for t in to_del:
-        print'decline of trans happening'
+        print('decline of trans happening')
         t.cancel()
         t.status = st
         t.save()
@@ -743,7 +743,7 @@ def trans_red(request, trans_id):
     if trans.creator != request.user and not request.user.has_perm('bank.del_foreign_trans'):
         return redirect(reverse('bank:index'))
     dec_trans_ok(request, trans_id)  # delete what we have
-    print trans_id
+    print(trans_id)
     # reverse to specific form
     type = trans.type
     if type.name == 'zar':
@@ -774,23 +774,23 @@ def trans_list(request, username):
 def manage_p2p(request):
     if request.method == "POST":
 
-        print(request.POST)
+        print((request.POST))
 
         con_trans = []
         dec_trans = []
 
-        for pk in xrange(50000):
+        for pk in range(50000):
             if 'c_' + str(pk) in request.POST:
                 t = Transaction.objects.get(pk=pk)
                 if request.POST['c_' + str(pk)] == 'confirm':
-                    print 'confirm' + str(t.pk)
+                    print('confirm' + str(t.pk))
                     t.status = TransactionStatus.objects.get(name='PR')
                     t.count()
 
                     con_trans.append(t)
 
                 if request.POST['c_' + str(pk)] == 'cancel':
-                    print 'cancel' + str(t.pk)
+                    print('cancel' + str(t.pk))
                     t.status = TransactionStatus.objects.get(name='DA')
                     t.save()
                     dec_trans.append(t)

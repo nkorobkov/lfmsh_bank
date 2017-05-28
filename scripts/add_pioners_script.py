@@ -49,7 +49,7 @@ for p in csv.reader(p_f):
     initial = Transaction.create_trans(recipient=new_u, creator=User.objects.get(username='admin'), value=INITIAL_MONEY,
                                        description=INITIAL_MONEY_DESC, type=TransactionType.objects.get(name='initial'),
                                        status=TransactionStatus.objects.get(name="PR"))
-    print ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
+    print((ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd))
     info = ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
 
     p_out.write(info.encode('utf-8'))

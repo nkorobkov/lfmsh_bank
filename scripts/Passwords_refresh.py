@@ -44,7 +44,7 @@ for u in User.objects.filter(groups__name='pedsostav'):
     u.set_password(pd)
     u.save()
 
-    print  'login: ' + u.username + ' password: ' + pd
+    print(('login: ' + u.username + ' password: ' + pd))
     info =  '\n' + 'login: ' +  u.username + ' password: ' + pd
 
     p_out.write(info.encode('utf-8'))

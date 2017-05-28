@@ -2,8 +2,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-import helper_functions as hf
-from constants import *
+from . import helper_functions as hf
+from .constants import *
 
 # Create your models here.
 
@@ -70,17 +70,17 @@ class Account(models.Model):
 
 
     def sem_att_w(self):
-        print 100 * int(self.sem_fac_attend) / self.sem_att_needed()
+        print(100 * int(self.sem_fac_attend) / self.sem_att_needed())
         return (100 * int(self.sem_fac_attend) / self.sem_att_needed())
 
     def lab_passed_w(self):
 
-        print 100 * int(self.lab_passed) / self.lab_needed()
+        print(100 * int(self.lab_passed) / self.lab_needed())
         return (100 * int(self.lab_passed) / self.lab_needed())
 
     def fac_passed_w(self):
         if self.fac_needed():
-            print 100 * int(self.fac_passed) / self.fac_needed()
+            print(100 * int(self.fac_passed) / self.fac_needed())
             return (100 * int(self.fac_passed) / self.fac_needed())
 
     def sem_read_w(self):
@@ -240,8 +240,8 @@ class Transaction(models.Model):
             return False
         if self.type.name == 'p2p' and self.status.name == 'PR':
             return False
-        print self.meta.all()
-        print len(self.meta.all())
+        print(self.meta.all())
+        print(len(self.meta.all()))
         if len(self.meta.all()) != 0:
             return False
 
@@ -263,9 +263,9 @@ class Transaction(models.Model):
         block = (int(self.value) ) % 10
         if (int(self.value)//10) % 10 == SEM_IND:
             if (int(self.value)) % 10 == 0:
-                return unicode('Лекция', 'utf-8')
-            return unicode('{0}.{1}.{2}, {3} блок семинаров'.format(year, month, day, block), 'utf-8')
-        return unicode('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')
+                return str('Лекция', 'utf-8')
+            return str('{0}.{1}.{2}, {3} блок семинаров'.format(year, month, day, block), 'utf-8')
+        return str('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')
 
 class MetaTransaction(models.Model):
     creation_dict = models.CharField(max_length=20000)

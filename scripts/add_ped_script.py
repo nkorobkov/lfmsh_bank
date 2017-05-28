@@ -47,7 +47,7 @@ for p in csv.reader(p_f):
     new_a.save()
 
 
-    print ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
+    print((ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd))
     info = ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
 
     p_out.write(info.encode('utf-8'))

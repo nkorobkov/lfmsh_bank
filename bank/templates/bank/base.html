@@ -5,14 +5,11 @@
 
 {# Load CSS and JavaScript #}
 
-<!--{% bootstrap_javascript jquery=1 %}
-{% bootstrap_css %}-->
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_css %}
 
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
-
-
-
 
 
 <head>
@@ -22,13 +19,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!---link rel="icon" href="http://crest.my/v2/wp-content/uploads/2015/10/email.png"--->
-    <link rel="stylesheet" href={% static "django_tables2/themes/paleblue/css/screen.css"%} />
-    <link rel="stylesheet" href={% static "bank/style.css"%} />
+    <link rel="stylesheet" href={% static "django_tables2/themes/paleblue/css/screen.css" %}/>
+    <link rel="stylesheet" href={% static "bank/style.css" %}/>
 
-        <link rel="stylesheet" href={% static "bank/css/bootstrap.min.css"%}>
-        <!---link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"--->
+    <link rel="stylesheet" href={% static "bank/css/bootstrap.min.css" %}>
+    <!---link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"--->
 
 
     <title>Банк ЛФМШ</title>
@@ -57,10 +54,10 @@
             <ul class="nav navbar-nav navbar-left">
 
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'bank:index' %}">Домой</a></li>
-                <li><a href="{% url 'bank:my_trans' %}">Мои транзакции</a></li>
-<li><a href="{% url 'bank:media'%}">Файловый архив</a></li>
-                <!----{% if user.account.can_add_trans %}
+                    <li><a href="{% url 'bank:index' %}">Домой</a></li>
+                    <li><a href="{% url 'bank:my_trans' %}">Мои транзакции</a></li>
+                    <li><a href="{% url 'bank:media' %}">Файловый архив</a></li>
+                    <!----{% if user.account.can_add_trans %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Add Trans <span class="caret"></span></a>
@@ -75,16 +72,15 @@
                 {% endif %}
 
 
-
             </ul>
             <ul class="nav navbar-nav navbar-right">
 
                 {% if user.is_authenticated %}
-                <li><p class="navbar-text">В системе как {{request.user.account.short_name}}</p></li>
-                <li><a href="{% url 'bank:logout' %}?next={% url 'bank:index' %}">Выйти</a></li>
+                    <li><p class="navbar-text">В системе как {{ request.user.account.short_name }}</p></li>
+                    <li><a href="{% url 'bank:logout' %}?next={% url 'bank:index' %}">Выйти</a></li>
                 {% else %}
-                <li><p class="navbar-text navbar-rigth">Вы не авторизированны в системе</p></li>
-                <li><a href="{% url 'bank:index' %}">Войти</a></li>
+                    <li><p class="navbar-text navbar-rigth">Вы не авторизированны в системе</p></li>
+                    <li><a href="{% url 'bank:index' %}">Войти</a></li>
                 {% endif %}
 
 
@@ -108,8 +104,8 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-sm-12">
-{% block content %}
-    {% endblock %}
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 </div>

@@ -1,10 +1,7 @@
 # coding=utf-8
 from django import forms
 from .models import Transaction, Account, TransactionType
-from django.contrib.auth.models import User, Group
 from django.forms import ModelChoiceField
-import helper_functions as hf
-from dal import autocomplete
 import datetime
 
 
@@ -25,40 +22,40 @@ class SprecialTransForm(forms.Form):
 
     recipient = RecipientModelChoiceField(
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
-        label=unicode('Получатель', 'utf-8'))
+        label="Получатель")
 
     type = forms.ModelChoiceField(queryset=TransactionType.objects.all().exclude(name='p2p').exclude(group1='fine'),
-                                  label=unicode('Тип', 'utf-8'))
+                                  label='Тип')
 
-    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'),  min_value=0)
+    value = forms.IntegerField(label='Сумма',  min_value=0)
 
-    description = forms.CharField(max_length=1000, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
+    description = forms.CharField(max_length=1000, widget=forms.Textarea, label='Описание')
 
 
 
 class LabTransForm(forms.Form):
     recipient = RecipientModelChoiceField(
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
-        label=unicode('Получатель', 'utf-8'))
+        label='Получатель')
 
-    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label='Описание')
 
-    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)
+    value = forms.IntegerField(label='Сумма', min_value=0)
 
 
 class SeminarTransForm(forms.Form):
     recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
                                                                                                                 'user__last_name'),
-                                          label=unicode('Расказчик', 'utf-8'))
+                                          label='Расказчик')
 
-    description = forms.CharField(label=unicode('Тема и описание', 'utf-8'), max_length=400, widget=forms.Textarea)
+    description = forms.CharField(label='Тема и описание', max_length=400, widget=forms.Textarea)
 
     date = forms.DateField(initial=datetime.date.today)
 
 
 class FacAttTransForm(forms.Form):
     date = forms.DateField(initial=datetime.date.today)
-    description = forms.CharField(label=unicode('Название факультатива, возможно описание занятия', 'utf-8'), max_length=400, widget=forms.Textarea)
+    description = forms.CharField(label='Название факультатива, возможно описание занятия', max_length=400, widget=forms.Textarea)
 
 
 class P2PTransForm(forms.Form):
@@ -71,25 +68,25 @@ class P2PTransForm(forms.Form):
 
     def __init__(self, max_value, *args, **kwargs):
         super(P2PTransForm, self).__init__(*args, **kwargs)
-        self.fields['value'] = forms.IntegerField(max_value=max_value, label=unicode('Сумма', 'utf-8'), min_value=0)
+        self.fields['value'] = forms.IntegerField(max_value=max_value, label='Сумма', min_value=0)
 
 
     recipient = RecipientModelChoiceField(
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
-        label=unicode('Получатель', 'utf-8'))
-    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
+        label='Получатель')
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label='Описание')
 
-    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)
+    value = forms.IntegerField(label='Сумма', min_value=0)
 
 
 class FineTransForm(forms.Form):
     recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
                                                                                                                 'user__last_name'),
-                                          label=unicode('Пионер', 'utf-8'))
+                                          label='Пионер')
 
 
     type = forms.ModelChoiceField(queryset=TransactionType.objects.all().filter(group1='fine'),
-                                  label=unicode('Тип штрафа', 'utf-8'))
-    value = forms.IntegerField(label=unicode('Сумма штрафа', 'utf-8'), max_value=2000, min_value=0, help_text=unicode('Ну в 90% случаев штрафуют за мат 10 бачей (c)Ахмеджанов', 'utf-8'))
+                                  label='Тип штрафа')
+    value = forms.IntegerField(label='Сумма штрафа', max_value=2000, min_value=0, help_text='Ну в 90% случаев штрафуют за мат 10 бачей (c)Ахмеджанов')
 
-    description = forms.CharField(label=unicode('Пояснение', 'utf-8'), max_length=1000, widget=forms.Textarea)
+    description = forms.CharField(label='Пояснение', max_length=1000, widget=forms.Textarea)

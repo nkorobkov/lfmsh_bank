@@ -23,4 +23,4 @@ for p in csv.reader(p_f):
     new_u = TransactionType(human_name=hn, name=n, group1=g1, group2=g2, group1_hn=hng1, group2_hn=hng2)
     new_u.save()
 
-    print new_u
+    print(new_u)

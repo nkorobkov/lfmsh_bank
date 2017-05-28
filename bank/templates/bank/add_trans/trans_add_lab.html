@@ -1,0 +1,20 @@
+{% extends 'bank/base.html' %}
+
+{% block content %}
+
+{% load bootstrap3 %}
+
+
+<h1>Сделанная лабораторная работа
+</h1>
+<form method="POST" class="post-form" role="form">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+    {% buttons submit='OK' reset="Очистить" %}{% endbuttons %}
+
+</form>
+
+<script type="text/javascript" src="/static/collected/admin/js/vendor/jquery/jquery.js"></script>
+
+{% endblock %}

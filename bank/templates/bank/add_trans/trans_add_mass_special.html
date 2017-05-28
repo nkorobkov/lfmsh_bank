@@ -1,0 +1,110 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+{% load bootstrap3 %}
+
+<h1>Универсальная транзакция
+    <small>Массового поражения</small>
+</h1>
+<form action={% url 'bank:add_mass_special' %} method="post">
+{% csrf_token %}
+
+<div class="row">
+    <div class="col-sm-6 ">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Первый отряд
+    </div>
+<table class='table table-striped table-condensed' id="trans_add_table">
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Начисление</th>
+        </tr>
+    {% for u in users.1 %}
+    <tr>
+        <td>{{u.account.long_name}} ({{u.account.get_balance}}@)</td>
+        <td><input type="number" name="{{u.username}}_num"  ></td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+</div>
+
+    <div class="col-sm-6 ">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Второй отряд
+    </div>
+    <table class='table table-striped table-condensed'>
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Начисление</th>
+        </tr>
+        {% for u in users.2 %}
+        <tr>
+            <td>{{u.account.long_name}} ({{u.account.get_balance}}@)</td>
+            <td><input type="number" name="{{u.username}}_num"  ></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+     </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6 ">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Третий отряд
+    </div>
+    <table class='table table-striped table-condensed'>
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Начисление</th>
+        </tr>
+        {% for u in users.3 %}
+        <tr>
+            <td>{{u.account.long_name}} ({{u.account.get_balance}}@)</td>
+            <td><input type="number" name="{{u.username}}_num"></td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+    </div>
+
+    <div class="col-sm-6 ">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Четвертый отряд
+    </div>
+    <table class='table table-striped table-condensed'>
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Начисление</th>
+        </tr>
+        {% for u in users.4 %}
+        <tr>
+            <td>{{u.account.long_name}} ({{u.account.get_balance}}@)</td>
+            <td><input type="number" name="{{u.username}}_num"  ></td>
+        </tr>
+        {% endfor %}
+</table>
+</div>
+</div>
+</div>
+
+  {% bootstrap_field form.description %}
+  {% bootstrap_field form.type %}
+
+    {% buttons submit='OK' reset="Очистить" %}{% endbuttons %}
+
+</form>
+
+
+{% endblock %}

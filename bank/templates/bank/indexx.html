@@ -1,0 +1,97 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="text-left">
+            <h3> Здравствуйте, {{request.user.account.long_name}}</h3>
+        </div>
+    </div>
+</div>
+
+
+
+
+<br>
+
+<br>
+<a href="{% url 'bank:my_trans' %}" class="btn btn-primary  " role="button"> Посмотреть свои транзакции</a>
+<br>
+
+
+
+
+{% if 'bank.view_pio_trans_list' in request.user.get_all_permissions %}
+<br>
+<a href="{% url 'bank:all_acc' %}" class="btn btn-primary  " role="button"> Посмотреть список пионеров с балансом</a>
+<br><br>
+
+{%endif%}
+
+
+{% if 'bank.view_ped_trans_list' in request.user.get_all_permissions %}
+<a href="{% url 'bank:all_acc_ped'  %} " class="btn btn-primary  " role="button"> Посмотреть список педсостава</a>
+<br><br>
+
+{%endif%}
+
+{% if 'bank.manage_trans' in request.user.get_all_permissions %}
+<a href="{% url 'bank:manage_p2p' %}"class="btn btn-primary  " role="button"> Разобрать пионерские личные транзакции  <span class="badge">{{ unm_len }}</span></a>
+<br><br>
+
+{%endif%}
+
+{% if 'bank.see_super_table' in request.user.get_all_permissions %}
+<a href="{% url 'bank:super_table' %}"class="btn btn-primary  " role="button"> Посмотреть супер таблицу</a>
+<br><br>
+{%endif%}
+
+Суммарные деньги пионеров: {{s}}
+<br><br>
+
+{% if 'bank.add_transaction' in request.user.get_all_permissions %}
+<br><br>
+
+
+<p>Добавить транзакции</p>
+
+<a href="{% url 'bank:add_mass_special' %}"> Массовая специальная </a>
+<br>
+<a href="{% url 'bank:add_special' %}"> Специальная </a>
+<br>
+<a href="{% url 'bank:add_fine' %}"> Штраф </a>
+<br>
+<a href="{% url 'bank:add_sem' %}"> Семинар </a>
+<br>
+<a href="{% url 'bank:add_zaryadka' %}"> Зарядка </a>
+<br>
+
+<a href="{% url 'bank:add_lab' %}"> Лабораторная работа </a>
+<br>
+
+
+
+<a href="{% url 'bank:add_fac' %}"> Зачет за факультатив </a>
+<br>
+<a href="{% url 'bank:add_exam' %}"> Баллы за экзамен по лекции </a>
+<br>
+
+<a href="{% url 'bank:add_activity' %}"> Призы за мероприятия </a>
+<br>
+
+<a href="{% url 'bank:add_lec' %}"> Присутствие на лекции </a>
+<br>
+<a href="{% url 'bank:add_fac_att' %}"> Присутствие на факультативе </a>
+<br>
+
+
+
+
+{%endif%}
+
+
+
+
+{% endblock %}

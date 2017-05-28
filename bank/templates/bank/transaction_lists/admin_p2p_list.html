@@ -1,0 +1,69 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<h2> Пионерские не подтвержденные личные транзакции</h2>
+
+<br>
+
+
+<form action={% url 'bank:manage_p2p' %} method="post" >
+{% csrf_token %}
+
+{% if trans %}
+<h3> Входящие</h3>
+
+<table class="table table-striped">
+    <tr>
+
+        <th>Дата</th>
+        <th>Автор</th>
+        <th>Получатель</th>
+        <th>Сумма</th>
+        <th>Описание</th>
+        <th>Подтверждение</th>
+
+
+    </tr>
+    {% for t in trans %}
+    <tr>
+        <td>{{t.get_creation_date}}</td>
+
+
+        <td>{{t.creator.account}} ({{t.creator.account.get_balance}} @)</td>
+
+        <td>{{t.recipient.account}} ({{t.recipient.account.get_balance}} @)</td>
+
+         <td>+{{t.get_value}}@</td>
+
+        <td>{{t.description}}</td>
+        <td>
+
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-success ">
+                    <input type="radio" name="c_{{t.pk}}" value="confirm" autocomplete="off" > Утвердить
+                </label>
+                <label class="btn btn-danger">
+                     <input type="radio" name="c_{{t.pk}}" value="cancel" autocomplete="off"> Отклонить
+                </label>
+                </div>
+
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<input type="submit"  class="btn btn-default"/>
+
+
+</form>
+{% else %}
+
+<h3>Вы все разобрали, какой молодец!</h3>
+
+
+{% endif %}
+
+
+{% endblock %}

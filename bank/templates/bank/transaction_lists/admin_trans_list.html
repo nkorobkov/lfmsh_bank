@@ -1,0 +1,115 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<h2> {{user.account.long_name}}  {{user.account.get_balance}}@</h2>
+<h2> Страница транзакций </h2>
+
+<br>
+
+
+{% if in_trans %}
+<h3> Входящие</h3>
+
+<table class="table table-striped">
+    <tr>
+
+        <th>Дата</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Автор</th>
+        <th>Статус</th>
+        <th>Описание</th>
+        {% if 'bank.del_foreign_trans' in request.user.get_all_permissions%}
+        <th>Отмена</th>
+        {% endif %}
+    </tr>
+    {% for t in in_trans %}
+    <tr>
+        <td>{{t.get_creation_date}}</td>
+        <td>{{t.type}}</td>
+
+        <td>{% if t.type.group1 != 'attend' %}
+            {% if t.value > 0 %}
+            +
+            {% endif %}
+            {{t.get_value}}@ {{t.type.group1}}
+            {% else %}
+            <!----{{t.get_value_as_date}}--->-
+            {% endif%}
+        </td>
+        <td>{{t.creator.account}}</td>
+        <td>{{t.status}}</td>
+
+        <td>{{t.description}}</td>
+
+        {% if 'bank.del_foreign_trans' in request.user.get_all_permissions%}
+
+        <td>
+            {% if t.can_be_declined %}
+            <a class="btn btn-info" href="{% url 'bank:trans_dec' t.pk %}" role="button">Отклонить</a>
+            {% else %}
+            <p> Нельзя отклонить</p>
+            {% endif %}
+        </td>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if out_trans %}
+
+<h3>Исходящие</h3>
+
+<table class="table table-striped">
+    <tr>
+
+        <th>Дата</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Получатель</th>
+        <th>Статус</th>
+        <th>Описание</th>
+
+        {% if 'bank.del_foreign_trans' in request.user.get_all_permissions%}
+        <th>Отмена</th>
+        {% endif %}
+
+
+    </tr>
+    {% for t in out_trans %}
+    <tr>
+        <td>{{t.get_creation_date}}</td>
+        <td>{{t.type}}</td>
+
+        <td>{% if t.get_value > 0 %}
+            +
+            {% endif %}
+            {{t.get_value}}@
+        </td>
+        <td>{{t.recipient.account}}</td>
+        <td>{{t.status}}</td>
+
+        <td>{{t.description}}</td>
+        {% if 'bank.del_foreign_trans' in request.user.get_all_permissions%}
+
+        <td>
+            {% if t.can_be_declined %}
+            <a class="btn btn-info" href="{% url 'bank:trans_dec' t.pk %}" role="button">Отклонить</a>
+            {% else %}
+            <p> Нельзя отклонить</p>
+            {% endif %}
+        </td>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Нет исходящих транзакций</p>
+{% endif %}
+
+{% endblock %}

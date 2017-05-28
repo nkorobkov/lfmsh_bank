@@ -1,0 +1,36 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<h3>Транзакция отменена</h3>
+
+{% if request.user.can_add_trans%}
+<p>Изменения</p>
+
+<table class='table table-striped' , id="trans_ok_table">
+    <tr>
+        <th>ФИО Пионера</th>
+        <th>Поступление</th>
+        <th>Сумма</th>
+    </tr>
+
+    {% for a in transactions %}
+    <tr>
+        <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
+        <td>{% if a.value < 0 %}+
+            {% endif %}
+            -{{ a.get_value }}@
+        </td>
+        <td>{{a.recipient.account.get_balance}}@</td>
+    </tr>
+
+    {% endfor %}
+
+
+</table>
+
+{% endif %}
+<br>
+<a href="{% url 'bank:index' %}"> Home page</a>
+
+{% endblock %}

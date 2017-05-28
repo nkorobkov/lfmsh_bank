@@ -1,0 +1,10 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+{% load render_table from django_tables2 %}
+
+
+
+        {% render_table trans %}
+
+{% endblock %}

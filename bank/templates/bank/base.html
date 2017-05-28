@@ -1,0 +1,118 @@
+{% load staticfiles %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+
+<!--{% bootstrap_javascript jquery=1 %}
+{% bootstrap_css %}-->
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+
+
+
+<head>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!---link rel="icon" href="http://crest.my/v2/wp-content/uploads/2015/10/email.png"--->
+    <link rel="stylesheet" href={% static "django_tables2/themes/paleblue/css/screen.css"%} />
+    <link rel="stylesheet" href={% static "bank/style.css"%} />
+
+        <link rel="stylesheet" href={% static "bank/css/bootstrap.min.css"%}>
+        <!---link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"--->
+
+
+    <title>Банк ЛФМШ</title>
+
+
+</head>
+
+<body>
+
+
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'bank:index' %}">Банк ЛФМШ</a>
+        </div>
+
+        <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-left">
+
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'bank:index' %}">Домой</a></li>
+                <li><a href="{% url 'bank:my_trans' %}">Мои транзакции</a></li>
+<li><a href="{% url 'bank:media'%}">Файловый архив</a></li>
+                <!----{% if user.account.can_add_trans %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Add Trans <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'bank:add_sem' %}">Семинар</a></li>
+                        <li><a href="{% url 'bank:add_zaryadka' %}">Зарядка</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'bank:add_special' %}">Свободная</a></li>
+                    </ul>
+                </li>
+                {% endif %} ---->
+                {% endif %}
+
+
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                {% if user.is_authenticated %}
+                <li><p class="navbar-text">В системе как {{request.user.account.short_name}}</p></li>
+                <li><a href="{% url 'bank:logout' %}?next={% url 'bank:index' %}">Выйти</a></li>
+                {% else %}
+                <li><p class="navbar-text navbar-rigth">Вы не авторизированны в системе</p></li>
+                <li><a href="{% url 'bank:index' %}">Войти</a></li>
+                {% endif %}
+
+
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+<!---script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>--->
+<script src={% static "bank/jquery/jquery-3.1.0.min.js" %}></script>
+<script src={% static "bank/js/bootstrap.min.js" %}></script>
+
+
+<!--div id="fix-for-navbar-fixed-top-spacing" style="height: 42px;">&nbsp;</div> -->
+
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-sm-12">
+{% block content %}
+    {% endblock %}
+        </div>
+    </div>
+</div>
+
+
+</body>

@@ -1,0 +1,40 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<h2>Здравствуйте, {{request.user.account.long_name}} </h2>
+
+
+<br>
+
+
+{% if attends %}
+
+<h4>Вам засчитаны  посещения занятий обязательной учебной программы</h4>
+
+<table class='table table-striped' >
+        <tr>
+            <th>Посещение</th>
+            <th>Описание</th>
+            <th>Дата и время</th>
+
+        </tr>
+
+    {% for a in attends %}
+        <tr>
+
+            <td>{{a.type.human_name}}</td>
+            <td>{{a.description}}</td>
+            <td>{{a.get_value_as_date}}</td>
+
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+
+{% endif %}
+
+{% endblock %}

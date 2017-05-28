@@ -1,0 +1,82 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<script>
+function uncheck(id) {
+    document.getElementById(id).checked = document.getElementById(id).checked ? false : true;
+    alert('js');
+}
+</script>
+
+<form action={% url 'bank:add_activity' %} method="post">
+
+{% csrf_token %}
+
+<h2>Премии и призы</h2>
+
+<h5>Выберите тип мероприятия</h5>
+
+<div class="row">
+    <div class="col-sm-12 ">
+
+        <div class="btn-group" data-toggle="buttons">
+                <label class="btn ">
+                    <input type="radio" name="type" value="sport_activity" autocomplete="off" required> Спортивное мероприятие
+                </label>
+                <label class="btn ">
+                     <input type="radio" name="type" value="evening_activity" autocomplete="off"> Вечернее мероприятие
+                </label>
+                </div>
+
+</div>
+    </div>
+
+
+<div class="row">
+    <div class="col-sm-3 ">
+        <label for="1_p_s">Первое место: </label>
+
+    <input type="number" id = '1_p_s' name="1m" min="0" value="{{activity.1}}" >
+</div>
+    <div class="col-sm-3 ">
+        <label for="2_p_s">Второе место: </label>
+
+    <input type="number" id = '2_p_s' name="2m" min="0" value="{{activity.2}}" >
+</div>
+
+    <div class="col-sm-3 ">
+        <label for="3_p_s">Третье место: </label>
+
+    <input type="number" id = '3_p_s' name="3m" min="0" value="{{activity.3}}" >
+</div>
+
+    <div class="col-sm-3 ">
+        <label for="4_p_s"> Участники: </label>
+
+    <input type="number" id = '4_p_s' name="4m" min="0" value="{{activity.4}}" >
+</div>
+
+
+    </div>
+
+<div class="row">
+    {% include table with otr_name='Первый'  user_list=users.1 %}
+    {% include table with otr_name='Второй'  user_list=users.2 %}
+</div>
+<div class="row">
+    {% include table with otr_name='Третий'  user_list=users.3 %}
+    {% include table with otr_name='Четвертый'  user_list=users.4%}
+</div>
+
+<p>Описание (название мероприятия, победители)</p>
+<textarea name="description" rows="5" cols="50">
+</textarea>
+<br>
+<input type="submit"  class="btn btn-default"/>
+
+
+
+{% endblock%}
+

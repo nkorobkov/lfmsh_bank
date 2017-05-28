@@ -1,0 +1,36 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<p>Ваша заявка принята к рассмотрению</p>
+
+
+<table class='table table-striped' , id="trans_ok_table">
+        <tr>
+            <th>ФИО Получателя Пионера</th>
+            <th>Перевод</th>
+            <th>Описание</th>
+        </tr>
+
+        <tr>
+            <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
+            <td>{% if a.value > 0 %}+
+                {% endif %}
+                {{ a.value }}@
+            </td>
+            <td>{{a.description}}</td>
+        </tr>
+
+
+
+</table>
+
+
+
+
+
+<br>
+<br>
+<a href="{% url 'bank:index' %}"> Домой </a>
+
+{% endblock %}

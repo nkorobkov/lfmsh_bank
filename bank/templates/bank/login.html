@@ -1,0 +1,33 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+{% load bootstrap3 %}
+
+
+
+
+
+<div class="container">
+
+<form method="post" action="{% url 'bank:login' %}" class="form-signin">
+
+    <h2 class="form-signin-heading">Представьтесь, пожалуйста</h2>
+
+
+{% csrf_token %}
+    <label >Логин:</label>
+
+    {% bootstrap_field form.username show_label=False %}
+      <label >Пароль:</label>
+
+    {% bootstrap_field form.password  show_label=False%}
+
+    {% buttons submit='OK' reset="Отмена" href="{{next}}"  %}{% endbuttons %}
+
+    <input type="hidden" name="next" link="{{ next }}" />
+</form>
+    </div>
+
+
+
+{% endblock %}

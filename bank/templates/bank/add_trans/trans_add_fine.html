@@ -1,0 +1,16 @@
+{% extends 'bank/base.html' %}
+
+    {% block content %}
+
+{% load bootstrap3 %}
+
+<h1>Штраф</h1>
+
+<h4>По возможности не используйте тип "штраф", а выбирайте более подходящий вам вариант <small>Если подходящих вариантов нет, пишите пояснение</small></h4>
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            {% buttons submit='OK' reset="Очистить" %}{% endbuttons %}
+        </form>
+    {% endblock %}

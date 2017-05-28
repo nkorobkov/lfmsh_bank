@@ -1,0 +1,23 @@
+{% extends 'bank/base.html' %}
+
+{% block content %}
+
+{% load bootstrap3 %}
+
+
+
+
+<h1>Универсальная транзакция
+    <small>На все случаи жизни</small>
+</h1>
+<form method="POST" class="post-form" role="form">
+    {% csrf_token %}
+<h4>Здесь мы начисляем только положительные суммы хорошим пионерам, если хотите начислить штраф, воспользуйтесь <a href="{% url 'bank:add_fine'%}"> специальной формой</a></h4>
+    {% bootstrap_form form %}
+    {% buttons submit='OK' reset="Очистить" %}{% endbuttons %}
+
+</form>
+
+<script type="text/javascript" src="/static/collected/admin/js/vendor/jquery/jquery.js"></script>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'bank/base.html' %}
+
+    {% block content %}
+
+{% load bootstrap3 %}
+{% load render_table from django_tables2 %}
+
+
+<h1>Отмечаем посетителей факультатива</h1>
+        <form method="POST" class="post-form">
+            {% csrf_token %}
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+    <h3 class="panel-title">Факультатив</h3>
+                </div>
+                <div class="row">
+    <div class="col-sm-6 ">
+         <div class="container-fluid">
+                    <h5>Дата</h5>
+{% bootstrap_field form.date show_label=False %}
+             </div>
+        </div>
+        <div class="col-sm-6 ">
+            <div class="container-fluid">
+                    <h5>Блок факультативов</h5>
+            <div class="btn-group"  role="group" data-toggle="buttons" aria-label="asdf">
+                <label class="btn btn-default">
+                    <input type="radio" name="block" value="1" autocomplete="off" required> Первый
+                </label>
+                <label class="btn btn-default">
+                     <input type="radio" name="block" value="2" autocomplete="off"> Второй
+                </label>
+
+                </div>
+                    </div>
+
+        </div>
+        </div>
+                                <div class="row">
+                                    <div class="col-sm-6 ">
+            <div class="container-fluid">
+                    <h5>Название факультатива</h5>
+                                    {% bootstrap_field form.description show_label=False %}
+
+                                    </div>
+
+                    </div></div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+    <h3 class="panel-title">Слушатели</h3>
+                </div>
+
+
+<div class="row">
+    {% include table_html with otr_name='Первый'  t=table.0 %}
+    {% include table_html with otr_name='Второй'  t=table.1 %}
+
+    {% include table_html with otr_name='Третий'  t=table.2 %}
+    {% include table_html with otr_name='Четвертый'  t=table.3%}
+</div>
+
+
+
+
+            </div>
+
+                {% buttons submit='OK' reset="Очистить" %}{% endbuttons %}
+        </form>
+    {% endblock %}

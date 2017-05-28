@@ -1,0 +1,73 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+{% if transactions %}
+<p>Транзакции успешно добавленны</p>
+<p>Произошедшие изменения:</p>
+
+<table class='table table-striped' , id="trans_ok_table">
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Изменение</th>
+            <th>Сумма</th>
+        </tr>
+
+    {% for a in transactions %}
+        <tr>
+            <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
+            <td>{% if a.value > 0 %}+
+                {% endif %}
+                {{ a.get_value }}@
+            </td>
+            <td>{{a.recipient.account.get_balance}}@</td>
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+<br>
+
+Транзакции учитываются с точностью до 7 знака после запятой, но для вашего удобства мы показываем округленные значения
+
+{% endif%}
+
+
+
+
+<br>
+
+{% if attends %}
+
+<h5>Засчитаны  посещения</h5>
+
+<table class='table table-striped' >
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Посещение</th>
+            <th>Дата и время</th>
+            <th>Зачтено</th>
+
+
+        </tr>
+
+    {% for a in attends %}
+        <tr>
+            <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
+
+            <td>{{a.type.human_name}}</td>
+            <td>{{a.get_value_as_date}}</td>
+            <td>{{a.counted}}</td>
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+
+{% endif %}
+<br>
+<a href="{% url 'bank:index' %}"> Домой</a>
+
+{% endblock %}

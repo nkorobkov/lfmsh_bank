@@ -1,0 +1,24 @@
+@startuml
+title Transaction States
+
+state processed
+
+state created
+state declined
+state substituted
+
+processed : counted : True
+created : counted : False
+declined : counted : False
+substituted : counted : False
+
+[*] --> created : User creates Transaction
+created --> processed : admin approved p2p trans \n or staff created trans
+created --> declined : admin declined p2p trans
+processed --> declined : creator or admin declined trans
+declined --> processed : creator or admin reprocessed trans
+processed --> substituted : user of admin changed trans
+
+
+
+@enduml

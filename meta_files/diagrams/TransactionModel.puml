@@ -1,0 +1,102 @@
+@startuml
+
+class Transaction  << (M,lightgreen) >>{
+
+User creator
+List<Money>
+List<Attendance>
+Map creation_map
+TransactionType type
+
+~ create(List<Money>, List<Attendance>, TransactionType type, ...)
+~ revert()
+~ apply()
+
+}
+
+Class Money  << (M,lightgreen) >> {
+MoneyType type
+}
+
+Class Attendance  << (M,lightgreen) >> {
+AttendanceType type
+AttendanceBlock block
+}
+
+
+class AtomicTransaction{
+ AtomicTransactionStatus status
+ User receiver
+ Date date_created
+ Date date_updated
+ Double value
+ String description
+}
+
+ENUM AttendanceBlock{
+__values__
+LEC
+FAC1
+FAC2
+SEM1
+SEM2
+SEM3
+__fields__
+List<AttendanceBlock> conflictsWith
+__methods__
+conflicts(AttendanceBlock)
+}
+
+class TransactionType << (M,orange) >> {
+String id
+List<MoneyType>
+List<AttendanceType>
+}
+
+class AtomicType{
+String group_general
+String group_local
+String id
+String readable_name
+String readable_group_general
+String readable_group_local
+}
+
+class AttendanceType << (M,orange) >> {
+
+}
+
+class MoneyType << (M,orange) >> {
+
+}
+
+
+class AtomicTransactionStatus << (M,orange) >> {
+Boolean counted
+List<AtomicTransactionStatus> possible_transitions
+
+}
+
+
+
+Money -up-|> AtomicTransaction
+Attendance -up-|> AtomicTransaction
+
+
+MoneyType -up-|> AtomicType
+AttendanceType -up-|> AtomicType
+
+MoneyType --* Money
+AttendanceType --* Attendance
+AtomicTransactionStatus --* AtomicTransaction
+
+Money --* Transaction
+Attendance --* Transaction
+TransactionType --* Transaction
+
+
+MoneyType --* TransactionType
+AttendanceType --* TransactionType
+
+
+@enduml

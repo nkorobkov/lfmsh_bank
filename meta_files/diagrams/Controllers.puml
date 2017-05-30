@@ -1,0 +1,43 @@
+@startuml
+title: Controllers
+
+class TransactionService{
+TransactionControllerFactory transaction_controller_factory
++ update(Transaction transaction, Map new_creation_map)
++ create_from_existing(Transaction transaction)
++ create(Map creation_map, TransactionType type)
++ revert(Transaction transaction)
++ apply(Transaction transaction)
+}
+
+class TransactionControllerFactory{
+- {static} Map<TransactionType, TransactionController> registred_transaction_controllers
+
++ TransactionController get_controller_for(TransactionType)
+}
+
+
+interface TransactionController <<Singleton>>{
+    View transactionForm
+    Transaction create(Map creation_map)
+
+}
+
+class SeminarTransactionController <<Singleton>>{
+}
+
+class LectureTransactionController <<Singleton>>{
+}
+
+class DefaultTransactionController <<Singleton>>{
+}
+
+
+
+SeminarTransactionController ..|> TransactionController
+LectureTransactionController ..|> TransactionController
+DefaultTransactionController ..|> TransactionController
+
+TransactionControllerFactory --* TransactionService
+TransactionController --* TransactionControllerFactory
+@enduml

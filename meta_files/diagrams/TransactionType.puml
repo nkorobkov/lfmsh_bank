@@ -1,0 +1,32 @@
+@startuml
+
+class TransactionType
+
+class default_income
+class fine
+class purchase
+class tax
+class exam
+class workout
+class lecture
+class activity
+class seminar
+class fac_attend
+class fac_pass
+class p2p
+
+
+
+TransactionType --> default_income
+TransactionType --> fine
+TransactionType --> purchase
+TransactionType --> tax
+TransactionType --> exam
+TransactionType --> workout
+TransactionType --> lecture
+TransactionType --> activity
+TransactionType --> seminar
+TransactionType --> fac_attend
+TransactionType --> fac_pass
+TransactionType --> p2p
+@enduml

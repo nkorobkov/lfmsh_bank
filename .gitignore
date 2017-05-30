@@ -16,3 +16,4 @@ main/__pycache__/urls.cpython-36.pyc
 *.sqlite3
 bank/migrations
 main/__pycache__
+*.pyc

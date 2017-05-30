@@ -20,7 +20,6 @@ import time
 import pprint
 
 
-
 # Create your views here.
 @login_required
 def index(request):
@@ -33,17 +32,16 @@ def index(request):
                       {'user_group': user_group_name, 'p2p_buf': hf.p2p_buf, 'lec_pen': lec_pen})
     elif user_group_name == 'pedsostav':
         s = 0
-        for u in User.objects.filter(groups__name = 'pioner'):
+        for u in User.objects.filter(groups__name='pioner'):
             s += u.account.balance
-        return render(request, 'bank/indexx.html', {'user_group': user_group_name,'s':s})
+        return render(request, 'bank/indexx.html', {'user_group': user_group_name, 's': s})
 
     p2p_unmanaged_len = len(Transaction.objects.filter(status__name='AD'))
     s = 0
-    for u in User.objects.filter(groups__name = 'pioner'):
+    for u in User.objects.filter(groups__name='pioner'):
         s += u.account.balance
 
-
-    return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len,'s':s})
+    return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len, 's': s})
 
 
 @login_required
@@ -201,7 +199,7 @@ def add_exam(request, meta_link_pk=None):
         for u in User.objects.filter(groups__name='pioner'):
             if str(u.pk) in request.POST and request.POST[str(u.pk)]:
                 exam_attendants.append((u, request.POST[str(u.pk)]))
-                sum_score += (max(0,int(request.POST[str(u.pk)])))**(0.5)
+                sum_score += (max(0, int(request.POST[str(u.pk)]))) ** (0.5)
 
         if not exam_attendants:
             return redirect(reverse('bank:index'))
@@ -216,7 +214,7 @@ def add_exam(request, meta_link_pk=None):
         print(type)
         status = TransactionStatus.objects.get(name='PR')
         new_transactions = []
-        meta_link = Transaction.create_trans(recipient=None, value=BUDGET*num_of_attendants, creator=creator,
+        meta_link = Transaction.create_trans(recipient=None, value=BUDGET * num_of_attendants, creator=creator,
                                              description=description,
                                              type=type, status=status)
         meta_link.save()
@@ -243,8 +241,6 @@ def add_exam(request, meta_link_pk=None):
         users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3).order_by('last_name')
         users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4).order_by('last_name')
 
-
-
         if meta_link_pk:
             meta_link = Transaction.objects.get(pk=meta_link_pk)
             creation_dict = eval(MetaTransaction.objects.get(meta=meta_link).creation_dict)
@@ -256,19 +252,18 @@ def add_exam(request, meta_link_pk=None):
         for user_pk in range(1000):
             if str(user_pk) in creation_dict and creation_dict[str(user_pk)][0]:
                 c_d[user_pk] = int(creation_dict[str(user_pk)][0])
-        users_pk = {'1':[],'2':[],'3':[],'4':[],'0':[],'5':[]}
+        users_pk = {'1': [], '2': [], '3': [], '4': [], '0': [], '5': []}
         for i in range(1000):
             if User.objects.filter(pk=i) and i in c_d:
                 users_pk[str(User.objects.filter(pk=i)[0].account.otr)].append(i)
 
-
-
         print('users pk', users_pk)
-        print('creation dict',c_d)
+        print('creation dict', c_d)
         form = SprecialTransForm()
 
         return render(request, 'bank/add_trans/trans_add_exam.html',
-                      {'users': users,'users_pk': users_pk, 'table': 'bank/add_trans/otr_tables/exam_table.html', 'form': form,
+                      {'users': users, 'users_pk': users_pk, 'table': 'bank/add_trans/otr_tables/exam_table.html',
+                       'form': form,
                        'budget': BUDGET, 'creation_dict': c_d})
 
 
@@ -328,7 +323,7 @@ def add_zaryadka(request, meta_link_pk=None):
 
         else:
             creation_dict = {}
-        #creation_dict = {k : int(creation_dict[k][0]) for k in creation_dict}
+        # creation_dict = {k : int(creation_dict[k][0]) for k in creation_dict}
 
         return render(request, 'bank/add_trans/trans_add_zaryadka.html',
                       {'table': table, 'creation_dict': creation_dict})
@@ -733,7 +728,7 @@ def meta_list(request, trans_id):
     if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
         return redirect(reverse('bank:index'))
     transactions = trans.meta_link.all()[0].transactions.all()
-    #print transactions
+    # print transactions
     return render(request, 'bank/transaction_lists/my_trans_list_ped.html', {'out_trans': transactions})
 
 
@@ -750,7 +745,6 @@ def trans_red(request, trans_id):
         return redirect(reverse('bank:add_zaryadka', kwargs={'meta_link_pk': int(trans_id)}))
     if type.name == 'lec':
         return redirect(reverse('bank:add_exam', kwargs={'meta_link_pk': int(trans_id)}))
-
 
 
 @permission_required('bank.view_pio_trans_list', login_url='bank:index')
@@ -811,6 +805,3 @@ def super_table(request):
 
 def media(request):
     return redirect('/media/')
-
-
-

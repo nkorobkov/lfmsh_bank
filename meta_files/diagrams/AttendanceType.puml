@@ -1,0 +1,17 @@
+@startuml
+title: Attendance Types
+
+class AttendanceType  << (M,lightgreen) >>
+
+class lecture
+class fac
+class workout
+class seminar
+class lab
+
+AttendanceType --> lecture
+AttendanceType --> fac
+AttendanceType --> workout
+AttendanceType --> seminar
+AttendanceType --> lab
+@enduml

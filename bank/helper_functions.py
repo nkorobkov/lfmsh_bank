@@ -8,7 +8,6 @@ daily_tax = -20
 sem_needed = 18
 activity_money = {1: 20, 2: 15, 3: 10, 4: 5}
 
-from .models import *
 
 
 def zaryadka(num_of_attendants):
@@ -30,7 +29,7 @@ def lec(score, sum_score, budget, num_of_attendants):
     sc = max(0,(float(score)))**(0.5)
     
     print(sc, end=' ') 
-    value = max(0,(float(budget)*num_of_attendants) * sc / (float(sum_score)))
+    value = max(0., (float(budget)*num_of_attendants) * sc / (float(sum_score)))
     print(value)
     return value
 
@@ -49,8 +48,7 @@ def sem_fac_penalty(n):
     s = INITIAL_STEP_SEM
     a = 0
     for i in range(n):
-        a +=s
-        s +=step
-
+        a += s
+        s += step
 
     return a

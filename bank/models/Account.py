@@ -1,20 +1,20 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 from bank import helper_functions as hf
 from bank.constants import *
 
-
 '''
 Extention of a User Class
 '''
+
+
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     balance = models.FloatField(default=0)
-    third_name = models.CharField(max_length=40, default='Not stated')
+    middle_name = models.CharField(max_length=40, default='Not stated')
 
-    otr = models.IntegerField(default=0)
+    party = models.IntegerField(default=0)
 
     grade = models.IntegerField(blank=True, default=0)
 
@@ -24,30 +24,27 @@ class Account(models.Model):
     lec_missed = models.IntegerField(blank=True, default=0)
     sem_read = models.IntegerField(blank=True, default=0)
 
-
     def get_penalty(self):
         p = 0
-        p += max(0, (self.lab_needed() - int(self.lab_passed))) * LAB_PENALTY #labs
-        p += hf.sem_fac_penalty(max(0, (hf.sem_needed - int(self.sem_fac_attend)))) #semfac attend
+        p += max(0, (self.lab_needed() - int(self.lab_passed))) * LAB_PENALTY  # labs
+        p += hf.sem_fac_penalty(max(0, (hf.sem_needed - int(self.sem_fac_attend))))  # semfac attend
         p += SEM_NOT_READ_PEN * max(0, 1 - int(self.sem_read))
         return p
 
-
-
-    def __unicode__(self):
+    def __str__(self):
         if self.user.first_name:
 
-            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.third_name[0] + '.'
+            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '.'
         else:
             return self.user.last_name
 
     def long_name(self):
-        return self.user.last_name + ' ' + self.user.first_name + ' ' + self.third_name
+        return self.user.last_name + ' ' + self.user.first_name + ' ' + self.middle_name
 
     def short_name(self):
         if self.user.first_name:
 
-            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.third_name[0] + '.'
+            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '.'
         else:
             return self.user.last_name
 
@@ -64,7 +61,6 @@ class Account(models.Model):
     def sem_att_needed(self):
 
         return hf.sem_needed
-
 
     def sem_att_w(self):
         print(100 * int(self.sem_fac_attend) / self.sem_att_needed())
@@ -84,9 +80,7 @@ class Account(models.Model):
 
         return int(self.sem_read) * 100
 
-
     def get_balance(self):
         if abs(self.balance) > 9.99:
             return int(self.balance)
         return round(self.balance, 1)
-

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "created",
+    "readable_name": "Создана",
+    "counted": false,
+    "possible_transitions": ["processed", "declined"]
+  },
+  {
+    "name": "processed",
+    "readable_name": "Начислена",
+    "counted": true,
+    "possible_transitions": ["declined","substituted"]
+  },
+  {
+    "name": "declined",
+    "readable_name": "Отменена",
+    "counted": false,
+    "possible_transitions": ["processed"]
+  },
+  {
+    "name": "substituted",
+    "readable_name": "Заменена",
+    "counted": false,
+    "possible_transitions": []
+  }
+]

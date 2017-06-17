@@ -1,0 +1,100 @@
+[
+  {
+    "name": "student",
+    "permissions": {
+      "see": {
+        "self": [
+          "balance",
+          "received_transactions",
+          "created_transactions"
+        ]
+      },
+      "create": {
+        "self": [
+          "p2p"
+        ]
+      }
+    }
+  },
+  {
+    "name": "staff",
+    "permissions": {
+      "see": {
+        "self": [
+          "received_transactions",
+          "created_transactions"
+        ],
+        "student": [
+          "balance",
+          "received_transactions",
+          "created_transactions"
+        ]
+      },
+      "create": {
+        "self": [
+          "general_money"
+        ]
+      },
+      "process": {
+        "self": [
+          "general_money"
+        ]
+      },
+      "update": {
+        "self": [
+          "general_money"
+        ]
+      },
+      "decline": {
+        "student": [
+          "created_transactions"
+        ]
+      }
+    }
+  },
+  {
+    "name": "admin",
+    "permissions": {
+      "see": {
+        "self": [
+          "balance",
+          "received_transactions",
+          "created_transactions"
+        ],
+        "student": [
+          "balance",
+          "received_transactions",
+          "created_transactions"
+        ],
+        "staff": [
+          "balance",
+          "received_transactions",
+          "created_transactions"
+        ]
+      },
+      "create": {
+        "self": [
+          "general_money"
+        ]
+      },
+      "process": {
+        "self": [
+          "general_money"
+        ]
+      },
+      "update": {
+        "self": [
+          "general_money"
+        ]
+      },
+      "decline": {
+        "student": [
+          "created_transactions"
+        ],
+        "staff": [
+          "created_transactions"
+        ]
+      }
+    }
+  }
+]

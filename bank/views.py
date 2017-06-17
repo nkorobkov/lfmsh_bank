@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from bank.models import Account, Transaction, TransactionType, TransactionStatus
+from bank.models import Account, Transaction, TransactionType, TransactionState
 from django.template import Context, loader
 from django.conf import settings
 from django.shortcuts import redirect
@@ -123,7 +123,7 @@ def add_special(request):
             creator = request.user
             type = form.cleaned_data['type']
 
-            status = TransactionStatus.objects.get(name='PR')
+            status = TransactionState.objects.get(name='PR')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
                                                  description=description,
@@ -161,7 +161,7 @@ def add_mass_special(request):
         type = TransactionType.objects.get(pk=request.POST['type'])
 
         print(type)
-        status = TransactionStatus.objects.get(name='PR')
+        status = TransactionState.objects.get(name='PR')
         new_transactions = []
         for u, s in fac_attendants:
             new_trans = Transaction.create_trans(recipient=u, value=int(s), creator=creator, description=description,
@@ -212,7 +212,7 @@ def add_exam(request, meta_link_pk=None):
         type = TransactionType.objects.get(name='lec')
 
         print(type)
-        status = TransactionStatus.objects.get(name='PR')
+        status = TransactionState.objects.get(name='PR')
         new_transactions = []
         meta_link = Transaction.create_trans(recipient=None, value=BUDGET * num_of_attendants, creator=creator,
                                              description=description,
@@ -285,7 +285,7 @@ def add_zaryadka(request, meta_link_pk=None):
         creator = request.user
         type = TransactionType.objects.get(name='zaryadka')
 
-        status = TransactionStatus.objects.get(name='PR')
+        status = TransactionState.objects.get(name='PR')
 
         new_transactions = []
         meta_link = Transaction.create_trans(recipient=None, value=ZARYADKA_BUDGET, creator=creator,
@@ -340,7 +340,7 @@ def add_lec(request):
         type = TransactionType.objects.get(name='fine_lec')
         att_type = TransactionType.objects.get(name='lec_attend')
 
-        status = TransactionStatus.objects.get(name='PR')
+        status = TransactionState.objects.get(name='PR')
         att_val = 10311100
         attends = []
         for u in User.objects.filter(groups__name='pioner'):
@@ -397,7 +397,7 @@ def add_fac(request):
         creator = request.user
         type = TransactionType.objects.get(name='fac_pass')
 
-        status = TransactionStatus.objects.get(name='PR')
+        status = TransactionState.objects.get(name='PR')
 
         new_transactions = []
         for u, s in fac_attendants:
@@ -442,7 +442,7 @@ def add_activity(request):
         creator = request.user
         type = TransactionType.objects.get(name=request.POST['type'])
 
-        status = TransactionStatus.objects.get(name='PR')
+        status = TransactionState.objects.get(name='PR')
         activity_money = {1: int(request.POST['1m']), 2: int(request.POST['2m']), 3: int(request.POST['3m']),
                           4: int(request.POST['4m'])}
         new_transactions = []
@@ -488,7 +488,7 @@ def add_sem(request):
             description = request.POST['description']
             creator = request.user
             type = TransactionType.objects.get(name='sem')
-            status = TransactionStatus.objects.get(name='PR')
+            status = TransactionState.objects.get(name='PR')
 
             att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (
                 int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(
@@ -545,7 +545,7 @@ def add_fac_att(request):
 
             description = request.POST['description']
             creator = request.user
-            status = TransactionStatus.objects.get(name='PR')
+            status = TransactionState.objects.get(name='PR')
 
             att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (
                 int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(
@@ -600,7 +600,7 @@ def add_fine(request):
             creator = request.user
 
             type = form.cleaned_data['type']
-            status = TransactionStatus.objects.get(name='PR')
+            status = TransactionState.objects.get(name='PR')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
                                                  description=description,
@@ -628,7 +628,7 @@ def add_lab(request):
             creator = request.user
 
             type = TransactionType.objects.get(name='lab_pass')
-            status = TransactionStatus.objects.get(name='PR')
+            status = TransactionState.objects.get(name='PR')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
                                                  description=description,
@@ -660,7 +660,7 @@ def add_p2p(request):
             creator = request.user
 
             type = TransactionType.objects.get(name='p2p')
-            status = TransactionStatus.objects.get(name='AD')
+            status = TransactionState.objects.get(name='AD')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
                                                  description=description, type=type, status=status)
@@ -706,10 +706,10 @@ def dec_trans_ok(request, trans_id):
         to_del = [trans]
     if request.user.has_perm('bank.del_foreign_trans') and to_del[0].creator != request.user:
 
-        st = TransactionStatus.objects.get(name='DA')
+        st = TransactionState.objects.get(name='DA')
 
     else:
-        st = TransactionStatus.objects.get(name='DC')
+        st = TransactionState.objects.get(name='DC')
     for t in to_del:
         print('decline of trans happening')
         t.cancel()
@@ -778,14 +778,14 @@ def manage_p2p(request):
                 t = Transaction.objects.get(pk=pk)
                 if request.POST['c_' + str(pk)] == 'confirm':
                     print('confirm' + str(t.pk))
-                    t.status = TransactionStatus.objects.get(name='PR')
+                    t.status = TransactionState.objects.get(name='PR')
                     t.count()
 
                     con_trans.append(t)
 
                 if request.POST['c_' + str(pk)] == 'cancel':
                     print('cancel' + str(t.pk))
-                    t.status = TransactionStatus.objects.get(name='DA')
+                    t.status = TransactionState.objects.get(name='DA')
                     t.save()
                     dec_trans.append(t)
 

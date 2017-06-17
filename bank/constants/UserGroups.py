@@ -5,3 +5,4 @@ class UserGroups(Enum):
     staff = 'staff'
     student = 'student'
     admin = 'admin'
+

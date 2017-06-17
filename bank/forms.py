@@ -7,18 +7,18 @@ import datetime
 
 # -*- coding: utf-8 -*-
 
-
+'''
 class RecipientModelChoiceField(ModelChoiceField):
     def label_from_instance(self, account):
         return str(account.otr) + ' ' + (account.long_name())
 
 
 class SprecialTransForm(forms.Form):
-    '''
-    class Meta:
-        model = Transaction
-        fields = ('recipient', 'value', 'description')
-    '''
+    
+    #class Meta:
+    #    model = Transaction
+    #    fields = ('recipient', 'value', 'description')
+    
 
     recipient = RecipientModelChoiceField(
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
@@ -59,11 +59,11 @@ class FacAttTransForm(forms.Form):
 
 
 class P2PTransForm(forms.Form):
-    '''
-    class Meta:
-        model = Transaction
-        fields = ('recipient', 'value', 'description')
-    '''
+    
+    #class Meta:
+    #    model = Transaction
+    #    fields = ('recipient', 'value', 'description')
+    
 
     def __init__(self, max_value, *args, **kwargs):
         super(P2PTransForm, self).__init__(*args, **kwargs)
@@ -88,3 +88,4 @@ class FineTransForm(forms.Form):
                                help_text='Ну в 90% случаев штрафуют за мат 10 бачей (c)Ахмеджанов')
 
     description = forms.CharField(label='Пояснение', max_length=1000, widget=forms.Textarea)
+'''

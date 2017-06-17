@@ -1,6 +1,9 @@
 # coding=utf-8
 __author__ = 'Insolia'
 
+SIGN = '@'
+
+
 ZARYADKA_BUDGET = 25.
 p2p_buf = 40.
 p2p_proc = 0.7

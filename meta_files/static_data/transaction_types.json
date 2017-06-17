@@ -1,0 +1,38 @@
+[
+  {
+    "name": "exam",
+    "readable_name": "Экзамен",
+    "money": [
+      "exam"
+    ],
+    "attendance": []
+  },
+  {
+    "name": "workout",
+    "readable_name": "Зарядка",
+    "money": [
+      "workout"
+    ],
+    "attendance": [
+      "workout"
+    ]
+  },
+  {
+    "name": "fac_attend",
+    "readable_name": "Занятие факультатива",
+    "money": [],
+    "attendance": ["fac_attend"]
+  },
+  {
+    "name": "p2p",
+    "readable_name": "Личный перевод",
+    "money": ["p2p"],
+    "attendance": []
+  },
+  {
+    "name": "general_money",
+    "readable_name": "Начисление",
+    "money": ["radio_help", "art_help", "staff_help"],
+    "attendance": []
+  }
+]

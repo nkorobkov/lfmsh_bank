@@ -1,0 +1,21 @@
+{
+  "studies": {
+    "readable_general": "Учеба",
+    "obligatory_studies": {
+      "readable_local": "Обязательная учебная программа",
+      "fac_pass": "Зачет за факультатив",
+      "fac_attend": "Посещение факультатива"
+    },
+    "optional_studies": {
+      "readable_local": "Не обязательная учебная программа",
+       "class_attend": "Посещение кружка"
+    }
+  },
+  "sport": {
+    "readable_general": "Спорт",
+    "sport": {
+      "readable_local": "Спорт",
+      "workout": "Зарядка"
+    }
+  }
+}

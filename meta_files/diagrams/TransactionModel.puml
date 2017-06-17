@@ -25,7 +25,7 @@ AttendanceBlock block
 
 
 class AtomicTransaction{
- AtomicTransactionStatus status
+ AtomicTransactionState status
  User receiver
  Date date_created
  Date date_updated
@@ -71,9 +71,9 @@ class MoneyType << (M,orange) >> {
 }
 
 
-class AtomicTransactionStatus << (M,orange) >> {
+class AtomicTransactionState << (M,orange) >> {
 Boolean counted
-List<AtomicTransactionStatus> possible_transitions
+List<AtomicTransactionState> possible_transitions
 
 }
 
@@ -88,7 +88,7 @@ AttendanceType -up-|> AtomicType
 
 MoneyType --* Money
 AttendanceType --* Attendance
-AtomicTransactionStatus --* AtomicTransaction
+AtomicTransactionState --* AtomicTransaction
 
 Money --* Transaction
 Attendance --* Transaction

@@ -101,7 +101,7 @@ class Command(BaseCommand):
     def add_user_groups():
         Group.objects.all().delete()
         for group in UserGroups:
-            Group.objects.create(name=group.value)
+            Group.objects.get_or_create(name=group.value)
 
     @staticmethod
     def add_transaction_permissions():
@@ -129,11 +129,11 @@ class Command(BaseCommand):
                     content_type = ContentType.objects.get_for_model(TransactionType)
                     new_perm = Permission.objects.get_or_create(codename=name, name=name, content_type=content_type)[0]
                     new_perm.save()
-
-            name = Command.make_perm_name(Actions.see.value, target, 'balance')
-            content_type = ContentType.objects.get_for_model(TransactionType)
-            new_perm = Permission.objects.get_or_create(codename=name, name=name, content_type=content_type)[0]
-            new_perm.save()
+            for info in ['balance', 'attendance']:
+                name = Command.make_perm_name(Actions.see.value, target, info)
+                content_type = ContentType.objects.get_for_model(TransactionType)
+                new_perm = Permission.objects.get_or_create(codename=name, name=name, content_type=content_type)[0]
+                new_perm.save()
 
 
     @staticmethod

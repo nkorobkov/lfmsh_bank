@@ -5,6 +5,7 @@
       "see": {
         "self": [
           "balance",
+          "attendance",
           "received_transactions",
           "created_transactions"
         ]

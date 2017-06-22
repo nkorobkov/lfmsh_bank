@@ -9,15 +9,13 @@ p2p_buf = 40.
 p2p_proc = 0.7
 daily_tax = -20
 sem_needed = 18
+lectures_needed = 10
 ACTIVITY_MONEY = {1: 20, 2: 15, 3: 10, 4: 5}
 
-lab_neded = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}
-fac_neded = {7: 0, 8: 0, 9: 1, 10: 1, 11: 1}
+lab_pass_needed = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}
+fac_pass_needed = {7: 0, 8: 0, 9: 1, 10: 1, 11: 1}
 
 NUMBER_OF_OTR = 4
-SEM_IND = 0
-FAC_IND = 1
-SF_IMPOSIBLE = {0o1: [0o1, 11], 0o2: [0o2, 11], 0o3: [0o3, 12], 11: [11, 0o1, 0o2], 12: [12, 0o3], 00: []}
 INITIAL_MONEY = 180
 INITIAL_MONEY_DESC = 'Поздравляем с началом экономической игры!'
 BUDGET = 80  # exam budget

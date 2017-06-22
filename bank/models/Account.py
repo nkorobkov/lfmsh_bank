@@ -15,14 +15,13 @@ class Account(models.Model):
     middle_name = models.CharField(max_length=40, default='Not stated')
 
     party = models.IntegerField(default=0)
-
     grade = models.IntegerField(blank=True, default=0)
 
-    lab_passed = models.IntegerField(blank=True, default=0)
-    fac_passed = models.IntegerField(blank=True, default=0)
-    sem_fac_attend = models.IntegerField(blank=True, default=0)
-    lec_missed = models.IntegerField(blank=True, default=0)
-    sem_read = models.IntegerField(blank=True, default=0)
+    '''
+    def times_attended(self, attendance):
+        attendance = Attendance.objects.filter(receiver=self.user, type__name=attendance.value)
+        return sum([a.value for a in attendance])
+    '''
 
     def get_penalty(self):
         p = 0
@@ -48,19 +47,14 @@ class Account(models.Model):
         else:
             return self.user.last_name
 
-    def lab_needed(self):
-        if self.grade < 9:
-            return 3
-        return 2
+    '''def lab_needed(self):
+        return constants.lab_pass_needed[self.grade]
 
     def fac_needed(self):
-        if self.grade < 9:
-            return 0
-        return 1
+        return constants.fac_pass_needed[self.grade]
 
     def sem_att_needed(self):
-
-        return hf.sem_needed
+        return constants.sem_needed
 
     def sem_att_w(self):
         print(100 * int(self.sem_fac_attend) / self.sem_att_needed())
@@ -78,7 +72,7 @@ class Account(models.Model):
 
     def sem_read_w(self):
 
-        return int(self.sem_read) * 100
+        return int(self.sem_read) * 100'''
 
     def get_balance(self):
         if abs(self.balance) > 9.99:

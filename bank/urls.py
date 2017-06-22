@@ -14,8 +14,10 @@ urlpatterns = [
     url(r'^my_trans/$', views.show_my_trans, name='my_trans'),
     url(r'^my_att/$', views.show_my_att, name='my_att'),
 
-    url(r'^all_acc$', views.all_pioner_accounts, name='all_acc'),
-    url(r'^all_acc_ped$', views.all_ped_accounts, name='all_acc_ped'),
+    url(r'^all_acc_student$', views.all_pioner_accounts, name='all_acc_student'),
+    url(r'^all_acc_staff$', views.all_ped_accounts, name='all_acc_staff'),
+
+    url(r'^add_transaction/(?P<type_name>.+)/$', views.add_transaction, name='add_transaction'),
 
     url(r'^add_trans/special/$', views.add_special, name='add_special'),
     url(r'^add_trans/mass_special/$', views.add_mass_special, name='add_mass_special'),

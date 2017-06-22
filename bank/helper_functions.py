@@ -52,3 +52,7 @@ def sem_fac_penalty(n):
         s += step
 
     return a
+
+
+def get_student_stats():
+    return {'sum_money' : 1000}

@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+
+from bank.helper_functions import get_student_stats
 from bank.models import Account, Transaction, TransactionType, TransactionState
 from django.template import Context, loader
 from django.conf import settings
@@ -23,25 +25,26 @@ import pprint
 # Create your views here.
 @login_required
 def index(request):
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    print(request.user.account)
-    if user_group_name == 'pioner':
-        lec_pen = hf.lec_pen(request.user.account.lec_missed)
+    user_group_name = request.user.groups.filter(name__in=[u.value for u in UserGroups])[0].name
 
-        return render(request, 'bank/index_pio.html',
-                      {'user_group': user_group_name, 'p2p_buf': hf.p2p_buf, 'lec_pen': lec_pen})
-    elif user_group_name == 'pedsostav':
-        s = 0
-        for u in User.objects.filter(groups__name='pioner'):
-            s += u.account.balance
-        return render(request, 'bank/indexx.html', {'user_group': user_group_name, 's': s})
+    student_stats = get_student_stats()
+    transaction_types = TransactionType.objects.all()
+    transaction_type_info = [
+        {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
+        transaction_types]
+    return render(request, 'bank/indexx.html',
+                  {'user_group': user_group_name, 'transaction_type_info': transaction_type_info, 'st_stats' : student_stats})
 
-    p2p_unmanaged_len = len(Transaction.objects.filter(status__name='AD'))
-    s = 0
-    for u in User.objects.filter(groups__name='pioner'):
-        s += u.account.balance
+@login_required
+def add_transaction(request, type_name):
+    # check permission create for this type
+    if not request.user.has_perm('_'.join(['create', 'self', type_name])):
+        return HttpResponseForbidden()
 
-    return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len, 's': s})
+
+    # decide weather it is a post or get
+    # pass control to plugin
+    pass
 
 
 @login_required

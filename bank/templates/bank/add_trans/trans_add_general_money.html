@@ -1,0 +1,54 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+    {% load bootstrap3 %}
+
+    <h1>Начисление
+        <small>за все подряд</small>
+    </h1>
+
+    <form action={% url 'bank:add_transaction' %} method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="{{ formset.forms.0.description.id_for_label }}">Комментарий:</label>
+                {{ formset.forms.0.description }}
+            </div>
+            <div class="col-sm-6">
+                <label for="{{ formset.forms.0.transaction_type.id_for_label }}">Тип:</label>
+                {{ formset.forms.0.transaction_type }}
+            </div>
+        </div>
+
+    <!-- may be reuse this form later for exam, fine, workout, lecture, and other pio list transaction types -->
+        <div class="row">
+            {% for form in formset %}
+                {% if forloop.counter in markup.starttable %}
+                    <div class="col-md-6">
+                    <h4>{{ form.student_party.value }} Отряд</h4>
+                    <table class="table">
+                    <tr>
+                        <th>Пионер</th>
+                        <th>Сумма</th>
+                    </tr>
+                {% endif %}
+            <tr>
+                <td>{{ form.student_name.value }}</td>
+                <td>{{ form.value }}</td>
+            </tr>
+
+            {% if forloop.counter in markup.endtable %}
+                </table>
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input type="submit" value="Начислить!" class="btn btn-default"/>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

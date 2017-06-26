@@ -1,7 +1,9 @@
+from django.forms import formset_factory
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden
 
-from bank.helper_functions import get_student_stats
+from bank.controls.TransactionService import TransactionService
+from bank.helper_functions import get_student_stats, get_perm_name
 from bank.models import Account, Transaction, TransactionType, TransactionState
 from django.template import Context, loader
 from django.conf import settings
@@ -33,18 +35,27 @@ def index(request):
         {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
         transaction_types]
     return render(request, 'bank/indexx.html',
-                  {'user_group': user_group_name, 'transaction_type_info': transaction_type_info, 'st_stats' : student_stats})
+                  {'user_group': user_group_name, 'transaction_type_info': transaction_type_info,
+                   'st_stats': student_stats})
+
 
 @login_required
 def add_transaction(request, type_name):
-    # check permission create for this type
-    if not request.user.has_perm('_'.join(['create', 'self', type_name])):
-        return HttpResponseForbidden()
+    if request.content_type == 'POST':
+        if not request.user.has_perm(get_perm_name('process', 'self', type_name)):
+            return HttpResponseForbidden()
 
 
-    # decide weather it is a post or get
-    # pass control to plugin
-    pass
+        # process form
+    else:
+        if not request.user.has_perm(get_perm_name('create', 'self', type_name)):
+            return HttpResponseForbidden()
+        # prepare form
+        controller = TransactionService.get_controller_for(type_name)
+        render_map = {'formset': controller.get_form(request.user.username)}
+        render_map.update(controller.get_render_map_update())
+        print(render_map)
+        return render(request, controller.template_url, render_map)
 
 
 @login_required

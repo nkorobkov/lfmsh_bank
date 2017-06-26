@@ -1,12 +1,12 @@
+from bank.constants.TransactionTypeEnum import TransactionTypeEnum
+from bank.controls.transaction_controllers.GeneralTransactionController import GeneralTransactionController
+
+
 class TransactionService:
-    class __TransactionService:
-        pass
 
-    instance = None
+    @staticmethod
+    def get_controller_for(trans_type):
+        if trans_type == TransactionTypeEnum.general_money.value:
+            return GeneralTransactionController
+        raise ModuleNotFoundError('no controller for this type')
 
-    def __init__(self, ):
-        if not TransactionService.instance:
-            TransactionService.instance = TransactionService.__TransactionService()
-
-    def __getattr__(self, name):
-        return getattr(self.instance, name)

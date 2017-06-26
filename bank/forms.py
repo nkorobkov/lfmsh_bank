@@ -1,11 +1,38 @@
 # coding=utf-8
 from django import forms
+
+from bank.constants.MoneyTypeEnum import MoneyTypeEnum
+from bank.constants.TransactionTypeEnum import TransactionTypeEnum
+from bank.models import MoneyType
 from .models import Transaction, Account, TransactionType
-from django.forms import ModelChoiceField
+from django.forms import ModelChoiceField, BaseFormSet
 import datetime
 
 
 # -*- coding: utf-8 -*-
+
+
+class GeneralMoneyKernelForm(forms.Form):
+    student_name = forms.CharField(label='Name', max_length=200)
+    student_party = forms.IntegerField(label='Party')
+    value = forms.IntegerField(label='Value')
+
+    # fields that will be used only once from first instance of formset.
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
+                                  required=True)
+    # TODO may be add inheritance to use same code for fine form later
+    transaction_type = forms.ModelChoiceField(
+        queryset=MoneyType.objects.filter(related_transaction_type__name=TransactionTypeEnum.general_money.value),
+        required=True, empty_label=None)
+
+    # technical fields not to be used on UI
+    receiver_username = forms.CharField(max_length=200)
+    creator_username = forms.CharField(max_length=200)
+
+
+class GeneralMoneyFormSet(BaseFormSet):
+    pass
+
 
 '''
 class RecipientModelChoiceField(ModelChoiceField):

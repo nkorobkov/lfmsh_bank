@@ -9,7 +9,6 @@ sem_needed = 18
 activity_money = {1: 20, 2: 15, 3: 10, 4: 5}
 
 
-
 def zaryadka(num_of_attendants):
     if num_of_attendants != 0:
         return max(1, ZARYADKA_BUDGET / num_of_attendants)
@@ -26,10 +25,10 @@ def seminar(score):
 def lec(score, sum_score, budget, num_of_attendants):
     print(num_of_attendants, sum_score)
     print(score, end=' ')
-    sc = max(0,(float(score)))**(0.5)
-    
-    print(sc, end=' ') 
-    value = max(0., (float(budget)*num_of_attendants) * sc / (float(sum_score)))
+    sc = max(0, (float(score))) ** (0.5)
+
+    print(sc, end=' ')
+    value = max(0., (float(budget) * num_of_attendants) * sc / (float(sum_score)))
     print(value)
     return value
 
@@ -43,7 +42,6 @@ def get_tax_desc():
 
 
 def sem_fac_penalty(n):
-
     step = SEM_STEP
     s = INITIAL_STEP_SEM
     a = 0
@@ -55,4 +53,9 @@ def sem_fac_penalty(n):
 
 
 def get_student_stats():
-    return {'sum_money' : 1000}
+    return {'sum_money': 1000}
+
+
+def get_perm_name(*args):
+    args = map(str, args)
+    return 'bank.' + '_'.join(args)

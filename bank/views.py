@@ -1,32 +1,28 @@
-from django.forms import formset_factory
+import logging
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden
 
 from bank.controls.TransactionService import TransactionService
 from bank.helper_functions import get_student_stats, get_perm_name
-from bank.models import Account, Transaction, TransactionType, TransactionState
-from django.template import Context, loader
-from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth import logout, login
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.views import logout_then_login
-from django.views import generic
 from django.core.urlresolvers import reverse
 from .forms import *
 from django_tables2 import RequestConfig
 from .tables import *
-from django.utils import timezone
 from . import helper_functions as hf
 from .constants import *
 import time
 import pprint
 
+log = logging.getLogger(__name__)
+
 
 # Create your views here.
 @login_required
 def index(request):
+    log.info(request.user.last_name + ' index')
     user_group_name = request.user.groups.filter(name__in=[u.value for u in UserGroups])[0].name
 
     student_stats = get_student_stats()
@@ -40,22 +36,66 @@ def index(request):
 
 
 @login_required
-def add_transaction(request, type_name):
-    if request.content_type == 'POST':
-        if not request.user.has_perm(get_perm_name('process', 'self', type_name)):
-            return HttpResponseForbidden()
+def add_transaction(request, type_name=TransactionTypeEnum.general_money.value):
+    controller = TransactionService.get_controller_for(type_name)
+    TransactionFormset = controller.get_blank_form()
+    initial = controller.get_initial_form_data(request.user.username)
+    if not request.user.has_perm(get_perm_name('create', 'self', type_name)):
+        log.warning(request.user + ' access denied on add trans ' + type_name)
+        return HttpResponseForbidden()
+
+    if request.method == 'POST':
+
+        formset = TransactionFormset(request.POST, initial=initial)
+
+        if formset.is_valid():
+
+            print(formset.cleaned_data)
+            # process form
+            # create transaction using plugin
+            # redirect to success page
+
+            pass
 
 
-        # process form
+
+    else:  # if GET
+        # prepare empty form
+        formset = TransactionFormset(initial=initial)
+    # if GET or if form was invalid
+    render_map = {'formset': formset}
+    render_map.update(controller.get_render_map_update())
+    return render(request, controller.template_url, render_map)
+
+
+
+
+@permission_required('bank.add_transaction', login_url='bank:index')
+def add_special(request):
+    if request.method == "POST":
+
+        form = SprecialTransForm(request.POST)
+        if form.is_valid():
+            value = form.cleaned_data['value']
+            recipient = form.cleaned_data['recipient'].user
+            description = form.cleaned_data['description']
+            creator = request.user
+            type = form.cleaned_data['type']
+
+            status = TransactionState.objects.get(name='PR')
+
+            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
+                                                 description=description,
+                                                 type=type, status=status)
+
+            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
+        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
+
+
     else:
-        if not request.user.has_perm(get_perm_name('create', 'self', type_name)):
-            return HttpResponseForbidden()
-        # prepare form
-        controller = TransactionService.get_controller_for(type_name)
-        render_map = {'formset': controller.get_form(request.user.username)}
-        render_map.update(controller.get_render_map_update())
-        print(render_map)
-        return render(request, controller.template_url, render_map)
+
+        form = SprecialTransForm()
+        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
 
 
 @login_required
@@ -125,32 +165,6 @@ def show_my_att(request):
                       {'attends': attends})
 
 
-@permission_required('bank.add_transaction', login_url='bank:index')
-def add_special(request):
-    if request.method == "POST":
-
-        form = SprecialTransForm(request.POST)
-        if form.is_valid():
-            value = form.cleaned_data['value']
-            recipient = form.cleaned_data['recipient'].user
-            description = form.cleaned_data['description']
-            creator = request.user
-            type = form.cleaned_data['type']
-
-            status = TransactionState.objects.get(name='PR')
-
-            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
-                                                 description=description,
-                                                 type=type, status=status)
-
-            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
-        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
-
-
-    else:
-
-        form = SprecialTransForm()
-        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
 
 
 @permission_required('bank.add_transaction', login_url='bank:index')

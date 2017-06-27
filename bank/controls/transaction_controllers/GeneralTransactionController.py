@@ -2,22 +2,31 @@ from django.contrib.auth.models import User
 from django.forms import formset_factory
 
 from bank.constants import UserGroups, NUM_OF_PARTIES
+from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet
 
 
-class GeneralTransactionController:
+class GeneralTransactionController(TransactionController):
     template_url = 'bank/add_trans/trans_add_general_money.html'
 
     @staticmethod
-    def get_form(creator_username):
+    def get_blank_form():
+        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
+
+        general_money_formset = formset_factory(GeneralMoneyKernelForm,
+                                                max_num=len(students_query))
+        return general_money_formset
+
+    @staticmethod
+    def get_initial_form_data(creator_username):
         students_query = User.objects.filter(groups__name__contains=UserGroups.student.value).order_by('account__party',
                                                                                                        'last_name')
         initial = [
             {'student_name': user.account.long_name(), 'student_party': user.account.party,
-             'receiver_username': user.username, 'creator_username': creator_username} for user in students_query]
-        general_money_formset = formset_factory(GeneralMoneyKernelForm, formset=GeneralMoneyFormSet,
-                                                max_num=len(students_query))
-        return general_money_formset(initial=initial)
+             'receiver_username': user.username, 'creator_username': creator_username, 'description': 'stub value',
+             'transaction_type': 564} for user in students_query]
+        initial[0]['description'] = ''
+        return initial
 
     @staticmethod
     def process_valid_form(form):
@@ -30,7 +39,7 @@ class GeneralTransactionController:
         starttable = []
         marker = 0
         for party in range(1, NUM_OF_PARTIES + 1):
-            starttable.append(marker+1)
+            starttable.append(marker + 1)
             marker += len(students_query.filter(account__party=party))
             endtable.append(marker)
 

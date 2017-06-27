@@ -8,10 +8,16 @@
     </h1>
 
     <form action={% url 'bank:add_transaction' %} method="post">
+
         {% csrf_token %}
+        {{ formset.management_form }}
 
         <div class="row">
             <div class="col-sm-6">
+                {% if formset.forms.0.errors %}
+                    <div class="alert alert-danger">Пожалуйста заполните Комментарий</div>
+
+                {% endif %}
                 <label for="{{ formset.forms.0.description.id_for_label }}">Комментарий:</label>
                 {{ formset.forms.0.description }}
             </div>
@@ -21,7 +27,7 @@
             </div>
         </div>
 
-    <!-- may be reuse this form later for exam, fine, workout, lecture, and other pio list transaction types -->
+        <!-- may be reuse this form later for exam, fine, workout, lecture, and other pio list transaction types -->
         <div class="row">
             {% for form in formset %}
                 {% if forloop.counter in markup.starttable %}
@@ -34,7 +40,14 @@
                     </tr>
                 {% endif %}
             <tr>
-                <td>{{ form.student_name.value }}</td>
+                <td>
+                    {% if not forloop.counter0 == 0 %}
+                        {{ form.description.as_hidden }}{{ form.transaction_type.as_hidden }}
+                    {% endif %}
+
+                    {{ form.student_name.value }}
+                    {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
+                    {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}</td>
                 <td>{{ form.value }}</td>
             </tr>
 

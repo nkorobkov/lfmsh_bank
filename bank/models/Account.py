@@ -33,7 +33,7 @@ class Account(models.Model):
     def __str__(self):
         if self.user.first_name:
 
-            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '.'
+            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '. ' + str(self.balance) + '@'
         else:
             return self.user.last_name
 

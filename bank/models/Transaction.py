@@ -22,8 +22,12 @@ class Transaction(models.Model):
 
     def process(self):
         if self.can_be_transitioned_to(States.processed.value):
-            for atomic in self.related_money_atomics:
+            for atomic in self.related_money_atomics.all():
                 atomic.apply()
+            self.state = TransactionState.objects.get(name=States.processed.value)
+            self.save()
+        else:
+            raise AttributeError('processed called when not expected')
 
     def can_be_transitioned_to(self, state_name):
         return len(self.state.possible_transitions.filter(name=state_name)) > 0

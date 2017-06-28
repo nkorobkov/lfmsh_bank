@@ -49,7 +49,7 @@ def add_transaction(request, type_name):
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data)
-            if not request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
+            if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()
             return render(request, 'bank/add_trans/success.html', {'transaction': created_transaction})

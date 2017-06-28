@@ -1,0 +1,14 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<div class="row">
+<div class="col-md-6">
+    <p>Транзакция успешно добавлена</p>
+    <p>{{ transaction }}</p>
+
+</div>
+</div>
+<a href="{% url 'bank:index' %}"> Домой</a>
+
+{% endblock %}

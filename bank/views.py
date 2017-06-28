@@ -23,21 +23,19 @@ log = logging.getLogger(__name__)
 @login_required
 def index(request):
     log.info(request.user.last_name + ' index')
-    user_group_name = request.user.groups.filter(name__in=[u.value for u in UserGroups])[0].name
-
     student_stats = get_student_stats()
     transaction_types = TransactionType.objects.all()
     transaction_type_info = [
         {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
         transaction_types]
     return render(request, 'bank/indexx.html',
-                  {'user_group': user_group_name, 'transaction_type_info': transaction_type_info,
+                  {'transaction_type_info': transaction_type_info,
                    'st_stats': student_stats})
 
 
 @login_required
 def add_transaction(request, type_name):
-    if not request.user.has_perm(get_perm_name('create', 'self', type_name)):
+    if not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
         log.warning(request.user + ' access denied on add trans ' + type_name)
         return HttpResponseForbidden()
 
@@ -51,6 +49,9 @@ def add_transaction(request, type_name):
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data)
+            if not request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
+                # process transaction if have rights to do so
+                created_transaction.process()
             return render(request, 'bank/add_trans/success.html', {'transaction': created_transaction})
 
     else:  # if GET

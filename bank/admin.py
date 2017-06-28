@@ -10,6 +10,8 @@ admin.site.register(Account)
 admin.site.register(Transaction)
 admin.site.register(TransactionType)
 admin.site.register(TransactionState)
+admin.site.register(AttendanceBlock)
+
 
 admin.site.register(AttendanceType)
 admin.site.register(MoneyType)

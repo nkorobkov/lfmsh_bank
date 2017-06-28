@@ -1,4 +1,5 @@
 from .Account import Account
+from .AttendanceBlock import AttendanceBlock
 from .TransactionType import TransactionType
 from .TransactionState import TransactionState
 from .Transaction import Transaction

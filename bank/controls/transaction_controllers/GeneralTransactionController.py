@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
-from bank.constants import UserGroups, NUM_OF_PARTIES
+from bank.constants import UserGroups, NUM_OF_PARTIES, MoneyTypeEnum
 from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet
+from bank.models import Transaction
 
 
 class GeneralTransactionController(TransactionController):
@@ -24,13 +25,9 @@ class GeneralTransactionController(TransactionController):
         initial = [
             {'student_name': user.account.long_name(), 'student_party': user.account.party,
              'receiver_username': user.username, 'creator_username': creator_username, 'description': 'stub value',
-             'transaction_type': 564} for user in students_query]
+             'transaction_type': MoneyTypeEnum.staff_help.value} for user in students_query]
         initial[0]['description'] = ''
         return initial
-
-    @staticmethod
-    def process_valid_form(form):
-        pass
 
     @staticmethod
     def get_render_map_update():
@@ -44,3 +41,13 @@ class GeneralTransactionController(TransactionController):
             endtable.append(marker)
 
         return {'markup': {'endtable': endtable, 'starttable': starttable}}
+
+    @staticmethod
+    def get_transaction_from_form_data(formset_data):
+
+        first_form = formset_data[0]
+
+        for atomic_data in formset_data:
+
+            pass
+        #Transaction.objects.create()

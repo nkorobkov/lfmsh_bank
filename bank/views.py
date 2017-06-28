@@ -36,34 +36,28 @@ def index(request):
 
 
 @login_required
-def add_transaction(request, type_name=TransactionTypeEnum.general_money.value):
-    controller = TransactionService.get_controller_for(type_name)
-    TransactionFormset = controller.get_blank_form()
-    initial = controller.get_initial_form_data(request.user.username)
+def add_transaction(request, type_name):
     if not request.user.has_perm(get_perm_name('create', 'self', type_name)):
         log.warning(request.user + ' access denied on add trans ' + type_name)
         return HttpResponseForbidden()
 
+    controller = TransactionService.get_controller_for(type_name)
+    TransactionFormset = controller.get_blank_form()
+    initial = controller.get_initial_form_data(request.user.username)
+
+
+
     if request.method == 'POST':
-
         formset = TransactionFormset(request.POST, initial=initial)
-
         if formset.is_valid():
-
-            print(formset.cleaned_data)
-            # process form
-            # create transaction using plugin
-            # redirect to success page
-
-            pass
-
-
+            created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data)
+            return render(request, 'bank/add_trans/success.html', {'transaction': created_transaction})
 
     else:  # if GET
         # prepare empty form
         formset = TransactionFormset(initial=initial)
     # if GET or if form was invalid
-    render_map = {'formset': formset}
+    render_map = {'formset': formset, 'type_name':type_name}
     render_map.update(controller.get_render_map_update())
     return render(request, controller.template_url, render_map)
 

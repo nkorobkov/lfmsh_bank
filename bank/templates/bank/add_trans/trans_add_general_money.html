@@ -7,7 +7,7 @@
         <small>за все подряд</small>
     </h1>
 
-    <form action={% url 'bank:add_transaction' %} method="post">
+    <form action={% url 'bank:add_transaction' type_name=type_name %} method="post">
 
         {% csrf_token %}
         {{ formset.management_form }}

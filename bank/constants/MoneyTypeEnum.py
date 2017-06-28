@@ -2,4 +2,6 @@ from enum import Enum
 
 
 class MoneyTypeEnum(Enum):
-    general_money = 'general_money'
+    staff_help = 'staff_help'
+    art_help = 'art_help'
+    radio_help = 'radio_help'

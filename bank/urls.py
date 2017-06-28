@@ -18,7 +18,6 @@ urlpatterns = [
     url(r'^all_acc_staff$', views.all_ped_accounts, name='all_acc_staff'),
 
     url(r'^add_transaction/(?P<type_name>.+)/$', views.add_transaction, name='add_transaction'),
-    url(r'^add_transaction/$', views.add_transaction, name='add_transaction'),
 
     url(r'^add_trans/special/$', views.add_special, name='add_special'),
     url(r'^add_trans/mass_special/$', views.add_mass_special, name='add_mass_special'),

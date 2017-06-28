@@ -13,8 +13,8 @@ class AtomicTransaction(models.Model):
 
     description = models.TextField(max_length=1023, blank=True)
     value = models.FloatField(default=0)
+    counted = models.BooleanField(default=False)
 
-    status = models.ForeignKey(TransactionState)
     class Meta:
         abstract = True
 

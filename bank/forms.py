@@ -20,7 +20,7 @@ class GeneralMoneyKernelForm(forms.Form):
     # TODO may be add inheritance to use same code for fine form later
     transaction_type = forms.ModelChoiceField(
         queryset=MoneyType.objects.filter(related_transaction_type__name=TransactionTypeEnum.general_money.value),
-        required=True, empty_label=None)
+        required=True, empty_label=None, to_field_name="name")
 
     # technical fields not to be used on UI
     receiver_username = forms.CharField(max_length=200)

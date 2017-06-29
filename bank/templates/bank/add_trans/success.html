@@ -2,13 +2,21 @@
 
 {% block content %}
 
-<div class="row">
-<div class="col-md-6">
-    <p>Транзакция успешно добавлена</p>
-    <p>{{ transaction }}</p>
+    <div class="row">
+        <div class="col-md-6">
+            <p>Транзакция успешно добавлена</p>
+            <p>{{ transaction }}</p>
 
-</div>
-</div>
-<a href="{% url 'bank:index' %}"> Домой</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <a class="btn btn-default" href="{% url 'bank:index' %}"> Домой</a>
+            <a class="btn btn-default" href="{% url 'bank:index' %}"> Поправить</a>
+            <a class="btn btn-default" href="{% url 'bank:index' %}"> Добавить Еще одну по шаблону</a>
+            <a class="btn btn-default" href="{% url 'bank:index' %}"> ААА! Отменить</a>
+
+        </div>
+    </div>
 
 {% endblock %}

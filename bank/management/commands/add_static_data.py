@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from django.contrib.auth.models import Group, Permission
@@ -5,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
 
 from bank.constants import UserGroups, Actions
-from bank.models import TransactionState, MoneyType, AttendanceType, TransactionType
+from bank.models import TransactionState, MoneyType, AttendanceType, TransactionType, AttendanceBlock
 from main.settings import BASE_DIR
 
 
@@ -16,10 +17,11 @@ class Command(BaseCommand):
     # all file adreses should be in constants here
     STATIC_DATA_PATH = '/meta_files/static_data/'
     MONEY_TYPES_DATA = 'money_types.json'
-    ATTENDANCE_TYPES_DATA = 'attendance_types.json'
+    ATTENDANCE_TYPES_DATA = 'attendance_types_json.json'
     TRANSACTION_STATES_DATA = 'transaction_states.json'
     TRANSACTION_TYPES_DATA = 'transaction_types.json'
     GROUPS_DATA = 'user_groups.json'
+    BLOCKS_DATA = 'attendance_blocks.json'
 
     def handle(self, *args, **options):
         self.add_static_data()
@@ -35,8 +37,7 @@ class Command(BaseCommand):
         self.add_groups_permissions()
         self.add_permissions_to_groups()
 
-
-        # add permissions to groups based on groups config
+        self.add_attendance_blocks()
 
     @staticmethod
     def add_transaction_states():
@@ -74,8 +75,6 @@ class Command(BaseCommand):
                 for type_name, type_readable_name in local_group_value.items():
                     if type_name == 'readable_local':
                         continue
-
-
 
                     atomic_type = model.objects.create(group_general=general_group_name, group_local=local_group_name,
                                                        readable_group_local=local_group_readable_name,
@@ -135,7 +134,6 @@ class Command(BaseCommand):
                 new_perm = Permission.objects.get_or_create(codename=name, name=name, content_type=content_type)[0]
                 new_perm.save()
 
-
     @staticmethod
     def add_permissions_to_groups():
         groups = Command.read_file_as_json(Command.GROUPS_DATA)
@@ -144,7 +142,7 @@ class Command(BaseCommand):
             permissions = group['permissions']
             group_model = Group.objects.get(name=name)
             for action, per_action_perm in permissions.items():
-                for target,perm_list in per_action_perm.items():
+                for target, perm_list in per_action_perm.items():
                     for perm in perm_list:
                         print(Command.make_perm_name(action, target, perm))
 
@@ -153,6 +151,20 @@ class Command(BaseCommand):
 
             group_model.save()
 
+    @staticmethod
+    def add_attendance_blocks():
+        AttendanceBlock.objects.all().delete()
+        blocks_data = Command.read_file_as_json(Command.BLOCKS_DATA)
+        for block_data in blocks_data:
+
+            block = AttendanceBlock.objects.create(name=block_data['name'], readable_name=block_data['readable_name'],
+                                                   start_time=Command.time_from_string(block_data['start_time']),
+                                                   end_time=Command.time_from_string(block_data['end_time']))
+
+            for att_type_name in block_data['related_attendance_types']:
+                att_type = AttendanceType.objects.get(name=att_type_name)
+                block.related_attendance_types.add(att_type)
+            block.save()
 
     @staticmethod
     def read_file_as_json(path):
@@ -168,6 +180,11 @@ class Command(BaseCommand):
 
     @staticmethod
     def make_perm_name(*args):
-
-        args = map(str,args)
+        args = map(str, args)
         return '_'.join(args)
+
+    @staticmethod
+    def time_from_string(time_string):
+        triple = time_string.split(':')
+        ints = map(int, triple)
+        return datetime.time(*ints)

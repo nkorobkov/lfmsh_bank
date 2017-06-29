@@ -20,27 +20,24 @@ class Money(AtomicTransaction):
         return new_money
 
     def apply(self):
-        if self.counted:
-            raise AttributeError
-        creator = self.related_transaction.creator.account
-        receiver = self.receiver.account
-        print(creator, receiver)
-        creator.balance -= self.value
-        receiver.balance += self.value
-        creator.save()
-        receiver.save()
-        print(creator, receiver)
-        self.counted = True
-        self.save()
+        self._switch_counted(True)
 
     def undo(self):
-        if not self.counted:
+        self._switch_counted(False)
+
+    def _switch_counted(self, value):
+        if self.counted == value:
             raise AttributeError
         creator = self.related_transaction.creator.account
         receiver = self.receiver.account
-        creator.balance += self.value
-        receiver.balance -= self.value
+        if not value:
+            creator.balance += self.value
+            receiver.balance -= self.value
+        else:
+            creator.balance -= self.value
+            receiver.balance += self.value
         creator.save()
         receiver.save()
-        self.counted = False
+        self.counted = value
+        self.update_timestamp = now()
         self.save()

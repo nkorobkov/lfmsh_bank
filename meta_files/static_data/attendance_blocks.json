@@ -1,0 +1,25 @@
+[
+  {
+    "name": "lecture",
+    "readable_name": "Лекция",
+    "start_time": "09:00:00",
+    "end_time": "10:30:00",
+    "related_attendance_types": ["lecture"]
+  },
+  {
+    "name": "seminar_1",
+    "readable_name": "Первый блок семинаров",
+    "start_time": "11:00:00",
+    "end_time": "11:40:00",
+    "related_attendance_types": ["seminar_attend","seminar_pass"]
+
+  },
+  {
+    "name": "seminar_2",
+    "readable_name": "Второй блок семинаров",
+    "start_time": "11:40:00",
+    "end_time": "12:20:00",
+    "related_attendance_types": ["seminar_attend","seminar_pass"]
+
+  }
+]

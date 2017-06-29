@@ -54,7 +54,7 @@
 
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'bank:index' %}">Домой</a></li>
-                    <li><a href="{% url 'bank:my_trans' %}">Мои транзакции</a></li>
+                    <li><a href="{% url 'bank:my_transactions' %}">Мои транзакции</a></li>
                     <li><a href="{% url 'bank:media' %}">Файловый архив</a></li>
                     <!----{% if user.account.can_add_trans %}
                 <li class="dropdown">

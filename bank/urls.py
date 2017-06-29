@@ -11,8 +11,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.LoginView.as_view(), {'template_name': 'bank/login.html', },
         name='login'),
 
-    url(r'^my_trans/$', views.show_my_trans, name='my_trans'),
-    url(r'^my_att/$', views.show_my_att, name='my_att'),
+    url(r'^my_transactions/$', views.my_transactions, name='my_transactions'),
 
     url(r'^all_acc_student$', views.all_pioner_accounts, name='all_acc_student'),
     url(r'^all_acc_staff$', views.all_ped_accounts, name='all_acc_staff'),

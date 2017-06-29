@@ -42,11 +42,9 @@ class Command(BaseCommand):
     @staticmethod
     def add_transaction_states():
         states = Command.read_file_as_json(Command.TRANSACTION_STATES_DATA)
-        # flush all states before making new ones
-        TransactionState.objects.all().delete()
 
         for state in states:
-            s = TransactionState.objects.create(name=state['name'], readable_name=state['readable_name'],
+            s, created = TransactionState.objects.get_or_create(name=state['name'], readable_name=state['readable_name'],
                                                 counted=state['counted'])
             s.save()
 
@@ -61,8 +59,6 @@ class Command(BaseCommand):
     def add_atomic_types(model, path):
 
         types = Command.read_file_as_json(path)
-        # flush all m types before making new ones
-        model.objects.all().delete()
 
         for general_group_name, general_group_value in types.items():
             general_group_readable_name = general_group_value['readable_general']
@@ -76,7 +72,7 @@ class Command(BaseCommand):
                     if type_name == 'readable_local':
                         continue
 
-                    atomic_type = model.objects.create(group_general=general_group_name, group_local=local_group_name,
+                    atomic_type, created = model.objects.get_or_create(group_general=general_group_name, group_local=local_group_name,
                                                        readable_group_local=local_group_readable_name,
                                                        readable_group_general=general_group_readable_name,
                                                        name=type_name, readable_name=type_readable_name)
@@ -85,11 +81,9 @@ class Command(BaseCommand):
     @staticmethod
     def add_transaction_types():
         types = Command.read_file_as_json(Command.TRANSACTION_TYPES_DATA)
-        # flush all states before making new ones
-        TransactionType.objects.all().delete()
 
         for trans_type in types:
-            new_type = TransactionType.objects.create(name=trans_type['name'],
+            new_type , created= TransactionType.objects.get_or_create(name=trans_type['name'],
                                                       readable_name=trans_type['readable_name'])
             new_type.save()
 
@@ -98,7 +92,6 @@ class Command(BaseCommand):
 
     @staticmethod
     def add_user_groups():
-        Group.objects.all().delete()
         for group in UserGroups:
             Group.objects.get_or_create(name=group.value)
 
@@ -153,11 +146,10 @@ class Command(BaseCommand):
 
     @staticmethod
     def add_attendance_blocks():
-        AttendanceBlock.objects.all().delete()
         blocks_data = Command.read_file_as_json(Command.BLOCKS_DATA)
         for block_data in blocks_data:
 
-            block = AttendanceBlock.objects.create(name=block_data['name'], readable_name=block_data['readable_name'],
+            block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'], readable_name=block_data['readable_name'],
                                                    start_time=Command.time_from_string(block_data['start_time']),
                                                    end_time=Command.time_from_string(block_data['end_time']))
 

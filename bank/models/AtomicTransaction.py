@@ -19,6 +19,9 @@ class AtomicTransaction(models.Model):
         abstract = True
 
 
+
+
+
 '''
     @classmethod
     def create_trans(cls, recipient, value, creator, description, type, status):

@@ -89,7 +89,7 @@ class Command(BaseCommand):
     def generate_password(length):
         s = ''
         for c in range(length):
-            a = random.sample(string.printable[:62], 1)
+            a = random.sample(string.printable[:62].replace("l","").replace("1",'').replace('I','').replace('i',''), 1)
             s = s + a[0]
         return s
 

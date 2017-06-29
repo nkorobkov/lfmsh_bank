@@ -37,7 +37,7 @@
         {% if 'bank.see_self_received_transactions' in request.user.get_all_permissions or 'bank.see_self_created_transactions' in request.user.get_all_permissions %}
             <div class="col-sm-6 col-md-4">
                 <h4> Списки транзакций </h4>
-                <a href="{% url 'bank:my_trans' %}"> Мои транзакции</a>
+                <a href="{% url 'bank:my_transactions' %}"> Мои транзакции</a>
             </div>
         {% endif %}
         <!-- other users list-->

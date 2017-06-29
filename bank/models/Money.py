@@ -19,6 +19,9 @@ class Money(AtomicTransaction):
         new_money.save()
         return new_money
 
+    def __str__(self):
+        return "{}@ за {}".format(self.value,self.type)
+
     def apply(self):
         self._switch_counted(True)
 

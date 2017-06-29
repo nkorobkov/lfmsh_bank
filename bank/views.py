@@ -43,8 +43,6 @@ def add_transaction(request, type_name):
     TransactionFormset = controller.get_blank_form()
     initial = controller.get_initial_form_data(request.user.username)
 
-
-
     if request.method == 'POST':
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
@@ -58,11 +56,29 @@ def add_transaction(request, type_name):
         # prepare empty form
         formset = TransactionFormset(initial=initial)
     # if GET or if form was invalid
-    render_map = {'formset': formset, 'type_name':type_name}
+    render_map = {'formset': formset, 'type_name': type_name}
     render_map.update(controller.get_render_map_update())
     return render(request, controller.template_url, render_map)
 
 
+@login_required
+def my_transactions(request):
+    created_transactions = []
+    received_money = []
+    received_counters = []
+
+    if request.user.has_perm(get_perm_name(Actions.see.value, 'self', 'created_transactions')):
+        created_transactions = Transaction.objects.filter(creator=request.user)
+
+    if request.user.has_perm(get_perm_name(Actions.see.value, 'self', 'received_transactions')):
+        received_money = Money.objects.filter(receiver=request.user).order_by('-creation_timestamp')
+
+        received_counters = Attendance.objects.filter(receiver=request.user).order_by('-creation_timestamp')
+    print({'created_transactions': created_transactions, 'received_counters': received_counters,
+                   'received_money': received_money})
+    return render(request, 'bank/transaction_lists/self_transactions.html',
+                  {'created_transactions': created_transactions, 'received_counters': received_counters,
+                   'received_money': received_money})
 
 
 @permission_required('bank.add_transaction', login_url='bank:index')
@@ -117,49 +133,6 @@ def all_ped_accounts(request):
     template_name = 'bank/user_lists/ped_list.html'
     accounts = Account.objects.filter(user__groups__name='pedsostav').order_by('user__last_name')
     return render(request, template_name, {'accounts': accounts})
-
-
-@login_required
-def show_my_trans(request):
-    print(request.user.account)
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    out_trans = Transaction.objects.filter(creator=request.user).exclude(type__group1='attend').order_by(
-        '-creation_date')
-
-    if user_group_name == 'pioner':
-
-        in_trans = Transaction.objects.filter(recipient=request.user).exclude(type__group1='attend').filter(
-            counted=True).order_by('-creation_date')
-
-        return render(request, 'bank/transaction_lists/my_trans_list_pioner.html',
-                      {'in_trans': in_trans, 'out_trans': out_trans})
-    else:
-        out_trans = out_trans.filter(meta=None)
-        return render(request, 'bank/transaction_lists/my_trans_list_ped.html',
-                      {'out_trans': out_trans})
-
-
-@login_required
-def show_my_att(request):
-    print(request.user.account)
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-
-        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').filter(
-            counted=True).order_by('-creation_date')
-        return render(request, 'bank/transaction_lists/my_att_list_pioner.html',
-                      {'attends': attends})
-
-    else:
-        attends = Transaction.objects.filter(creator=request.user).filter(type__group1='attend').filter(
-            counted=True).order_by('-creation_date')
-
-        return render(request, 'bank/transaction_lists/my_att_list_ped.html',
-                      {'attends': attends})
-
-
 
 
 @permission_required('bank.add_transaction', login_url='bank:index')

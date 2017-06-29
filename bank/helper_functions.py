@@ -22,6 +22,18 @@ def seminar(score):
         return score * 10
 
 
+def get_students_markup(students):
+    endtable = []
+    starttable = []
+    marker = 0
+    for party in range(1, NUM_OF_PARTIES + 1):
+        starttable.append(marker + 1)
+        marker += len(students.filter(account__party=party))
+        endtable.append(marker)
+
+    return {'markup': {'endtable': endtable, 'starttable': starttable}}
+'''
+
 def lec(score, sum_score, budget, num_of_attendants):
     print(num_of_attendants, sum_score)
     print(score, end=' ')
@@ -31,7 +43,7 @@ def lec(score, sum_score, budget, num_of_attendants):
     value = max(0., (float(budget) * num_of_attendants) * sc / (float(sum_score)))
     print(value)
     return value
-
+'''
 
 def lec_pen(missed):
     return (missed + 1) * 10

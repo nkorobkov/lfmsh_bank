@@ -1,0 +1,25 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+    <h3>Доблестный Педсостав</h3>
+    <table class='table table-striped'>
+        <tr>
+            <th>Представитель</th>
+            {% if can_see_balance %}
+                <th>Балланс</th>
+            {% endif %}
+        </tr>
+        {% for u in staff %}
+            <tr>
+                <td>{{ u.account.long_name }}</td>
+                {% if can_see_balance %}
+                    <td>{{ u.account.balance }}</td>
+                {% endif %}
+            </tr>
+
+        {% endfor %}
+    </table>
+
+
+{% endblock %}

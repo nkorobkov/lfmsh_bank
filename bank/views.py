@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden
 
 from bank.controls.TransactionService import TransactionService
-from bank.helper_functions import get_student_stats, get_perm_name
+from bank.helper_functions import get_student_stats, get_perm_name, get_students_markup
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
@@ -68,6 +68,7 @@ def my_transactions(request):
     received_counters = []
 
     if request.user.has_perm(get_perm_name(Actions.see.value, 'self', 'created_transactions')):
+        # TODO: order by time somehow
         created_transactions = Transaction.objects.filter(creator=request.user)
 
     if request.user.has_perm(get_perm_name(Actions.see.value, 'self', 'received_transactions')):
@@ -75,64 +76,31 @@ def my_transactions(request):
 
         received_counters = Attendance.objects.filter(receiver=request.user).order_by('-creation_timestamp')
     print({'created_transactions': created_transactions, 'received_counters': received_counters,
-                   'received_money': received_money})
+           'received_money': received_money})
     return render(request, 'bank/transaction_lists/self_transactions.html',
                   {'created_transactions': created_transactions, 'received_counters': received_counters,
                    'received_money': received_money})
 
 
-@permission_required('bank.add_transaction', login_url='bank:index')
-def add_special(request):
-    if request.method == "POST":
+@login_required
+def students(request):
+    students_data = User.objects.filter(groups__name__contains=UserGroups.student.value).order_by('account__party',
+                                                                                                  'last_name')
+    render_dict = get_students_markup(students_data)
+    render_dict.update({'students': students_data})
+    render_dict.update({'can_see_balance': request.user.has_perm(
+        get_perm_name(Actions.see.value, UserGroups.student.value, 'balance'))})
 
-        form = SprecialTransForm(request.POST)
-        if form.is_valid():
-            value = form.cleaned_data['value']
-            recipient = form.cleaned_data['recipient'].user
-            description = form.cleaned_data['description']
-            creator = request.user
-            type = form.cleaned_data['type']
-
-            status = TransactionState.objects.get(name='PR')
-
-            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
-                                                 description=description,
-                                                 type=type, status=status)
-
-            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
-        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
-
-
-    else:
-
-        form = SprecialTransForm()
-        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
+    return render(request, 'bank/user_lists/students.html', render_dict)
 
 
 @login_required
-@permission_required('bank.view_pio_trans_list')
-def all_pioner_accounts(request):
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    template_name = 'bank/user_lists/pioner_list.html'
-
-    table = []
-
-    for i in range(NUMBER_OF_OTR):
-        table.append(
-            PionerOtrTable(User.objects.filter(groups__name='pioner').filter(account__otr=i + 1), order_by='name'))
-        RequestConfig(request).configure(table[i])
-        table[i].paginate(per_page=100)
-
-    return render(request, template_name, {'table': table})
-
-
-@login_required
-@permission_required('bank.view_ped_trans_list', login_url='bank:index')
-def all_ped_accounts(request):
-    template_name = 'bank/user_lists/ped_list.html'
-    accounts = Account.objects.filter(user__groups__name='pedsostav').order_by('user__last_name')
-    return render(request, template_name, {'accounts': accounts})
+def staff(request):
+    staff_data = User.objects.filter(groups__name__contains=UserGroups.staff.value).order_by('last_name')
+    render_dict = {'staff': staff_data}
+    render_dict.update({'can_see_balance': request.user.has_perm(
+        get_perm_name(Actions.see.value, UserGroups.staff.value, 'balance'))})
+    return render(request, 'bank/user_lists/staff.html', render_dict)
 
 
 @permission_required('bank.add_transaction', login_url='bank:index')

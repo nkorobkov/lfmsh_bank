@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^staff$', views.staff, name='staff'),
 
     url(r'^add_transaction/(?P<type_name>.+)/$', views.add_transaction, name='add_transaction'),
+    url(r'^user/(?P<username>.+)/$', views.user, name='user'),
 
     url(r'^dec_trans/(?P<trans_id>[0-9]+)/$', views.dec_trans, name='trans_dec'),
     url(r'^dec_trans_ok/(?P<trans_id>[0-9]+)/$', views.dec_trans_ok, name='trans_dec_ok'),

@@ -14,16 +14,13 @@
                 <tr>
                     <th>Пионер</th>
                     {% if can_see_balance %}
-
                         <th>Балланс</th>
                     {% endif %}
-
                 </tr>
             {% endif %}
         <tr>
-            <td>{{ student.account.long_name }}</td>
+            <td><a href="{% url 'bank:user' student.username%}">{{ student.account.long_name }}</a></td>
             {% if can_see_balance %}
-
                 <td>{{ student.account.balance }}</td>
             {% endif %}
         </tr>

@@ -1,0 +1,72 @@
+<ul class="nav nav-tabs">
+        {% if created_transactions %}
+            <li><a data-toggle="tab" href="#created">Созданные транзакции</a></li>
+        {% endif %}
+        {% if received_money %}
+            <li><a data-toggle="tab" href="#money">Полученные деньги</a></li>
+        {% endif %}
+        {% if received_counters %}
+            <li><a data-toggle="tab" href="#counters">Учтенные счетчики</a></li>
+        {% endif %}
+    </ul>
+
+    <div class="tab-content">
+        {% if created_transactions %}
+
+            <div id="created" class="tab-pane active">
+                <h4>Созданные транзакции</h4>
+                <table class="table table-striped">
+                    <tr>
+                        <th>---</th>
+
+                    </tr>
+                    {% for transaction in created_transactions %}
+                        <tr>
+                            <td>{{ transaction }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        {% if received_money %}
+
+            <div id="money" class="tab-pane">
+                <h4>Баксы</h4>
+                <table class="table table-striped">
+                    <tr>
+                        <th>баксы</th>
+                    </tr>
+                    {% for money in received_money %}
+                        <tr>
+                            <td>
+                                {{ money }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+        {% if received_counters %}
+
+            <div id="counters" class="tab-pane">
+
+                <h4>Счетчики</h4>
+                <table class="table table-striped">
+                    <tr>
+                                                <th>---</th>
+
+                    </tr>
+                    {% for counter in recieved_counters %}
+                        <tr>
+                            <td>
+                                {{ counter }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+
+    </div>

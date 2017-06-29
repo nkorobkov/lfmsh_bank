@@ -22,6 +22,7 @@ def seminar(score):
         return score * 10
 
 
+
 def get_students_markup(students):
     endtable = []
     starttable = []
@@ -32,6 +33,8 @@ def get_students_markup(students):
         endtable.append(marker)
 
     return {'markup': {'endtable': endtable, 'starttable': starttable}}
+
+
 '''
 
 def lec(score, sum_score, budget, num_of_attendants):
@@ -44,6 +47,7 @@ def lec(score, sum_score, budget, num_of_attendants):
     print(value)
     return value
 '''
+
 
 def lec_pen(missed):
     return (missed + 1) * 10

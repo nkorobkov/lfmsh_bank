@@ -65,3 +65,11 @@ class Transaction(models.Model):
     def __str__(self):
         return "{}@ для {} пионеров".format(sum([a.value for a in list(self.related_money_atomics.all())]),
                                             len(self.related_money_atomics.values_list()))
+
+    def receivers_count(self):
+        atomics = self.get_all_atomics()
+        return len(set([at.receiver.username for at in atomics]))
+
+    def money_count(self):
+        return sum([a.value for a in self.related_money_atomics.all()])
+

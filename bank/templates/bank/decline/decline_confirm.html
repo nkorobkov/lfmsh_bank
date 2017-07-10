@@ -1,0 +1,23 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<h3>
+    Страница отмены транзакции</h3>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p>Вы уверены что хотите отменить транзакцию ?</p>
+            {% include 'bank/transaction_lists/transaction.html'%}
+
+        </div>
+    </div>
+<form>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning" formaction="{% url 'bank:decline' transaction.id %} " formmethod="POST">
+        Отменить транзакцию
+    </button>
+    <a class="btn btn-info" href="{% url 'bank:index' %}"> Домой</a>
+</form>
+
+{% endblock %}

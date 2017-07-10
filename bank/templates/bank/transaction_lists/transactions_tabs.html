@@ -12,24 +12,34 @@
 
 <div class="tab-content">
     {% if created_transactions %}
-
-        <div id="created" class="tab-pane active">
+     <!-- ugly place to activate tab if no received_money present-->
+        {% if not received_money %}
+            <div id="created" class="tab-pane active">
+        {% else %}
+            <div id="created" class="tab-pane">
+        {% endif %}
             <h4>Созданные транзакции</h4>
             <table class="table table-striped">
                 <tr>
-                    <th>Транзакция</th>
+                    <th>Дата</th>
+                    <th>Тип</th>
+                    <th>Расходы</th>
+                    <th>Жертв</th>
                     <th>Статус</th>
                     <th>Действия</th>
 
                 </tr>
                 {% for transaction_info in created_transactions %}
                     <tr>
-                        <td>{{ transaction_info.transaction }}</td>
+                        <td>{{ transaction_info.transaction.creation_timestamp }}</td>
+                        <td><a onclick="$('#trans-info-{{ transaction_info.transaction.id }}').toggle()">{{ transaction_info.transaction.type }}<a></td>
+                        <td>{{ transaction_info.transaction.money_count }}</td>
+                        <td>{{ transaction_info.transaction.receivers_count }}</td>
                         <td>{{ transaction_info.transaction.state }}</td>
                         <td>
                             {% if transaction_info.decline %}
                                 <a class="btn btn-danger"
-                                   href="{% url 'bank:decline_transaction' transaction_info.transaction.id %}">
+                                   href="{% url 'bank:decline' transaction_info.transaction.id %}">
                                     Откатить</a>
                             {% endif %}
                             {% if transaction_info.update %}
@@ -45,28 +55,31 @@
                         </td>
 
                     </tr>
+                    <tr style="display: none" id="trans-info-{{ transaction_info.transaction.id }}">
+                    <td colspan="6"> {% include 'bank/transaction_lists/transaction.html' with transaction=transaction_info.transaction %} </td>
+                    </tr>
                 {% endfor %}
             </table>
         </div>
     {% endif %}
 
     {% if received_money %}
+            <div id="money" class="tab-pane active">
 
-        <div id="money" class="tab-pane">
-            <h4>Баксы</h4>
-            <table class="table table-striped">
-                <tr>
-                    <th>баксы</th>
-                </tr>
-                {% for money in received_money %}
-                    <tr>
-                        <td>
-                            {{ money }}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
+    <h4>Баксы</h4>
+    <table class="table table-striped">
+        <tr>
+            <th>баксы</th>
+        </tr>
+        {% for money in received_money %}
+            <tr>
+                <td>
+                    {{ money }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
     {% endif %}
     {% if received_counters %}
 
@@ -90,4 +103,4 @@
     {% endif %}
 
 
-</div>
+    </div>

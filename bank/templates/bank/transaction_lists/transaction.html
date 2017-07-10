@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-sm-12">
+        {{ transaction }}
+    </div>
+</div>
+{% if transaction.related_money_atomics.exists %}
+
+<div class="row">
+    <h3>Денюжки</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Кому</th>
+            <th>Сколько</th>
+        </tr>
+        {% for money in transaction.related_money_atomics.all %}
+            <tr>
+                <td>{{ money.receiver.account.long_name }}</td>
+                <td>{{ money.value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% if transaction.related_attendance_atomics.exists %}
+<div class="row">
+    <h3>Счетчики</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Кому</th>
+            <th>Каких</th>
+            <th>Сколько</th>
+        </tr>
+        {% for att in transaction.related_attendance_atomics.all %}
+            <tr>
+                <td>{{ att.receiver.account.long_name }}</td>
+                <td>{{ att.type }}</td>
+                <td>{{ att.value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+

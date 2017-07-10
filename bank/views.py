@@ -1,7 +1,7 @@
 import ast
 import logging
 import json
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 
 from bank.controls.TransactionService import TransactionService
@@ -38,8 +38,8 @@ def index(request):
 @login_required
 def add_transaction(request, type_name, update_of=None, from_template=None):
     if update_of:
-        updated_transaction = Transaction.objects.get(id=update_of)
-        if not is_valid_update(request, updated_transaction):
+        updated_transaction = get_object_or_404(Transaction, id=update_of)
+        if not user_can_update(request, updated_transaction):
             return HttpResponseForbidden()
         if not updated_transaction.type.name == type_name:
             return HttpResponseBadRequest('Transaction type do not match updated transaction type')
@@ -52,8 +52,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
     TransactionFormset = controller.get_blank_form()
     if update_of or from_template:
         source = update_of if update_of else from_template
-        initial = json.loads(
-            Transaction.objects.get(id=source).creation_map)
+        initial = json.loads(get_object_or_404(Transaction, id=source).creation_map)
     else:
         initial = controller.get_initial_form_data(request.user.username)
     if request.method == 'POST':
@@ -61,7 +60,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
         if formset.is_valid():
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if update_of:
-                Transaction.objects.get(id=update_of).substitute()
+                get_object_or_404(Transaction, id=update_of).substitute()
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()
@@ -77,8 +76,16 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
 
 
 @login_required()
-def decline_transaction(request, transaction_id):
-    pass
+def decline(request, transaction_id):
+    declined_transaction = get_object_or_404(Transaction, id=transaction_id)
+    if not user_can_decline(request, declined_transaction):
+        return HttpResponseForbidden()
+    if request.method == 'POST':
+        declined_transaction.decline()
+        return render(request, 'bank/decline/decline_success.html', {'transaction': declined_transaction})
+
+    else:  # GET
+        return render(request, 'bank/decline/decline_confirm.html', {'transaction': declined_transaction})
 
 
 @login_required
@@ -132,7 +139,7 @@ def dec_trans(request, trans_id):
     if trans.creator != request.user and not request.user.has_perm('bank.del_foreign_trans'):
         return redirect(reverse('bank:index'))
 
-    return render(request, 'bank/dec_trans/trans_dec_confirm.html', {'trans': to_del, 'meta': trans_id})
+    return render(request, 'bank/decline/trans_dec_confirm.html', {'trans': to_del, 'meta': trans_id})
 
 
 @login_required
@@ -160,7 +167,7 @@ def dec_trans_ok(request, trans_id):
         trans.status = st
         trans.save()
 
-    return render(request, 'bank/dec_trans/trans_dec_ok.html', {'transactions': to_del})
+    return render(request, 'bank/decline/trans_dec_ok.html', {'transactions': to_del})
 
 
 @permission_required('bank.view_pio_trans_list', login_url='bank:index')
@@ -264,7 +271,8 @@ def _get_transactions_of_user_who_is(user, target_user, group):
                                                        target_transaction_identifier)) and trans.state.possible_transitions.filter(
                     name=States.substituted.value).exists()})
             trans_info.update(
-                {'decline': user.has_perm(get_perm_name(Actions.decline.value, group, target_transaction_identifier)) and trans.state.possible_transitions.filter(
+                {'decline': user.has_perm(get_perm_name(Actions.decline.value, group,
+                                                        target_transaction_identifier)) and trans.state.possible_transitions.filter(
                     name=States.declined.value).exists()})
             trans_info.update(
                 {'create': user.has_perm(get_perm_name(Actions.create.value, group, target_transaction_identifier))})
@@ -274,17 +282,32 @@ def _get_transactions_of_user_who_is(user, target_user, group):
         received_money = Money.objects.filter(receiver=target_user).order_by('-creation_timestamp')
         received_counters = Attendance.objects.filter(receiver=target_user).order_by('-creation_timestamp')
 
-    print(created_transactions)
     return {'created_transactions': created_transactions, 'received_counters': received_counters,
             'received_money': received_money}
 
 
-def is_valid_update(request, updated_transaction):
+def user_can_update(request, updated_transaction):
     """
     can update only self transactions with rights
     """
+    if not updated_transaction.state.possible_transitions.all().filter(name=States.substituted.value).exists():
+        return False
     if updated_transaction.creator.username == request.user.username:
         if request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name)):
             return True
     else:
         return False
+
+
+def user_can_decline(request, updated_transaction):
+    if not updated_transaction.state.possible_transitions.all().filter(name=States.declined.value).exists():
+        return False
+    if updated_transaction.creator.username == request.user.username:
+        if request.user.has_perm(get_perm_name(Actions.decline.value, 'self', updated_transaction.type.name)):
+            return True
+    else:
+        if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
+                name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name, 'created_transaction')):
+            return True
+
+    return False

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import CASCADE
+from django.utils.timezone import now
 
 from bank.constants import *
 from bank.models import Transaction
@@ -17,6 +18,13 @@ class AtomicTransaction(models.Model):
 
     class Meta:
         abstract = True
+
+    def _switch_counted(self, value):
+        if self.counted == value:
+            raise AttributeError
+        self.counted = value
+        self.update_timestamp = now()
+        self.save()
 
 
 

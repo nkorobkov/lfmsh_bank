@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 
-
 from bank import views
 
 urlpatterns = [
@@ -16,10 +15,16 @@ urlpatterns = [
     url(r'^students$', views.students, name='students'),
     url(r'^staff$', views.staff, name='staff'),
 
+    url(r'^add_transaction/(?P<type_name>[a-z_2]+)/tmp(?P<from_template>[0-9]+)/$', views.add_transaction,
+        name='add_transaction_from_template'),
+    url(r'^add_transaction/(?P<type_name>[a-z_2]+)/upd(?P<update_of>[0-9]+)/$', views.add_transaction,
+        name='update_transaction'),
     url(r'^add_transaction/(?P<type_name>.+)/$', views.add_transaction, name='add_transaction'),
+
     url(r'^user/(?P<username>.+)/$', views.user, name='user'),
 
-    url(r'^dec_trans/(?P<trans_id>[0-9]+)/$', views.dec_trans, name='trans_dec'),
+    url(r'^decline_transaction/(?P<transaction_id>[0-9]+)/$', views.decline_transaction, name='decline_transaction'),
+
     url(r'^dec_trans_ok/(?P<trans_id>[0-9]+)/$', views.dec_trans_ok, name='trans_dec_ok'),
 
     url(r'^trans_list/(?P<username>.+)/$', views.trans_list, name='trans_list'),

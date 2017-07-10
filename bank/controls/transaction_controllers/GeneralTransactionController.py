@@ -5,7 +5,7 @@ from bank.constants import UserGroups, NUM_OF_PARTIES, MoneyTypeEnum
 from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet
 from bank.helper_functions import get_students_markup
-from bank.models import Transaction, Money
+from bank.models import Transaction, Money, MoneyType
 
 
 class GeneralTransactionController(TransactionController):
@@ -36,16 +36,18 @@ class GeneralTransactionController(TransactionController):
         return get_students_markup(students_query)
 
     @staticmethod
-    def get_transaction_from_form_data(formset_data):
+    def get_transaction_from_form_data(formset_data, update_of):
 
         first_form = formset_data[0]
         creator = User.objects.get(username=first_form['creator_username'])
 
-        new_transaction = Transaction.new_transaction(creator, first_form['transaction_type'].related_transaction_type, formset_data)
+        new_transaction = Transaction.new_transaction(creator, MoneyType.objects.get(name=first_form['transaction_type']).related_transaction_type,
+                                                      formset_data, update_of)
         for atomic_data in formset_data:
             value = atomic_data['value']
             if value:
                 receiver = User.objects.get(username=atomic_data['receiver_username'])
-                Money.new_money(receiver, atomic_data['value'], first_form['transaction_type'], first_form['description'],
+                Money.new_money(receiver, atomic_data['value'], MoneyType.objects.get(name=first_form['transaction_type']),
+                                first_form['description'],
                                 new_transaction)
         return new_transaction

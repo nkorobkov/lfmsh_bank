@@ -7,61 +7,70 @@
         <small>за все подряд</small>
     </h1>
 
-    <form action={% url 'bank:add_transaction' type_name=type_name %} method="post">
 
-        {% csrf_token %}
-        {{ formset.management_form }}
+    {% if update_of %}
+        <form action={% url 'bank:update_transaction' type_name=type_name update_of=update_of %} method="post">
 
-        <div class="row">
-            <div class="col-sm-6">
-                {% if formset.forms.0.errors %}
-                    <div class="alert alert-danger">Пожалуйста заполните Комментарий</div>
+    {% elif from_template %}
+        <form action={% url 'bank:add_transaction_from_template' type_name=type_name from_template=from_template %} method="post">
+    {% else %}
+        <form action={% url 'bank:add_transaction' type_name=type_name %} method="post">
 
-                {% endif %}
-                <label for="{{ formset.forms.0.description.id_for_label }}">Комментарий:</label>
-                {{ formset.forms.0.description }}
-            </div>
-            <div class="col-sm-6">
-                <label for="{{ formset.forms.0.transaction_type.id_for_label }}">Тип:</label>
-                {{ formset.forms.0.transaction_type }}
-            </div>
-        </div>
+    {% endif %}
 
-        <!-- may be reuse this form later for exam, fine, workout, lecture, and other pio list transaction types -->
-        <div class="row">
-            {% for form in formset %}
-                {% if forloop.counter in markup.starttable %}
-                    <div class="col-md-6">
-                    <h4>{{ form.student_party.value }} Отряд</h4>
-                    <table class="table">
-                    <tr>
-                        <th>Пионер</th>
-                        <th>Сумма</th>
-                    </tr>
-                {% endif %}
+{% csrf_token %}
+{{ formset.management_form }}
+
+<div class="row">
+    <div class="col-sm-6">
+        {% if formset.forms.0.errors %}
+            <div class="alert alert-danger">Пожалуйста заполните Комментарий</div>
+
+        {% endif %}
+        <label for="{{ formset.forms.0.description.id_for_label }}">Комментарий:</label>
+        {{ formset.forms.0.description }}
+    </div>
+    <div class="col-sm-6">
+        <label for="{{ formset.forms.0.transaction_type.id_for_label }}">Тип:</label>
+        {{ formset.forms.0.transaction_type }}
+    </div>
+</div>
+
+<!-- may be reuse this form later for exam, fine, workout, lecture, and other pio list transaction types -->
+<div class="row">
+    {% for form in formset %}
+        {% if forloop.counter in markup.starttable %}
+            <div class="col-md-6">
+            <h4>{{ form.student_party.value }} Отряд</h4>
+            <table class="table">
             <tr>
-                <td>
-                    {% if not forloop.counter0 == 0 %}
-                        {{ form.description.as_hidden }}{{ form.transaction_type.as_hidden }}
-                    {% endif %}
-
-                    {{ form.student_name.value }}
-                    {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
-                    {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}</td>
-                <td>{{ form.value }}</td>
+                <th>Пионер</th>
+                <th>Сумма</th>
             </tr>
-
-            {% if forloop.counter in markup.endtable %}
-                </table>
-                </div>
+        {% endif %}
+    <tr>
+        <td>
+            {% if not forloop.counter0 == 0 %}
+                {{ form.description.as_hidden }}{{ form.transaction_type.as_hidden }}
             {% endif %}
-            {% endfor %}
+
+            {{ form.student_name.value }}
+            {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
+            {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}</td>
+        <td>{{ form.value }}</td>
+    </tr>
+
+    {% if forloop.counter in markup.endtable %}
+        </table>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <input type="submit" value="Начислить!" class="btn btn-default"/>
-            </div>
-        </div>
-    </form>
+    {% endif %}
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <input type="submit" value="Начислить!" class="btn btn-default"/>
+    </div>
+</div>
+</form>
 
 {% endblock %}

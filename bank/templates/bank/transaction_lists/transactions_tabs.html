@@ -1,72 +1,93 @@
 <ul class="nav nav-tabs">
-        {% if created_transactions %}
-            <li><a data-toggle="tab" href="#created">Созданные транзакции</a></li>
-        {% endif %}
-        {% if received_money %}
-            <li><a data-toggle="tab" href="#money">Полученные деньги</a></li>
-        {% endif %}
-        {% if received_counters %}
-            <li><a data-toggle="tab" href="#counters">Учтенные счетчики</a></li>
-        {% endif %}
-    </ul>
+    {% if created_transactions %}
+        <li><a data-toggle="tab" href="#created">Созданные транзакции</a></li>
+    {% endif %}
+    {% if received_money %}
+        <li><a data-toggle="tab" href="#money">Полученные деньги</a></li>
+    {% endif %}
+    {% if received_counters %}
+        <li><a data-toggle="tab" href="#counters">Учтенные счетчики</a></li>
+    {% endif %}
+</ul>
 
-    <div class="tab-content">
-        {% if created_transactions %}
+<div class="tab-content">
+    {% if created_transactions %}
 
-            <div id="created" class="tab-pane active">
-                <h4>Созданные транзакции</h4>
-                <table class="table table-striped">
+        <div id="created" class="tab-pane active">
+            <h4>Созданные транзакции</h4>
+            <table class="table table-striped">
+                <tr>
+                    <th>Транзакция</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+
+                </tr>
+                {% for transaction_info in created_transactions %}
                     <tr>
-                        <th>---</th>
+                        <td>{{ transaction_info.transaction }}</td>
+                        <td>{{ transaction_info.transaction.state }}</td>
+                        <td>
+                            {% if transaction_info.decline %}
+                                <a class="btn btn-danger"
+                                   href="{% url 'bank:decline_transaction' transaction_info.transaction.id %}">
+                                    Откатить</a>
+                            {% endif %}
+                            {% if transaction_info.update %}
+                                <a class="btn btn-warning"
+                                   href="{% url 'bank:update_transaction' transaction_info.transaction.type.name transaction_info.transaction.id %}">
+                                    Изменить</a>
+                            {% endif %}
+                            {% if transaction_info.create %}
+                                <a class="btn btn-info"
+                                   href="{% url 'bank:add_transaction_from_template' transaction_info.transaction.type.name transaction_info.transaction.id %}">По
+                                    шаблону</a>
+                            {% endif %}
+                        </td>
 
                     </tr>
-                    {% for transaction in created_transactions %}
-                        <tr>
-                            <td>{{ transaction }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
 
-        {% if received_money %}
+    {% if received_money %}
 
-            <div id="money" class="tab-pane">
-                <h4>Баксы</h4>
-                <table class="table table-striped">
+        <div id="money" class="tab-pane">
+            <h4>Баксы</h4>
+            <table class="table table-striped">
+                <tr>
+                    <th>баксы</th>
+                </tr>
+                {% for money in received_money %}
                     <tr>
-                        <th>баксы</th>
+                        <td>
+                            {{ money }}
+                        </td>
                     </tr>
-                    {% for money in received_money %}
-                        <tr>
-                            <td>
-                                {{ money }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        {% endif %}
-        {% if received_counters %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    {% if received_counters %}
 
-            <div id="counters" class="tab-pane">
+        <div id="counters" class="tab-pane">
 
-                <h4>Счетчики</h4>
-                <table class="table table-striped">
+            <h4>Счетчики</h4>
+            <table class="table table-striped">
+                <tr>
+                    <th>---</th>
+
+                </tr>
+                {% for counter in recieved_counters %}
                     <tr>
-                                                <th>---</th>
-
+                        <td>
+                            {{ counter }}
+                        </td>
                     </tr>
-                    {% for counter in recieved_counters %}
-                        <tr>
-                            <td>
-                                {{ counter }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
 
 
-    </div>
+</div>

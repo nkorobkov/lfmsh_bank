@@ -29,8 +29,7 @@ class Money(AtomicTransaction):
         self._switch_counted(False)
 
     def _switch_counted(self, value):
-        if self.counted == value:
-            raise AttributeError
+        super()._switch_counted(value)
         creator = self.related_transaction.creator.account
         receiver = self.receiver.account
         if not value:
@@ -41,6 +40,3 @@ class Money(AtomicTransaction):
             receiver.balance += self.value
         creator.save()
         receiver.save()
-        self.counted = value
-        self.update_timestamp = now()
-        self.save()

@@ -75,3 +75,4 @@ def get_student_stats():
 def get_perm_name(*args):
     args = map(str, args)
     return 'bank.' + '_'.join(args)
+

@@ -3,11 +3,13 @@ from django import forms
 
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
 from bank.models import MoneyType
-from django.forms import BaseFormSet
+from django.forms import BaseFormSet, ModelChoiceField
 
 
 # -*- coding: utf-8 -*-
-
+class AtomicTypeField(forms.ModelChoiceField):
+    def to_python(self, value):
+        return value
 
 class GeneralMoneyKernelForm(forms.Form):
     student_name = forms.CharField(label='Name', max_length=200)
@@ -18,7 +20,7 @@ class GeneralMoneyKernelForm(forms.Form):
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
                                   required=True)
     # TODO may be add inheritance to use same code for fine form later
-    transaction_type = forms.ModelChoiceField(
+    transaction_type = AtomicTypeField(
         queryset=MoneyType.objects.filter(related_transaction_type__name=TransactionTypeEnum.general_money.value),
         required=True, empty_label=None, to_field_name="name")
 
@@ -29,6 +31,9 @@ class GeneralMoneyKernelForm(forms.Form):
 
 class GeneralMoneyFormSet(BaseFormSet):
     pass
+
+
+
 
 
 '''

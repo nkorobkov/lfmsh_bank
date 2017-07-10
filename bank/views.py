@@ -1,6 +1,8 @@
+import ast
 import logging
+import json
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 
 from bank.controls.TransactionService import TransactionService
 from bank.helper_functions import get_student_stats, get_perm_name, get_students_markup
@@ -34,19 +36,32 @@ def index(request):
 
 
 @login_required
-def add_transaction(request, type_name):
-    if not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
-        log.warning(request.user + ' access denied on add trans ' + type_name)
+def add_transaction(request, type_name, update_of=None, from_template=None):
+    if update_of:
+        updated_transaction = Transaction.objects.get(id=update_of)
+        if not is_valid_update(request, updated_transaction):
+            return HttpResponseForbidden()
+        if not updated_transaction.type.name == type_name:
+            return HttpResponseBadRequest('Transaction type do not match updated transaction type')
+
+    elif not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
+        log.warning(request.user.get_username() + ' access denied on add trans ' + type_name)
         return HttpResponseForbidden()
 
     controller = TransactionService.get_controller_for(type_name)
     TransactionFormset = controller.get_blank_form()
-    initial = controller.get_initial_form_data(request.user.username)
-
+    if update_of or from_template:
+        source = update_of if update_of else from_template
+        initial = json.loads(
+            Transaction.objects.get(id=source).creation_map)
+    else:
+        initial = controller.get_initial_form_data(request.user.username)
     if request.method == 'POST':
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
-            created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data)
+            created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
+            if update_of:
+                Transaction.objects.get(id=update_of).substitute()
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()
@@ -56,15 +71,20 @@ def add_transaction(request, type_name):
         # prepare empty form
         formset = TransactionFormset(initial=initial)
     # if GET or if form was invalid
-    render_map = {'formset': formset, 'type_name': type_name}
+    render_map = {'formset': formset, 'type_name': type_name, 'update_of': update_of, 'from_template': from_template}
     render_map.update(controller.get_render_map_update())
     return render(request, controller.template_url, render_map)
+
+
+@login_required()
+def decline_transaction(request, transaction_id):
+    pass
 
 
 @login_required
 def my_transactions(request):
     return render(request, 'bank/transaction_lists/self_transactions.html',
-                  _get_transactions_of_user_who_is(request.user, 'self'))
+                  _get_transactions_of_user_who_is(request.user, request.user, 'self'))
 
 
 @login_required
@@ -96,7 +116,7 @@ def user(request, username):
     render_dict.update(
         {'can_see_balance': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'balance')),
          'can_see_counters': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'attendance'))})
-    render_dict.update(_get_transactions_of_user_who_is(host, host_group.name))
+    render_dict.update(_get_transactions_of_user_who_is(request.user, host, host_group.name))
     return render(request, 'bank/user_page.html', render_dict)
 
 
@@ -228,17 +248,43 @@ def media(request):
     return redirect('/media/')
 
 
-def _get_transactions_of_user_who_is(user, group):
+def _get_transactions_of_user_who_is(user, target_user, group):
     created_transactions = []
     received_money = []
     received_counters = []
     if user.has_perm(get_perm_name(Actions.see.value, group, 'created_transactions')):
-        # TODO: order by time somehow
-        created_transactions = Transaction.objects.filter(creator=user)
+        for trans in Transaction.objects.filter(creator=target_user).order_by('-creation_timestamp').all():
+            trans_info = {'transaction': trans}
+            if group == 'self':
+                target_transaction_identifier = trans.type.name
+            else:
+                target_transaction_identifier = 'created_transactions'
+            trans_info.update(
+                {'update': user.has_perm(get_perm_name(Actions.update.value, group,
+                                                       target_transaction_identifier)) and trans.state.possible_transitions.filter(
+                    name=States.substituted.value).exists()})
+            trans_info.update(
+                {'decline': user.has_perm(get_perm_name(Actions.decline.value, group, target_transaction_identifier)) and trans.state.possible_transitions.filter(
+                    name=States.declined.value).exists()})
+            trans_info.update(
+                {'create': user.has_perm(get_perm_name(Actions.create.value, group, target_transaction_identifier))})
+            created_transactions.append(trans_info)
 
-    if user.has_perm(get_perm_name(Actions.see.value, 'self', 'received_transactions')):
-        received_money = Money.objects.filter(receiver=user).order_by('-creation_timestamp')
-        received_counters = Attendance.objects.filter(receiver=user).order_by('-creation_timestamp')
+    if user.has_perm(get_perm_name(Actions.see.value, group, 'received_transactions')):
+        received_money = Money.objects.filter(receiver=target_user).order_by('-creation_timestamp')
+        received_counters = Attendance.objects.filter(receiver=target_user).order_by('-creation_timestamp')
 
+    print(created_transactions)
     return {'created_transactions': created_transactions, 'received_counters': received_counters,
             'received_money': received_money}
+
+
+def is_valid_update(request, updated_transaction):
+    """
+    can update only self transactions with rights
+    """
+    if updated_transaction.creator.username == request.user.username:
+        if request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name)):
+            return True
+    else:
+        return False

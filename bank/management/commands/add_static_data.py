@@ -44,8 +44,9 @@ class Command(BaseCommand):
         states = Command.read_file_as_json(Command.TRANSACTION_STATES_DATA)
 
         for state in states:
-            s, created = TransactionState.objects.get_or_create(name=state['name'], readable_name=state['readable_name'],
-                                                counted=state['counted'])
+            s, created = TransactionState.objects.get_or_create(name=state['name'],
+                                                                readable_name=state['readable_name'],
+                                                                counted=state['counted'])
             s.save()
 
         for state in states:
@@ -72,10 +73,11 @@ class Command(BaseCommand):
                     if type_name == 'readable_local':
                         continue
 
-                    atomic_type, created = model.objects.get_or_create(group_general=general_group_name, group_local=local_group_name,
-                                                       readable_group_local=local_group_readable_name,
-                                                       readable_group_general=general_group_readable_name,
-                                                       name=type_name, readable_name=type_readable_name)
+                    atomic_type, created = model.objects.get_or_create(group_general=general_group_name,
+                                                                       group_local=local_group_name,
+                                                                       readable_group_local=local_group_readable_name,
+                                                                       readable_group_general=general_group_readable_name,
+                                                                       name=type_name, readable_name=type_readable_name)
                     atomic_type.save()
 
     @staticmethod
@@ -83,8 +85,8 @@ class Command(BaseCommand):
         types = Command.read_file_as_json(Command.TRANSACTION_TYPES_DATA)
 
         for trans_type in types:
-            new_type , created= TransactionType.objects.get_or_create(name=trans_type['name'],
-                                                      readable_name=trans_type['readable_name'])
+            new_type, created = TransactionType.objects.get_or_create(name=trans_type['name'],
+                                                                      readable_name=trans_type['readable_name'])
             new_type.save()
 
             Command.add_type_to_atomic_type(trans_type['money'], new_type, MoneyType)
@@ -97,7 +99,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def add_transaction_permissions():
-        per_trans_type_permissions = [Actions.create, Actions.process, Actions.update]
+        per_trans_type_permissions = [Actions.create, Actions.decline, Actions.process, Actions.update]
         types = Command.read_file_as_json(Command.TRANSACTION_TYPES_DATA)
         for trans_type in types:
             for perm in per_trans_type_permissions:
@@ -149,9 +151,12 @@ class Command(BaseCommand):
         blocks_data = Command.read_file_as_json(Command.BLOCKS_DATA)
         for block_data in blocks_data:
 
-            block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'], readable_name=block_data['readable_name'],
-                                                   start_time=Command.time_from_string(block_data['start_time']),
-                                                   end_time=Command.time_from_string(block_data['end_time']))
+            block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'],
+                                                                   readable_name=block_data['readable_name'],
+                                                                   start_time=Command.time_from_string(
+                                                                       block_data['start_time']),
+                                                                   end_time=Command.time_from_string(
+                                                                       block_data['end_time']))
 
             for att_type_name in block_data['related_attendance_types']:
                 att_type = AttendanceType.objects.get(name=att_type_name)

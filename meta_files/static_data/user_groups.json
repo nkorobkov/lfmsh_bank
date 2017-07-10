@@ -47,6 +47,9 @@
         ]
       },
       "decline": {
+        "self": [
+          "general_money"
+        ],
         "student": [
           "created_transactions"
         ]

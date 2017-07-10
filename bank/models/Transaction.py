@@ -73,3 +73,6 @@ class Transaction(models.Model):
     def money_count(self):
         return sum([a.value for a in self.related_money_atomics.all()])
 
+    def get_creation_timestamp(self):
+        return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
+

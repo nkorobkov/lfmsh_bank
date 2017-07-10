@@ -5,7 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 
 from bank.controls.TransactionService import TransactionService
-from bank.helper_functions import get_student_stats, get_perm_name, get_students_markup
+from bank.controls.stats_controller import get_student_stats
+from bank.helper_functions import get_perm_name, get_students_markup
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
@@ -13,7 +14,6 @@ from django.core.urlresolvers import reverse
 from .forms import *
 from django_tables2 import RequestConfig
 from .tables import *
-from . import helper_functions as hf
 from .constants import *
 import time
 import pprint
@@ -279,8 +279,8 @@ def _get_transactions_of_user_who_is(user, target_user, group):
             created_transactions.append(trans_info)
 
     if user.has_perm(get_perm_name(Actions.see.value, group, 'received_transactions')):
-        received_money = Money.objects.filter(receiver=target_user).order_by('-creation_timestamp')
-        received_counters = Attendance.objects.filter(receiver=target_user).order_by('-creation_timestamp')
+        received_money = Money.objects.filter(receiver=target_user).filter(counted=True).order_by('-creation_timestamp')
+        received_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True).order_by('-creation_timestamp')
 
     return {'created_transactions': created_transactions, 'received_counters': received_counters,
             'received_money': received_money}

@@ -14,7 +14,7 @@ class AtomicTypeField(forms.ModelChoiceField):
 class GeneralMoneyKernelForm(forms.Form):
     student_name = forms.CharField(label='Name', max_length=200)
     student_party = forms.IntegerField(label='Party')
-    value = forms.IntegerField(label='Value', required=False)
+    value = forms.IntegerField(label='Value', required=False, min_value=1)
 
     # fields that will be used only once from first instance of formset.
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',

@@ -71,7 +71,7 @@
 
     {% if 'bank.see_student_balance' in request.user.get_all_permissions %}
          <div class="col-sm-6">
-            Суммарные деньги пионеров: {{ st_stats.sum_money }}
+            Суммарные деньги пионеров: {{ st_stats.sum_money }} @
          </div>
     {% endif %}
     </div>

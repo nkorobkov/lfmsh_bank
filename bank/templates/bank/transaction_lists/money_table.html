@@ -1,0 +1,18 @@
+<table class="table table-striped">
+    <tr>
+        <th>Дата</th>
+        <th>Автор</th>
+        <th>Сумма</th>
+        <th>Описание</th>
+        <th>Тип</th>
+    </tr>
+    {% for money in moneys %}
+        <tr>
+            <td>{{ money.get_creation_timestamp }}</td>
+            <td>{{ money.related_transaction.creator.account.long_name }}</td>
+            <td>{{ money.value }}</td>
+            <td>{{ money.description }}</td>
+            <td>{{ money.type }}</td>
+        </tr>
+    {% endfor %}
+</table>

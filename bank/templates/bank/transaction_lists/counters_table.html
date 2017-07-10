@@ -1,0 +1,17 @@
+<table class="table table-striped">
+    <tr>
+        <th>Дата</th>
+        <th>Автор</th>
+        <th>Сумма</th>
+        <th>Описание</th>
+        <th>Тип</th>
+    </tr>
+    {% for counter in counters %}
+        <tr>
+            <td>{{ counter.get_creation_timestamp }}</td>
+            <td>{{ counter.related_transaction.creator.account.long_name }}</td>
+            <td>{{ counter.value }}</td>
+            <td>{{ counter.description }}</td>
+            <td>{{ counter.type }}</td>
+        </tr>
+    {% endfor %}

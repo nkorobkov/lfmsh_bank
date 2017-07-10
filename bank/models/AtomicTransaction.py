@@ -26,8 +26,8 @@ class AtomicTransaction(models.Model):
         self.update_timestamp = now()
         self.save()
 
-
-
+    def get_creation_timestamp(self):
+        return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
 
 
 '''

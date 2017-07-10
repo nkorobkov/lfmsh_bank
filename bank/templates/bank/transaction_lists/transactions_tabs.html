@@ -58,7 +58,7 @@
 
             </tr>
             <tr style="display: none" id="trans-info-{{ transaction_info.transaction.id }}">
-                <td colspan="6"> {% include 'bank/transaction_lists/transaction.html' with transaction=transaction_info.transaction %} </td>
+                <td colspan="6"> {% include 'bank/transaction_lists/transaction.html' with transaction=transaction_info.transaction viewer_role='creator'%} </td>
             </tr>
         {% endfor %}
     </table>
@@ -69,7 +69,7 @@
         <div id="money" class="tab-pane active">
 
             <h4>Баксы</h4>
-            {% include 'bank/transaction_lists/money_table.html' with moneys=received_money %}
+            {% include 'bank/transaction_lists/money_table.html' with moneys=received_money  viewer_role='receiver'%}
 
         </div>
     {% endif %}
@@ -78,7 +78,7 @@
         <div id="counters" class="tab-pane">
 
             <h4>Счетчики</h4>
-            {% include 'bank/transaction_lists/counters_table.html' with moneys=recieved_counters %}
+            {% include 'bank/transaction_lists/counters_table.html' with moneys=recieved_counters  viewer_role='receiver'%}
         </div>
     {% endif %}
 

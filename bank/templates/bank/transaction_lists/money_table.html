@@ -1,7 +1,12 @@
 <table class="table table-striped">
     <tr>
         <th>Дата</th>
-        <th>Автор</th>
+        {% if not viewer_role == 'receiver' %}
+            <th>Жертва</th>
+        {% endif %}
+        {% if not viewer_role == 'creator' %}
+            <th>Автор</th>
+        {% endif %}
         <th>Сумма</th>
         <th>Описание</th>
         <th>Тип</th>
@@ -9,7 +14,13 @@
     {% for money in moneys %}
         <tr>
             <td>{{ money.get_creation_timestamp }}</td>
-            <td>{{ money.related_transaction.creator.account.long_name }}</td>
+            {% if not viewer_role == 'receiver' %}
+                <td>{{ money.receiver.account.long_name }}</td>
+            {% endif %}
+            {% if not viewer_role == 'creator' %}
+                <td>{{ money.related_transaction.creator.account.long_name }}</td>
+            {% endif %}
+
             <td>{{ money.value }}</td>
             <td>{{ money.description }}</td>
             <td>{{ money.type }}</td>

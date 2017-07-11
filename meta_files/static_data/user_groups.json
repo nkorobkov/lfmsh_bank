@@ -27,6 +27,7 @@
         ],
         "student": [
           "balance",
+          "attendance",
           "received_transactions",
           "created_transactions"
         ]

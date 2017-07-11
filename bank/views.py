@@ -30,9 +30,10 @@ def index(request):
     transaction_type_info = [
         {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
         transaction_types]
+    counters = get_counters_of_user_who_is(request.user, request.user, 'self')
     return render(request, 'bank/indexx.html',
                   {'transaction_type_info': transaction_type_info,
-                   'st_stats': student_stats})
+                   'st_stats': student_stats, 'counters': counters})
 
 
 @login_required
@@ -124,6 +125,7 @@ def user(request, username):
         {'can_see_balance': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'balance')),
          'can_see_counters': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'attendance'))})
     render_dict.update(_get_transactions_of_user_who_is(request.user, host, host_group.name))
+    render_dict.update({'counters': get_counters_of_user_who_is(request.user, host, host_group)})
     return render(request, 'bank/user_page.html', render_dict)
 
 
@@ -292,5 +294,16 @@ def user_can_decline(request, updated_transaction):
                 name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
                                                'created_transaction')):
             return True
-
     return False
+
+
+def get_counters_of_user_who_is(user, target_user, group):
+    if not user.has_perm(get_perm_name(Actions.see.value, group, "attendance")):
+        return None
+
+    all_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True)
+    result = {}
+    for counter_type in AttendanceType.objects.all():
+        counter_sum = sum([c.value for c in all_counters.filter(type=counter_type)])
+        result.update({counter_type.readable_name: int(counter_sum)})
+    return result

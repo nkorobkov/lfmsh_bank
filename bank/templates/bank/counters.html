@@ -1,3 +1,14 @@
 <div>
-    Here we will have counters soon
+    {% if counters %}
+        <h4> Зачтенные Счетчики</h4>
+        {% for key, value in counters.items %}
+
+
+            {% if value %}
+            <p>{{ key }}: {{ value }}</p>
+            {% endif %}
+
+
+        {% endfor %}
+    {% endif %}
 </div>

@@ -33,7 +33,7 @@
             <tr>
                 <td>{{ transaction_info.transaction.get_creation_timestamp }}</td>
                 <td>
-                    <a onclick="$('#trans-info-{{ transaction_info.transaction.id }}').toggle()">{{ transaction_info.transaction.type }}<a>
+                    <a onclick="$('#trans-info-{{ transaction_info.transaction.id }}').toggle()">{{ transaction_info.transaction.type }}</a>
                 </td>
                 <td>{{ transaction_info.transaction.money_count }}</td>
                 <td>{{ transaction_info.transaction.receivers_count }}</td>
@@ -74,11 +74,9 @@
         </div>
     {% endif %}
     {% if received_counters %}
-
         <div id="counters" class="tab-pane">
-
             <h4>Счетчики</h4>
-            {% include 'bank/transaction_lists/counters_table.html' with moneys=recieved_counters  viewer_role='receiver'%}
+            {% include 'bank/transaction_lists/counters_table.html' with counters=received_counters  viewer_role='receiver'%}
         </div>
     {% endif %}
 

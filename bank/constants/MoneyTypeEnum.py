@@ -7,3 +7,4 @@ class MoneyTypeEnum(Enum):
     radio_help = 'radio_help'
 
     p2p='p2p'
+    seminar_pass = 'seminar_pass'

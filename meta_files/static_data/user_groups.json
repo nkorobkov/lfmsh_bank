@@ -33,22 +33,26 @@
       },
       "create": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ]
       },
       "process": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ]
       },
       "update": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ]
       },
       "decline": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ],
         "student": [
           "created_transactions"
@@ -78,17 +82,20 @@
       },
       "create": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ]
       },
       "process": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ]
       },
       "update": {
         "self": [
-          "general_money"
+          "general_money",
+          "seminar"
         ]
       },
       "decline": {

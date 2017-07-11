@@ -1,0 +1,105 @@
+from django.contrib.auth.models import User
+from django.forms import formset_factory
+
+from bank.constants import UserGroups, NUM_OF_PARTIES, MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
+from bank.controls.transaction_controllers.TransactionController import TransactionController
+from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet, SeminarKernelForm
+from bank.helper_functions import get_students_markup
+from bank.models import Transaction, Money, MoneyType, TransactionType, Attendance, AttendanceType
+
+
+class SeminarTransactionController(TransactionController):
+    template_url = 'bank/add/add_seminar.html'
+
+    @staticmethod
+    def get_blank_form():
+        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
+        return formset_factory(SeminarKernelForm, max_num=len(students_query))
+
+    @staticmethod
+    def get_initial_form_data(creator_username):
+        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value).order_by('account__party',
+                                                                                                       'last_name')
+        initial = [
+            {'student_name': user.account.long_name(),
+             'student_party': user.account.party,
+             'receiver_username': user.username,
+             'creator_username': creator_username,
+             'description': 'stub value',
+             'receiver': user.username,
+             'block': 'seminar_1',
+             'content_quality': 0,
+             'knowledge_quality': 0,
+             'presentation_quality': 0,
+             'presentation_quality_2': 0,
+             'presentation_quality_3': 0,
+             'unusual_things': 0,
+             'materials': 0,
+             'discussion': 0
+
+             } for user in students_query]
+
+        initial[0]['description'] = ''
+        initial[0]['receiver'] = None
+        initial[0]['block'] = None
+
+        for key in SeminarTransactionController._get_mark_keys():
+            initial[0][key] = None
+        return initial
+
+    @staticmethod
+    def get_render_map_update():
+        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
+        return get_students_markup(students_query)
+
+    @staticmethod
+    def get_transaction_from_form_data(formset_data, update_of):
+        first_form = formset_data[0]
+
+        mark = sum([int(first_form[key]) for key in SeminarTransactionController._get_mark_keys()])
+        money_reward = SeminarTransactionController._get_reward_from_mark(mark)
+
+        creator = User.objects.get(username=first_form['creator_username'])
+
+        new_transaction = Transaction.new_transaction(creator, TransactionType.objects.get(
+            name=TransactionTypeEnum.seminar.value),
+                                                      formset_data, update_of)
+
+        reader = User.objects.get(username=first_form['receiver'])
+        Money.new_money(reader, money_reward,
+                        MoneyType.objects.get(name=MoneyTypeEnum.seminar_pass.value),
+                        first_form['description'],
+                        new_transaction)
+
+        Attendance.new_attendance(reader, 1,
+                                  AttendanceType.objects.get(name=AttendanceTypeEnum.seminar_pass.value),
+                                  first_form['description'], first_form['block'], first_form['date'],
+                                  new_transaction)
+
+        for atomic_data in formset_data:
+            attended = atomic_data['attended']
+            if attended:
+                receiver = User.objects.get(username=atomic_data['receiver_username'])
+                Attendance.new_attendance(receiver, 1,
+                                AttendanceType.objects.get(name=AttendanceTypeEnum.seminar_attend.value),
+                                first_form['description'], first_form['block'], first_form['date'],
+                                new_transaction)
+        return new_transaction
+
+    @staticmethod
+    def _get_mark_keys():
+        return ['content_quality',
+                'knowledge_quality',
+                'presentation_quality',
+                'presentation_quality_2',
+                'presentation_quality_3',
+                'unusual_things',
+                'materials',
+                'discussion']
+
+    @staticmethod
+    def _get_reward_from_mark(mark):
+        if mark > 0:
+            return mark * 5
+        else:
+            return mark * 10

@@ -4,7 +4,8 @@
     "obligatory_studies": {
       "readable_local": "Обязательная учебная программа",
       "fac_pass": "Зачет за факультатив",
-      "exam": "Экзамен"
+      "exam": "Экзамен",
+      "seminar_pass": "Проведение семинара"
     },
     "optional_studies": {
       "readable_local": "Необязательная учебная программа",

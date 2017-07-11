@@ -34,5 +34,11 @@
     "readable_name": "Начисление",
     "money": ["radio_help", "art_help", "staff_help"],
     "attendance": []
+  },
+  {
+    "name": "seminar",
+    "readable_name": "Семинар",
+    "money": ["seminar"],
+    "attendance": ["seminar_attend", "seminar_pass"]
   }
 ]

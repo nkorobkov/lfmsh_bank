@@ -1,4 +1,5 @@
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
+from bank.controls.transaction_controllers.SeminarTransactionController import SeminarTransactionController
 from bank.controls.transaction_controllers.P2PTransactionController import P2PTransactionController
 from bank.controls.transaction_controllers.GeneralTransactionController import GeneralTransactionController
 
@@ -11,5 +12,7 @@ class TransactionService:
             return GeneralTransactionController
         if trans_type == TransactionTypeEnum.p2p.value:
             return P2PTransactionController
+        if trans_type == TransactionTypeEnum.seminar.value:
+            return SeminarTransactionController
         raise ModuleNotFoundError('no controller for this type')
 

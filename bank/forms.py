@@ -1,16 +1,26 @@
 # coding=utf-8
+import datetime
+
 from django import forms
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from bank.constants import UserGroups, P2P_BUFFER
+from bank.constants import UserGroups, P2P_BUFFER, AttendanceTypeEnum
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
-from bank.models import MoneyType
+from bank.models import MoneyType, AttendanceBlock
 from django.forms import BaseFormSet, ModelChoiceField
 
 
 # -*- coding: utf-8 -*-
 class AtomicTypeField(forms.ModelChoiceField):
+    def to_python(self, value):
+        return value
+
+class MyDateField(forms.DateField):
+    def to_python(self, value):
+        return str(value)
+
+class MyBlockField(forms.ModelChoiceField):
     def to_python(self, value):
         return value
 
@@ -32,9 +42,67 @@ class GeneralMoneyKernelForm(forms.Form):
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
                                   required=True)
     # TODO may be add inheritance to use same code for fine form later
-    transaction_type = AtomicTypeField(
-        queryset=MoneyType.objects.filter(related_transaction_type__name=TransactionTypeEnum.general_money.value),
-        required=True, empty_label=None, to_field_name="name")
+    transaction_type = AtomicTypeField(label="Тип",
+                                       queryset=MoneyType.objects.filter(
+                                           related_transaction_type__name=TransactionTypeEnum.general_money.value),
+                                       required=True, empty_label=None, to_field_name="name")
+
+    # technical fields not to be used on UI
+    receiver_username = forms.CharField(max_length=200)
+    creator_username = forms.CharField(max_length=200)
+
+
+class SeminarKernelForm(forms.Form):
+    student_name = forms.CharField(label='Name', max_length=200)
+    student_party = forms.IntegerField(label='Party')
+    attended = forms.BooleanField(required=False)
+
+    # fields that will be used only once from first instance of formset.
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
+                                  required=True)
+    receiver = ReceiverField(label="Докладчик",
+                             queryset=User.objects.filter(
+                                 groups__name__in=[UserGroups.student.value]).order_by('account__party',
+                                                                                       'last_name'),
+                             empty_label="Жертва", to_field_name="username")
+
+    date = MyDateField(initial=datetime.date.today, label="Дата проведения")
+    block = MyBlockField(label='Блок семинара',
+                                   queryset=AttendanceBlock.objects.filter(
+                                       related_attendance_types__name__in=[AttendanceTypeEnum.seminar_pass.value]),
+                                   required=True, empty_label='Блок', to_field_name='name')
+
+    # marks
+
+    content_quality_choices = [(-1, "Нет"), (0, "Не очень"), (1, "Да")]
+    content_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=content_quality_choices)
+
+    knowledge_quality_choices = [(-1, "Отсутствует"), (0, "Поверхностная"), (1, "Средняя"), (2, "Хорошая"),
+                                 (3, "Высокая")]
+    knowledge_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=knowledge_quality_choices)
+
+    presentation_quality_choices = [(-1, "Отсутствует"), (0, "Прослеживается с Трудом"),
+                                    (1, "Прослеживается, но существуют явные недочеты"), (2, "Явных недочетов нет"),
+                                    (3, "Недочетов нет вовсе")]
+    presentation_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_choices)
+
+    presentation_quality_2_choices = [(-1, "Тема не раскрыта"), (0, "Тема Раскрыта не полностью"),
+                                      (1, "Тема раскрыта не полностью, но присутствуют интересные факты"),
+                                      (2, "Тема раскрыта"),
+                                      (3, "Тема раскрыта, интересные факты присутствуют")]
+    presentation_quality_2 = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_2_choices)
+
+    presentation_quality_3_choices = [(0, "Нет"), (1, "Да")]
+    presentation_quality_3 = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_3_choices)
+
+    materials_choices = [(0, "Отсутствует"), (1, "Присутствует"), (2, "Присутствует в разных формах")]
+    materials = forms.ChoiceField(widget=forms.RadioSelect, choices=materials_choices)
+
+    unusual_things_choices = [(0, "Нет или почти нет"), (1, "Да")]
+    unusual_things = forms.ChoiceField(widget=forms.RadioSelect, choices=unusual_things_choices)
+
+    discussion_choices = [(0, "Нет или почти нет"), (1, "Непродолжительное"), (1, "Продолжительное")]
+    discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices)
 
     # technical fields not to be used on UI
     receiver_username = forms.CharField(max_length=200)
@@ -46,7 +114,7 @@ class GeneralMoneyFormSet(BaseFormSet):
 
 
 class P2PKernelForm(forms.Form):
-    value = forms.IntegerField(label='Value', required=True, min_value=1)
+    value = forms.IntegerField(label='Value', required=True, min_value=1)  # consider adding validators here
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
                                   required=True)
     receiver_username = ReceiverField(
@@ -55,6 +123,7 @@ class P2PKernelForm(forms.Form):
         required=True,
         empty_label="Выберите получателя", to_field_name="username")
     creator_username = forms.CharField(max_length=200)
+
 
 class P2PFormSet(BaseFormSet):
     pass

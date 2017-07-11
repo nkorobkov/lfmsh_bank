@@ -57,9 +57,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
         initial = controller.get_initial_form_data(request.user.username)
     if request.method == 'POST':
         formset = TransactionFormset(request.POST, initial=initial)
-        print(formset.errors)
         if formset.is_valid():
-            print('is valid')
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if update_of:
                 get_object_or_404(Transaction, id=update_of).substitute()
@@ -266,7 +264,6 @@ def _get_transactions_of_user_who_is(user, target_user, group):
         received_money = Money.objects.filter(receiver=target_user).filter(counted=True).order_by('-creation_timestamp')
         received_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True).order_by(
             '-creation_timestamp')
-
     return {'created_transactions': created_transactions, 'received_counters': received_counters,
             'received_money': received_money}
 

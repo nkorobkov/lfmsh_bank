@@ -1,28 +1,34 @@
+
 <table class="table table-bordered">
     <tr>
-        <th>Дата</th>
+        <th>Создана</th>
         {% if not viewer_role == 'receiver' %}
             <th>Жертва</th>
         {% endif %}
         {% if not viewer_role == 'creator' %}
             <th>Автор</th>
         {% endif %}
-        <th>Сумма</th>
+        <th>Состояние</th>
         <th>Описание</th>
         <th>Тип</th>
+        <th>Блок</th>
+        <th>Дата</th>
     </tr>
     {% for counter in counters %}
         <tr>
             <td>{{ counter.get_creation_timestamp }}</td>
-            <td>{{ money.get_creation_timestamp }}</td>
             {% if not viewer_role == 'receiver' %}
-                <td>{{ money.receiver.account.long_name }}</td>
+                <td>{{ counter.receiver.account.long_name }}</td>
             {% endif %}
             {% if not viewer_role == 'creator' %}
-                <td>{{ money.related_transaction.creator.account.long_name }}</td>
+                <td>{{ counter.related_transaction.creator.account.long_name }}</td>
             {% endif %}
-            <td>{{ counter.value }}</td>
+            <td>{{ counter.get_counted }}</td>
             <td>{{ counter.description }}</td>
             <td>{{ counter.type }}</td>
+            <td>{{ counter.attendance_block }}</td>
+            <td>{{ counter.get_date }}</td>
+
         </tr>
     {% endfor %}
+</table>

@@ -1,20 +1,19 @@
-<div class="row">
-    <div class="col-sm-12">
-        {{ transaction }}
-    </div>
-</div>
-{% if transaction.related_money_atomics.exists %}
 
+{% if transaction.related_money_atomics.exists %}
 <div class="row">
+<div class="col-sm-12">
     <h3>Баксы</h3>
     {% include 'bank/transaction_lists/money_table.html' with moneys=transaction.related_money_atomics.all %}
 </div>
+    </div>
 {% endif %}
 {% if transaction.related_attendance_atomics.exists %}
 <div class="row">
+<div class="col-sm-12">
+
     <h3>Счетчики</h3>
         {% include 'bank/transaction_lists/counters_table.html' with counters=transaction.related_money_atomics.all %}
-
+</div>
 </div>
 {% endif %}
 

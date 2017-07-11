@@ -5,7 +5,7 @@ SIGN = '@'
 
 
 ZARYADKA_BUDGET = 25.
-p2p_buf = 40.
+P2P_BUFFER = 40.
 p2p_proc = 0.7
 daily_tax = -20
 sem_needed = 18

@@ -5,3 +5,5 @@ class MoneyTypeEnum(Enum):
     staff_help = 'staff_help'
     art_help = 'art_help'
     radio_help = 'radio_help'
+
+    p2p='p2p'

@@ -9,7 +9,7 @@ from bank.models import Transaction, Money, MoneyType
 
 
 class GeneralTransactionController(TransactionController):
-    template_url = 'bank/add_trans/trans_add_general_money.html'
+    template_url = 'bank/add/add_general_money.html'
 
     @staticmethod
     def get_blank_form():

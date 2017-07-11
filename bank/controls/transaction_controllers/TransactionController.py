@@ -1,2 +1,4 @@
 class TransactionController:
-    pass
+    @staticmethod
+    def get_render_map_update():
+        return {}

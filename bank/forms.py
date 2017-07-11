@@ -1,6 +1,9 @@
 # coding=utf-8
 from django import forms
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
+from bank.constants import UserGroups, P2P_BUFFER
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
 from bank.models import MoneyType
 from django.forms import BaseFormSet, ModelChoiceField
@@ -10,6 +13,15 @@ from django.forms import BaseFormSet, ModelChoiceField
 class AtomicTypeField(forms.ModelChoiceField):
     def to_python(self, value):
         return value
+
+
+class ReceiverField(forms.ModelChoiceField):
+    def to_python(self, value):
+        return value
+
+    def label_from_instance(self, user):
+        return '{} {}'.format(user.account.party, user.account.long_name())
+
 
 class GeneralMoneyKernelForm(forms.Form):
     student_name = forms.CharField(label='Name', max_length=200)
@@ -33,7 +45,19 @@ class GeneralMoneyFormSet(BaseFormSet):
     pass
 
 
+class P2PKernelForm(forms.Form):
+    value = forms.IntegerField(label='Value', required=True, min_value=1)
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
+                                  required=True)
+    receiver_username = ReceiverField(
+        queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).order_by('account__party',
+                                                                                           'last_name'),
+        required=True,
+        empty_label="Выберите получателя", to_field_name="username")
+    creator_username = forms.CharField(max_length=200)
 
+class P2PFormSet(BaseFormSet):
+    pass
 
 
 '''

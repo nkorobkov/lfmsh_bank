@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 @login_required
 def index(request):
     log.info(request.user.last_name + ' index')
-    student_stats = get_student_stats()
+    student_stats = get_student_stats(request.user)
     transaction_types = TransactionType.objects.all()
     transaction_type_info = [
         {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
@@ -129,47 +129,29 @@ def user(request, username):
     return render(request, 'bank/user_page.html', render_dict)
 
 
-@login_required()
-def dec_trans(request, trans_id):
-    print('decline page')
+def manage(request, user_group, to_decline=None, to_process=None):
+    can_process = request.user.has_perm(
+        get_perm_name(Actions.process.value, user_group, 'created_transactions'))
+    can_decline = request.user.has_perm(
+        get_perm_name(Actions.decline.value, user_group, 'created_transactions'))
+    if not (can_decline or can_process):
+        return HttpResponseForbidden()
 
-    trans = Transaction.objects.get(pk=trans_id)
-    if not trans.recipient:
-        to_del = trans.meta_link.all()[0].transactions.all()
-    else:
-        to_del = [trans]
-    if trans.creator != request.user and not request.user.has_perm('bank.del_foreign_trans'):
-        return redirect(reverse('bank:index'))
+    if to_decline and can_decline:
+        transaction = get_object_or_404(Transaction, id=to_decline)
+        if transaction.creator.groups.filter(name__in=[user_group]).exists():
+            transaction.decline()
+        else:
+            return HttpResponseForbidden()
 
-    return render(request, 'bank/decline/trans_dec_confirm.html', {'trans': to_del, 'meta': trans_id})
+    if to_process and can_process:
+        get_object_or_404(Transaction, id=to_process).process()
 
-
-@login_required
-def dec_trans_ok(request, trans_id):
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    trans = Transaction.objects.get(pk=trans_id)
-    if trans.creator != request.user and not request.user.has_perm('bank.del_foreign_trans'):
-        return redirect(reverse('bank:index'))
-    if not trans.recipient:
-        to_del = trans.meta_link.all()[0].transactions.all()
-    else:
-        to_del = [trans]
-    if request.user.has_perm('bank.del_foreign_trans') and to_del[0].creator != request.user:
-
-        st = TransactionState.objects.get(name='DA')
-
-    else:
-        st = TransactionState.objects.get(name='DC')
-    for t in to_del:
-        print('decline of trans happening')
-        t.cancel()
-        t.status = st
-        t.save()
-
-        trans.status = st
-        trans.save()
-
-    return render(request, 'bank/decline/trans_dec_ok.html', {'transactions': to_del})
+    render_dict = {"transactions": Transaction.objects.filter(creator__groups__name__in=[user_group]).filter(
+        state__name=States.created.value)}
+    render_dict.update({'can_process': can_process, 'can_decline': can_decline})
+    render_dict.update({'user_group': user_group})
+    return render(request, 'bank/transaction_lists/manage.html', render_dict)
 
 
 @permission_required('bank.view_pio_trans_list', login_url='bank:index')
@@ -282,7 +264,8 @@ def _get_transactions_of_user_who_is(user, target_user, group):
 
     if user.has_perm(get_perm_name(Actions.see.value, group, 'received_transactions')):
         received_money = Money.objects.filter(receiver=target_user).filter(counted=True).order_by('-creation_timestamp')
-        received_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True).order_by('-creation_timestamp')
+        received_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True).order_by(
+            '-creation_timestamp')
 
     return {'created_transactions': created_transactions, 'received_counters': received_counters,
             'received_money': received_money}
@@ -309,7 +292,8 @@ def user_can_decline(request, updated_transaction):
             return True
     else:
         if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
-                name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name, 'created_transaction')):
+                name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
+                                               'created_transaction')):
             return True
 
     return False

@@ -25,7 +25,12 @@ urlpatterns = [
 
     url(r'^decline/(?P<transaction_id>[0-9]+)/$', views.decline, name='decline'),
 
+    url(r'^manage/(?P<user_group>[a-zA-z]+)/$', views.manage, name='manage'),
+    url(r'^manage/(?P<user_group>[a-zA-z]+)/pr(?P<to_process>[0-9]+)$', views.manage, name='manage_process'),
+    url(r'^manage/(?P<user_group>[a-zA-z]+)/dc(?P<to_decline>[0-9]+)$', views.manage, name='manage_decline'),
+
     url(r'^media/$', views.media, name='media'),
+
 
 ]
 '''

@@ -75,34 +75,34 @@ class SeminarKernelForm(forms.Form):
     # marks
 
     content_quality_choices = [(-1, "Нет"), (0, "Не очень"), (1, "Да")]
-    content_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=content_quality_choices)
+    content_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=content_quality_choices, label="1. Соответствует ли содержание заявленной теме?")
 
     knowledge_quality_choices = [(-1, "Отсутствует"), (0, "Поверхностная"), (1, "Средняя"), (2, "Хорошая"),
                                  (3, "Высокая")]
-    knowledge_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=knowledge_quality_choices)
+    knowledge_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=knowledge_quality_choices, label="2. Степень ознакомленности рассказчика с темой семинара, степень понимания материала:")
 
     presentation_quality_choices = [(-1, "Отсутствует"), (0, "Прослеживается с Трудом"),
                                     (1, "Прослеживается, но существуют явные недочеты"), (2, "Явных недочетов нет"),
                                     (3, "Недочетов нет вовсе")]
-    presentation_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_choices)
+    presentation_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_choices, label="3. Последовательность и логичность изложения:")
 
     presentation_quality_2_choices = [(-1, "Тема не раскрыта"), (0, "Тема Раскрыта не полностью"),
                                       (1, "Тема раскрыта не полностью, но присутствуют интересные факты"),
                                       (2, "Тема раскрыта"),
                                       (3, "Тема раскрыта, интересные факты присутствуют")]
-    presentation_quality_2 = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_2_choices)
+    presentation_quality_2 = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_2_choices, label=" 4. Степень того, насколько рассказчик раскрыл тему, наличие интересных фактов:")
 
     presentation_quality_3_choices = [(0, "Нет"), (1, "Да")]
-    presentation_quality_3 = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_3_choices)
+    presentation_quality_3 = forms.ChoiceField(widget=forms.RadioSelect, choices=presentation_quality_3_choices, label="5.а Считаете ли Вы, что докладчик продемонстрировал неординарные ораторские способности?")
 
     materials_choices = [(0, "Отсутствует"), (1, "Присутствует"), (2, "Присутствует в разных формах")]
-    materials = forms.ChoiceField(widget=forms.RadioSelect, choices=materials_choices)
+    materials = forms.ChoiceField(widget=forms.RadioSelect, choices=materials_choices, label="5.б Наличие иллюстирующего материала: ")
 
     unusual_things_choices = [(0, "Нет или почти нет"), (1, "Да")]
-    unusual_things = forms.ChoiceField(widget=forms.RadioSelect, choices=unusual_things_choices)
+    unusual_things = forms.ChoiceField(widget=forms.RadioSelect, choices=unusual_things_choices, label="5.в Можете ли Вы отметить что-то необычное в форме проведения семинара?")
 
     discussion_choices = [(0, "Нет или почти нет"), (1, "Непродолжительное"), (1, "Продолжительное")]
-    discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices)
+    discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices, label="6. Вызвал ли семинар обсуждение среди слушателей?")
 
     # technical fields not to be used on UI
     receiver_username = forms.CharField(max_length=200)

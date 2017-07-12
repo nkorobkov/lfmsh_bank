@@ -30,39 +30,37 @@
         <div class="panel-heading">
             <h3 class="panel-title">Оценка</h3>
         </div>
+        <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-lg-6">
-                <p> 1. Соответствует ли содержание заявленной теме?</p>
-                {{ formset.forms.0.content_quality }}
+
+                 {% bootstrap_field  formset.forms.0.content_quality %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 2. Степень ознакомленности рассказчика с темой семинара, степень понимания материала:</p>
-                {{ formset.forms.0.knowledge_quality }}
+
+                 {% bootstrap_field  formset.forms.0.knowledge_quality %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 3. Последовательность и логичность изложения:</p>
-                {{ formset.forms.0.presentation_quality }}
+                 {% bootstrap_field  formset.forms.0.presentation_quality %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 4. Степень того, насколько рассказчик раскрыл тему, наличие интересных фактов:</p>
-                {{ formset.forms.0.presentation_quality_2 }}
+
+                 {% bootstrap_field  formset.forms.0.presentation_quality_2 %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 5.а Считаете ли Вы, что докладчик продемонстрировал неординарные ораторские способности?</p>
-                {{ formset.forms.0.presentation_quality_3 }}
+
+                 {% bootstrap_field  formset.forms.0.presentation_quality_3 %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 5.б Наличие иллюстирующего материала: </p>
-                {{ formset.forms.0.materials }}
+                 {% bootstrap_field  formset.forms.0.materials %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 5.в Можете ли Вы отметить что-то необычное в форме проведения семинара?</p>
-                {{ formset.forms.0.unusual_things }}
+                 {% bootstrap_field formset.forms.0.unusual_things %}
             </div>
             <div class="col-sm-12 col-lg-6">
-                <p> 6 Вызвал ли семинар обсуждение среди слушателей?</p>
-                {{ formset.forms.0.discussion }}
+                {% bootstrap_field formset.forms.0.discussion %}
             </div>
+        </div>
         </div>
     </div>
 {% endblock %}

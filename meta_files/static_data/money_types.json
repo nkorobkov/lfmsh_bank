@@ -10,7 +10,8 @@
     "optional_studies": {
       "readable_local": "Необязательная учебная программа",
       "class_pass": "Зачет за кружок",
-      "olympiad": "Олимпиада"
+      "olympiad": "Олимпиада",
+      "olympiad_problem": "Решение Убойных Задач"
     }
   },
   "work": {
@@ -36,7 +37,17 @@
     "readable_general": "Спорт",
     "participation": {
       "readable_local": "Участие в спортивном мероприятии",
-      "workout": "Зарядка"
+      "workout": "Зарядка",
+      "sport_activity": "Спортивное Мероприятие"
+      }
+  },
+
+  "activity": {
+    "readable_general": "Мероприятие",
+    "activity": {
+      "readable_local": "Мероприятие",
+      "day_activity": "Дневное Мероприятие",
+      "evening_activity": "Вечернее Мероприятие"
       }
   },
   "p2p": {
@@ -44,6 +55,49 @@
     "p2p": {
       "readable_local": "Личный перевод",
       "p2p": "Личный перевод"
+      }
+  },
+  "tecnicals": {
+    "readable_general": "Технические Типы",
+    "tax": {
+      "readable_local": "Налог",
+      "tax": "Ежедневный налог"
+      },
+    "subs": {
+      "readable_local": "Субсидии",
+      "initial": "Начальное начисление"
+      }
+  }
+  ,
+  "fine": {
+    "readable_general": "Штрафы",
+    "fine_general": {
+      "readable_local": "Нарушения общего характера",
+      "fine_lang": "Упортребление ненормативной лексики",
+      "fine_schedule":"Нарушение распорядка дня",
+      "fine_safety":"Нарушение техники безопасности",
+      "fine_clean":"Невыполнение санитарных норм",
+      "fine_sub":"Невыполнение требований вожатого",
+      "fine_moral":"Аморальное поведение",
+      "fine_damage":"Причинение вреда имуществу лагеря",
+      "fine_any":"Штраф"
+      },
+    "fine_study": {
+      "readable_local": "Невыполнение требований учебной программы",
+      "fine_lecture": "Пропуск лекции",
+      "fine_sem": "Отказ от проведения семинара",
+      "fine_lab": "Невыполнение нормы по лабораторным работам",
+      "fine_fac": "Невыполнение нормы по факультативам",
+      "fine_attend": "Невыполнение нормы по посещению занятий обязательной учебной программы"
+      }
+  },
+  "purchase": {
+    "readable_general": "Покупка",
+    "purchase": {
+      "readable_local": "Покупка",
+      "goods": "Покупка товаров",
+      "service": "Покупка услуг",
+      "auction": "Покупка на аукционе"
       }
   }
 }

@@ -21,24 +21,98 @@
     "name": "fac_attend",
     "readable_name": "Занятие факультатива",
     "money": [],
-    "attendance": ["fac_attend"]
+    "attendance": [
+      "fac_attend"
+    ]
   },
   {
     "name": "p2p",
     "readable_name": "Личный перевод",
-    "money": ["p2p"],
+    "money": [
+      "p2p"
+    ],
     "attendance": []
   },
   {
     "name": "general_money",
     "readable_name": "Начисление",
-    "money": ["radio_help", "art_help", "staff_help"],
+    "money": [
+      "radio_help",
+      "art_help",
+      "staff_help"
+    ],
     "attendance": []
   },
   {
     "name": "seminar",
     "readable_name": "Семинар",
-    "money": ["seminar"],
-    "attendance": ["seminar_attend", "seminar_pass"]
+    "money": [
+      "seminar"
+    ],
+    "attendance": [
+      "seminar_attend",
+      "seminar_pass"
+    ]
+  },
+  {
+    "name": "lecture",
+    "readable_name": "Лекция",
+    "money": [
+      "fine_lecture"
+    ],
+    "attendance": [
+      "lecture"
+    ]
+  },
+  {
+    "name": "fac_pass",
+    "readable_name": "Зачет по факультативу",
+    "money": [
+      "fac_pass"
+    ],
+    "attendance": [
+      "fac_pass"
+    ]
+  },
+  {
+    "name": "activity",
+    "readable_name": "Мероприятие",
+    "money": [
+      "evening_activity",
+      "day_activity",
+      "sport_activity"
+    ],
+    "attendance": [
+      "first_place_certificate"
+    ]
+  },
+  {
+    "name": "fine",
+    "readable_name": "Штраф",
+    "money": [
+      "fine_lang",
+      "fine_schedule",
+      "fine_safety",
+      "fine_clean",
+      "fine_sub",
+      "fine_moral",
+      "fine_damage",
+      "fine_any"
+    ],
+    "attendance": []
+  },
+  {
+    "name": "tax",
+    "readable_name": "Налог",
+    "money": ["tax"],
+    "attendance": []
+  },
+  {
+    "name": "purchase",
+    "readable_name": "Покупка",
+    "money": [
+      "goods", "service", "auction"
+    ],
+    "attendance": []
   }
 ]

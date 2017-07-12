@@ -20,5 +20,13 @@
       "readable_local": "Спорт",
       "workout": "Зарядка"
     }
+  },
+  "certificates": {
+    "readable_general": "Сертификаты",
+    "activity": {
+      "readable_local": "Сертификаты за мероприятия",
+      "first_place_certificate": "Сертификат за первое место"
+    }
   }
+
 }

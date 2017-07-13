@@ -1,14 +1,13 @@
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
-from bank.constants import UserGroups, NUM_OF_PARTIES, MoneyTypeEnum
-from bank.controls.transaction_controllers.TransactionController import TransactionController
-from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet
-from bank.helper_functions import get_students_markup
+from bank.constants import UserGroups, MoneyTypeEnum
+from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
+from bank.forms import GeneralMoneyKernelForm
 from bank.models import Transaction, Money, MoneyType
 
 
-class GeneralTransactionController(TransactionController):
+class GeneralTransactionController(TableTransactionController):
     template_url = 'bank/add/add_general_money.html'
 
     @staticmethod
@@ -29,11 +28,6 @@ class GeneralTransactionController(TransactionController):
              'transaction_type': MoneyTypeEnum.staff_help.value} for user in students_query]
         initial[0]['description'] = ''
         return initial
-
-    @staticmethod
-    def get_render_map_update():
-        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
-        return get_students_markup(students_query)
 
     @staticmethod
     def get_transaction_from_form_data(formset_data, update_of):

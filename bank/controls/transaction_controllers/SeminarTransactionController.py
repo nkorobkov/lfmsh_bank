@@ -2,13 +2,13 @@ from django.contrib.auth.models import User
 from django.forms import formset_factory
 
 from bank.constants import UserGroups, NUM_OF_PARTIES, MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
-from bank.controls.transaction_controllers.TransactionController import TransactionController
+from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
 from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet, SeminarKernelForm
 from bank.helper_functions import get_students_markup
 from bank.models import Transaction, Money, MoneyType, TransactionType, Attendance, AttendanceType
 
 
-class SeminarTransactionController(TransactionController):
+class SeminarTransactionController(TableTransactionController):
     template_url = 'bank/add/add_seminar.html'
 
     @staticmethod
@@ -46,11 +46,6 @@ class SeminarTransactionController(TransactionController):
         for key in SeminarTransactionController._get_mark_keys():
             initial[0][key] = None
         return initial
-
-    @staticmethod
-    def get_render_map_update():
-        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
-        return get_students_markup(students_query)
 
     @staticmethod
     def get_transaction_from_form_data(formset_data, update_of):

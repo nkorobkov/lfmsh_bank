@@ -1,22 +1,17 @@
-{% extends "bank/add/all_students_table_form.html" %}
+{% extends "bank/add/all_students_with_value.html" %}
 
 {% block header %}
     <h1>Начисление
         <small>за все подряд</small>
     </h1>
-{% endblock%}
+{% endblock %}
 
 
 {% block before_table %}
-            {% load bootstrap3 %}
-
+    {% load bootstrap3 %}
     <div class="row">
         <div class="col-sm-6">
-            {% if formset.forms.0.errors %}
-                <div class="alert alert-danger">Пожалуйста заполните Комментарий</div>
-
-            {% endif %}
-            {% bootstrap_field  formset.forms.0.description %}
+            {% bootstrap_field formset.forms.0.description %}
         </div>
         <div class="col-sm-6">
             {% bootstrap_field formset.forms.0.transaction_type %}
@@ -25,24 +20,11 @@
 {% endblock %}
 
 
-{% block headers_row %}
-    <tr>
-        <th>Пионер</th>
-        <th>Сумма</th>
-    </tr>
-{% endblock %}
+{% block hidden_fields %}
+    {% if not forloop.counter0 == 0 %}
+        {{ form.description.as_hidden }}{{ form.transaction_type.as_hidden }}
+    {% endif %}
 
-
-{% block regular_row %}
-    <tr>
-        <td>
-            {% if not forloop.counter0 == 0 %}
-                {{ form.description.as_hidden }}{{ form.transaction_type.as_hidden }}
-            {% endif %}
-
-            {{ form.student_name.value }}
-            {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
-            {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}</td>
-        <td>{{ form.value }}</td>
-    </tr>
+    {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
+    {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}
 {% endblock %}

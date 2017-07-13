@@ -27,7 +27,7 @@ def index(request):
     log.info(request.user.last_name + ' index')
     student_stats = get_student_stats(request.user)
     transaction_types = TransactionType.objects.all()
-    transaction_type_info = [
+    transaction_type_info = [ # TODO change to resolve perm on server
         {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
         transaction_types]
     counters = get_counters_of_user_who_is(request.user, request.user, 'self')

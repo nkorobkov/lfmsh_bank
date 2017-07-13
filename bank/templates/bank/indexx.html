@@ -40,12 +40,12 @@
                 <a href="{% url 'bank:my_transactions' %}"> Мои транзакции</a><br>
 
                 {% if st_stats.created_students_len %}
-                    <a href="{% url 'bank:manage' 'student' %}" >Пионерские личные
+                    <a href="{% url 'bank:manage' 'student' %}">Пионерские личные
                         транзакции <span class="badge">{{ st_stats.created_students_len }}</span></a><br>
                 {% endif %}
 
                 {% if st_stats.created_staff_len %}
-                    <a href="{% url 'bank:manage' 'staff' %}" >Педсоставские
+                    <a href="{% url 'bank:manage' 'staff' %}">Педсоставские
                         транзакции <span class="badge">{{ st_stats.created_staff_len }}</span></a>
                 {% endif %}
 
@@ -64,7 +64,7 @@
             {% for transaction_type in transaction_type_info %}
                 {% if transaction_type.create_permission in request.user.get_all_permissions %}
                     <a href="{% url 'bank:add_transaction' transaction_type.name %}">
-                        Добавить {{ transaction_type.readable_name }} </a><br>
+                        {{ transaction_type.readable_name }} </a><br>
                 {% endif %}
             {% endfor %}
         </div>

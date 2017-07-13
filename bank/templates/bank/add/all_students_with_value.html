@@ -1,0 +1,22 @@
+{% extends "bank/add/all_students_table_form.html" %}
+
+
+{% block headers_row %}
+    <tr>
+        <th>Пионер</th>
+        <th>Сумма</th>
+    </tr>
+{% endblock %}
+
+
+{% block regular_row %}
+    <tr>
+        <td>
+            {{ form.student_name.value }}
+
+            {% block hidden_fields %}{% endblock %}
+
+        </td>
+        <td>{{ form.value }}</td>
+    </tr>
+{% endblock %}

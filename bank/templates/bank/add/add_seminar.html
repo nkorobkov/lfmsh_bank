@@ -1,4 +1,4 @@
-{% extends "bank/add/all_students_table_form.html" %}
+{% extends "bank/add/all_students_with_check.html" %}
 
 {% block header %}
     <h1> Семинар</h1>
@@ -8,10 +8,6 @@
 {% block before_table %}
     {% load bootstrap3 %}
 
-    {% if formset.forms.0.errors %}
-        <div class="alert alert-danger">{{ formset.forms.0.errors }}</div>
-
-    {% endif %}
     <div class="row">
         <div class="col-sm-6">
             {% bootstrap_field formset.forms.0.description %}
@@ -74,9 +70,8 @@
 {% endblock %}
 
 
-{% block regular_row %}
-    <tr>
-        <td>
+{% block hidden_fields %}
+
             {% if not forloop.counter0 == 0 %}
                 {{ form.description.as_hidden }}{{ form.content_quality.as_hidden }}
                 {{ form.knowledge_quality.as_hidden }}{{ form.presentation_quality.as_hidden }}
@@ -85,14 +80,8 @@
                 {{ form.date.as_hidden }}{{ form.receiver.as_hidden }}{{ form.block.as_hidden }}
 
             {% endif %}
-
-            {{ form.student_name.value }}
-
-
             {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
-            {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}</td>
+            {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}
 
 
-        <td>{{ form.attended }}</td>
-    </tr>
 {% endblock %}

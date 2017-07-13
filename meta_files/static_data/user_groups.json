@@ -35,24 +35,40 @@
       "create": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ]
       },
       "process": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ]
       },
       "update": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ]
       },
       "decline": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ],
         "student": [
@@ -84,22 +100,42 @@
       "create": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ]
       },
       "process": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ]
       },
       "update": {
         "self": [
           "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
           "seminar"
         ]
       },
       "decline": {
+        "self": [
+          "general_money",
+          "lecture",
+          "workout",
+          "fac_pass",
+          "fac_attend",
+          "seminar"
+        ],
         "student": [
           "created_transactions"
         ],

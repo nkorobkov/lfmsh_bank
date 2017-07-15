@@ -1,5 +1,4 @@
-{% extends "bank/add/all_students_with_check.html" %}
-
+{% extends "bank/add/all_students_with_value.html" %}
 
 
 {% block before_table %}
@@ -9,9 +8,7 @@
         <div class="col-sm-6">
             {% bootstrap_field formset.forms.0.description %}
         </div>
-        <div class="col-sm-6">
-            {% bootstrap_field formset.forms.0.date %}
-        </div>
+
        {% block additional_fields %}{% endblock %}
     </div>
 
@@ -21,9 +18,8 @@
 
             {% if not forloop.counter0 == 0 %}
                 {{ form.description.as_hidden }}
-                {{ form.date.as_hidden }}
-
             {% endif %}
+
             {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}
             {{ form.receiver_username.as_hidden }}{{ form.creator_username.as_hidden }}
 

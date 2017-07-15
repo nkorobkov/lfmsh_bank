@@ -9,6 +9,8 @@ from bank.models import Transaction, TransactionType, Attendance, AttendanceType
 
 class FacAttendTransactionController(TableTransactionController):
     template_url = 'bank/add/add_fac_attend.html'
+    value_show_name = 'Посетил'
+    header = "Занятие факультатива"
 
     @staticmethod
     def _get_kernel_form():

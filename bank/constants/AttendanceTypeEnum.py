@@ -9,3 +9,4 @@ class AttendanceTypeEnum(Enum):
     fac_pass = 'fac_pass'
     lecture_attend = 'lecture_attend'
     lecture_miss = 'lecture_miss'
+    book_certificate = 'book_certificate'

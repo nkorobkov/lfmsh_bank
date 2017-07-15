@@ -95,6 +95,7 @@
     "readable_general": "Покупка",
     "purchase": {
       "readable_local": "Покупка",
+      "books": "Покупка книг",
       "goods": "Покупка товаров",
       "service": "Покупка услуг",
       "auction": "Покупка на аукционе"

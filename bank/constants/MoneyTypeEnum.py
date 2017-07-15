@@ -10,3 +10,7 @@ class MoneyTypeEnum(Enum):
     seminar_pass = 'seminar_pass'
     workout = 'workout'
     fine_lecture = 'fine_lecture'
+    fine_any = 'fine_any'
+    exam = 'exam'
+    fac_pass = 'fac_pass'
+    books = 'books'

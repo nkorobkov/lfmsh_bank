@@ -1,6 +1,10 @@
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
+from bank.controls.transaction_controllers.ExamTransactionController import ExamTransactionController
 from bank.controls.transaction_controllers.FacAttendTransactionController import FacAttendTransactionController
+from bank.controls.transaction_controllers.FacPassTransactionController import FacPassTransactionController
+from bank.controls.transaction_controllers.FineTransactionController import FineTransactionController
 from bank.controls.transaction_controllers.LectureTransactionController import LectureTransactionController
+from bank.controls.transaction_controllers.PurcaseTransactionController import PurchaseTransactionController
 from bank.controls.transaction_controllers.SeminarTransactionController import SeminarTransactionController
 from bank.controls.transaction_controllers.P2PTransactionController import P2PTransactionController
 from bank.controls.transaction_controllers.GeneralTransactionController import GeneralTransactionController
@@ -23,6 +27,15 @@ class TransactionService:
             return WorkoutTransactionController
         if trans_type == TransactionTypeEnum.fac_attend.value:
             return FacAttendTransactionController
+
+        if trans_type == TransactionTypeEnum.exam.value:
+            return ExamTransactionController
+        if trans_type == TransactionTypeEnum.purchase.value:
+            return PurchaseTransactionController
+        if trans_type == TransactionTypeEnum.fac_pass.value:
+            return FacPassTransactionController
+        if trans_type == TransactionTypeEnum.fine.value:
+            return FineTransactionController
 
         raise ModuleNotFoundError('no controller for this type')
 

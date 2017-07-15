@@ -111,7 +111,7 @@
     "name": "purchase",
     "readable_name": "Покупка",
     "money": [
-      "goods", "service", "auction"
+      "goods", "books", "service", "auction"
     ],
     "attendance": []
   }

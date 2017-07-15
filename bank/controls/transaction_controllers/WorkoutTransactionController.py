@@ -10,6 +10,10 @@ from bank.models import Transaction, TransactionType, Attendance, AttendanceType
 class WorkoutTransactionController(TableTransactionController):
     template_url = 'bank/add/add_workout.html'
 
+    value_show_name = 'Посетил'
+    header = "Зарядка"
+
+
     @staticmethod
     def _get_kernel_form():
         return WorkoutForm

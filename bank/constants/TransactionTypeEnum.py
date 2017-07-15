@@ -8,3 +8,7 @@ class TransactionTypeEnum(Enum):
     fac_attend = 'fac_attend'
     lecture = 'lecture'
     workout = 'workout'
+    fine = 'fine'
+    purchase = 'purchase'
+    fac_pass = 'fac_pass'
+    exam = 'exam'

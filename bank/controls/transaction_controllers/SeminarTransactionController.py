@@ -1,15 +1,15 @@
 from django.contrib.auth.models import User
-from django.forms import formset_factory
 
-from bank.constants import UserGroups, NUM_OF_PARTIES, MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
+from bank.constants import UserGroups, MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
-from bank.forms import GeneralMoneyKernelForm, GeneralMoneyFormSet, SeminarKernelForm
-from bank.helper_functions import get_students_markup
+from bank.forms import SeminarKernelForm
 from bank.models import Transaction, Money, MoneyType, TransactionType, Attendance, AttendanceType
 
 
 class SeminarTransactionController(TableTransactionController):
     template_url = 'bank/add/add_seminar.html'
+    value_show_name = 'Посетил'
+    header = "Семинар"
 
     @staticmethod
     def _get_kernel_form():

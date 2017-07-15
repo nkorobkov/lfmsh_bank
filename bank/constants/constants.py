@@ -18,7 +18,7 @@ fac_pass_needed = {7: 0, 8: 0, 9: 1, 10: 1, 11: 1}
 NUMBER_OF_OTR = 4
 INITIAL_MONEY = 180
 INITIAL_MONEY_DESC = 'Поздравляем с началом экономической игры!'
-BUDGET = 80  # exam budget
+EXAM_BUDGET = 80
 
 LAB_PENALTY = 20
 LECTURE_PENALTY = 10

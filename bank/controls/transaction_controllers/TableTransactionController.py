@@ -7,11 +7,19 @@ from bank.helper_functions import get_students_markup
 
 
 class TableTransactionController(TransactionController):
-    @staticmethod
-    def get_render_map_update():
+    value_show_name = "Посетил"
+    header = "Транзакция"
+
+    @classmethod
+    def get_render_map_update(cls):
         result = super(TableTransactionController, TableTransactionController).get_render_map_update()
         students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
         result.update(get_students_markup(students_query))
+        if cls.value_show_name:
+            result.update({'value_show_name': cls.value_show_name})
+        if cls.header:
+            result.update({'header': cls.header})
+
         return result
 
     @staticmethod

@@ -39,7 +39,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ]
       },
       "process": {
@@ -49,7 +52,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ]
       },
       "update": {
@@ -59,7 +65,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ]
       },
       "decline": {
@@ -69,7 +78,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ],
         "student": [
           "created_transactions"
@@ -104,7 +116,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ]
       },
       "process": {
@@ -114,7 +129,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ]
       },
       "update": {
@@ -134,7 +152,10 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "fine",
+          "purchase",
+          "exam"
         ],
         "student": [
           "created_transactions"

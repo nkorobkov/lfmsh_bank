@@ -1,0 +1,19 @@
+{% extends "bank/add/all_students_general_value.html" %}
+
+
+
+
+{% block additional_fields %}
+    {% load bootstrap3 %}
+        <div class="col-sm-6">
+            {% bootstrap_field formset.forms.0.money_type %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block additional_hidden_fields %}
+    {% if not forloop.counter0 == 0 %}
+        {{ form.money_type.as_hidden}}
+    {% endif %}
+{% endblock %}

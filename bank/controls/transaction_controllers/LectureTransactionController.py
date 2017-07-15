@@ -4,16 +4,13 @@ from django.forms import formset_factory
 from bank.constants import TransactionTypeEnum, AttendanceTypeEnum, AttendanceBlockEnum, MoneyTypeEnum, LECTURE_PENALTY
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
 from bank.forms import LectureForm
-from bank.models import Transaction, TransactionType, Attendance, AttendanceType, AttendanceBlock, Money, MoneyType
+from bank.models import Transaction, TransactionType, Attendance, AttendanceType, Money, MoneyType
 
 
 class LectureTransactionController(TableTransactionController):
-    """
-    on update fine grow
-    """
-
     template_url = 'bank/add/add_lecture.html'
-
+    value_show_name = 'Посетил'
+    header = "Лекция"
 
     @staticmethod
     def _get_kernel_form():
@@ -29,6 +26,8 @@ class LectureTransactionController(TableTransactionController):
                                                       formset_data, update_of)
 
         attendance_block_name = AttendanceBlockEnum.lecture.value
+        money_type = MoneyType.objects.get(name=MoneyTypeEnum.fine_lecture.value)
+
         for atomic_data in formset_data:
             attended = atomic_data['attended']
             receiver = User.objects.get(username=atomic_data['receiver_username'])
@@ -38,7 +37,7 @@ class LectureTransactionController(TableTransactionController):
                 attendance_type_name = AttendanceTypeEnum.lecture_miss.value
                 fine_value = LectureTransactionController._get_lecture_fine(
                     receiver.account.get_counter(AttendanceTypeEnum.lecture_miss.value))
-                Money.new_money(receiver, fine_value, MoneyType.objects.get(name=MoneyTypeEnum.fine_lecture.value),
+                Money.new_money(receiver, fine_value, money_type,
                                 first_form['description'], new_transaction)
 
             Attendance.new_attendance(receiver, 1,

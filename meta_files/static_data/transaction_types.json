@@ -47,7 +47,7 @@
     "name": "seminar",
     "readable_name": "Семинар",
     "money": [
-      "seminar"
+      "seminar_pass"
     ],
     "attendance": [
       "seminar_attend",
@@ -83,7 +83,7 @@
       "sport_activity"
     ],
     "attendance": [
-      "first_place_certificate"
+      "book_certificate"
     ]
   },
   {

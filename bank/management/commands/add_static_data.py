@@ -88,7 +88,7 @@ class Command(BaseCommand):
             new_type, created = TransactionType.objects.get_or_create(name=trans_type['name'],
                                                                       readable_name=trans_type['readable_name'])
             new_type.save()
-
+            print(trans_type)
             Command.add_type_to_atomic_type(trans_type['money'], new_type, MoneyType)
             Command.add_type_to_atomic_type(trans_type['attendance'], new_type, AttendanceType)
 

@@ -14,7 +14,7 @@
             <tr>
                 <td>{{ u.account.long_name }}</td>
                 {% if can_see_balance %}
-                    <td>{{ u.account.balance }}</td>
+                    <td>{{ u.account.get_balance }}</td>
                 {% endif %}
             </tr>
 

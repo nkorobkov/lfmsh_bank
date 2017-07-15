@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from bank import helper_functions as hf
-from bank.constants import *
+
+from bank.constants import SIGN
 
 '''
 Extention of a User Class
@@ -17,28 +17,21 @@ class Account(models.Model):
     party = models.IntegerField(default=0)
     grade = models.IntegerField(blank=True, default=0)
 
-    '''
-    def times_attended(self, attendance):
-        attendance = Attendance.objects.filter(receiver=self.user, type__name=attendance.value)
-        return sum([a.value for a in attendance])
-    '''
-
-    def get_penalty(self):
-        p = 0
-        p += max(0, (self.lab_needed() - int(self.lab_passed))) * LAB_PENALTY  # labs
-        p += hf.sem_fac_penalty(max(0, (hf.sem_needed - int(self.sem_fac_attend))))  # semfac attend
-        p += SEM_NOT_READ_PEN * max(0, 1 - int(self.sem_read))
-        return p
+    def get_counter(self, counter_name):
+        return sum([a.value for a in self.user.received_attendance.filter(type__name=counter_name).filter(counted=True)])
 
     def __str__(self):
         if self.user.first_name:
-
             return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '. ' + str(self.balance) + '@'
         else:
             return self.user.last_name
 
+    def name_with_balance(self):
+        return '{} {} {}'.format(self.user.last_name, self.user.first_name, self.get_balance())
+
+
     def long_name(self):
-        return self.user.last_name + ' ' + self.user.first_name + ' ' + self.middle_name
+        return self.user.last_name + ' ' + self.user.first_name
 
     def short_name(self):
         if self.user.first_name:
@@ -47,7 +40,20 @@ class Account(models.Model):
         else:
             return self.user.last_name
 
-    '''def lab_needed(self):
+    def get_balance(self):
+        if abs(self.balance) > 9.99:
+            return '{} {}'.format(str(int(self.balance)), SIGN)
+        return '{} {}'.format(str(round(self.balance, 1)), SIGN)
+
+    '''
+    def get_penalty(self):
+        p = 0
+        p += max(0, (self.lab_needed() - int(self.lab_passed))) * LAB_PENALTY  # labs
+        p += hf.sem_fac_penalty(max(0, (hf.sem_needed - int(self.sem_fac_attend))))  # semfac attend
+        p += SEM_NOT_READ_PEN * max(0, 1 - int(self.sem_read))
+        return p
+    
+    def lab_needed(self):
         return constants.lab_pass_needed[self.grade]
 
     def fac_needed(self):
@@ -74,7 +80,3 @@ class Account(models.Model):
 
         return int(self.sem_read) * 100'''
 
-    def get_balance(self):
-        if abs(self.balance) > 9.99:
-            return int(self.balance)
-        return round(self.balance, 1)

@@ -16,7 +16,6 @@
                     <th>Aвтор</th>
                     <th>Тип</th>
                     <th>Расходы</th>
-                    <th>Жертв</th>
                     <th>Статус</th>
                     <th>Действия</th>
 
@@ -24,12 +23,11 @@
                 {% for transaction in transactions %}
                     <tr>
                         <td>{{ transaction.get_creation_timestamp }}</td>
-                        <td>{{ transaction.creator.account }}</td>
+                        <td>{{ transaction.creator.account.name_with_balance }}</td>
                         <td>
                             <a onclick="$('#trans-info-{{ transaction.id }}').toggle()">{{ transaction.type }}</a>
                         </td>
-                        <td>{{ transaction.money_count }}</td>
-                        <td>{{ transaction.receivers_count }}</td>
+                        <td>{{ transaction.money_count_string }}</td>
                         <td>{{ transaction.state }}</td>
                         <td>
                             {% if can_process %}
@@ -47,7 +45,7 @@
                         </td>
 
                     </tr>
-                    <tr style="display: none" id="trans-info-{{ a.transaction.id }}">
+                    <tr style="display: none" id="trans-info-{{ transaction.id }}">
                         <td colspan="6"> {% include 'bank/transaction_lists/transaction.html' with  viewer_role='creator' %} </td>
                     </tr>
                 {% endfor %}

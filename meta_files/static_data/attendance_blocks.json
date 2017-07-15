@@ -21,5 +21,29 @@
     "end_time": "12:20:00",
     "related_attendance_types": ["seminar_attend","seminar_pass"]
 
+  },
+  {
+    "name": "workout",
+    "readable_name": "Зарядка",
+    "start_time": "08:15:00",
+    "end_time": "08:30:00",
+    "related_attendance_types": ["workout"]
+
+  },
+  {
+    "name": "fac_1",
+    "readable_name": "Первый блок Факультативов",
+    "start_time": "11:00:00",
+    "end_time": "12:30:00",
+    "related_attendance_types": ["fac_attend"]
+
+  },
+  {
+    "name": "fac_2",
+    "readable_name": "Второй блок Факультативов",
+    "start_time": "12:30:00",
+    "end_time": "13:30:00",
+    "related_attendance_types": ["fac_attend"]
+
   }
 ]

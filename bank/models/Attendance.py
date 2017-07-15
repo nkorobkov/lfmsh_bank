@@ -18,10 +18,11 @@ class Attendance(AtomicTransaction):
     related_transaction = models.ForeignKey(Transaction, on_delete=CASCADE, related_name='related_attendance_atomics')
 
     @classmethod
-    def new_attendance(cls, receiver, value, type, description, attendance_block_name,date, transaction):
+    def new_attendance(cls, receiver, value, type, description, date, transaction,  attendance_block_name=None):
+        attendance_block = AttendanceBlock.objects.get(name=attendance_block_name) if attendance_block_name else None
         new_att = cls(related_transaction=transaction, receiver=receiver, value=value, type=type,
                       description=description, counted=False, update_timestamp=now(), date=date,
-                      attendance_block=AttendanceBlock.objects.get(name=attendance_block_name))
+                      attendance_block=attendance_block)
         new_att.save()
         return new_att
 
@@ -33,6 +34,8 @@ class Attendance(AtomicTransaction):
         self._switch_counted(False)
 
     def is_valid(self):
+        if not self.attendance_block:
+            return True
         for suspicious in Attendance.objects.filter(receiver=self.receiver).filter(date=self.date).filter(counted=True).exclude(id=self.id).all():
             if self.attendance_block.clashes_with(suspicious.attendance_block):
                 return False

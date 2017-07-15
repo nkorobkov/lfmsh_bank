@@ -151,19 +151,32 @@ class Command(BaseCommand):
         blocks_data = Command.read_file_as_json(Command.BLOCKS_DATA)
         for block_data in blocks_data:
 
-            block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'],
-                                                                   readable_name=block_data['readable_name'],
-                                                                   start_time=Command.time_from_string(
-                                                                       block_data['start_time']),
-                                                                   end_time=Command.time_from_string(
-                                                                       block_data['end_time']))
+            if AttendanceBlock.objects.filter(name = block_data['name']).exists():
+                block = AttendanceBlock.objects.get(name = block_data['name'])
+                block.readable_name = block_data['readable_name']
+                block.start_time = Command.time_from_string(
+                    block_data['start_time'])
+                block.end_time = Command.time_from_string(
+                    block_data['end_time'])
+                for att_type_name in block_data['related_attendance_types']:
+                    att_type = AttendanceType.objects.get(name=att_type_name)
+                    block.related_attendance_types.add(att_type)
+                block.save()
+            else:
+                block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'],
+                                                                       readable_name=block_data['readable_name'],
+                                                                       start_time=Command.time_from_string(
+                                                                           block_data['start_time']),
+                                                                       end_time=Command.time_from_string(
+                                                                           block_data['end_time']))
 
-            for att_type_name in block_data['related_attendance_types']:
-                att_type = AttendanceType.objects.get(name=att_type_name)
-                block.related_attendance_types.add(att_type)
-            block.save()
+                for att_type_name in block_data['related_attendance_types']:
+                    att_type = AttendanceType.objects.get(name=att_type_name)
+                    block.related_attendance_types.add(att_type)
+                block.save()
 
-    @staticmethod
+
+    @ staticmethod
     def read_file_as_json(path):
         f = open(BASE_DIR + Command.STATIC_DATA_PATH + path)
         return json.JSONDecoder().decode(f.read())

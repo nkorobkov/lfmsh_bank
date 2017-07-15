@@ -21,7 +21,7 @@
         <tr>
             <td><a href="{% url 'bank:user' student.username%}">{{ student.account.long_name }}</a></td>
             {% if can_see_balance %}
-                <td>{{ student.account.balance }}</td>
+                <td>{{ student.account.get_balance }}</td>
             {% endif %}
         </tr>
 

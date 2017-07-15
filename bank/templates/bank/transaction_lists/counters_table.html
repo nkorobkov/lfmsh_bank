@@ -23,7 +23,7 @@
             {% if not viewer_role == 'creator' %}
                 <td>{{ counter.related_transaction.creator.account.long_name }}</td>
             {% endif %}
-            <td>{{ counter.get_counted }}</td>
+            <td>{% include 'bank/transaction_lists/counted_marker.html' with counted=counter.counted %}</td>
             <td>{{ counter.description }}</td>
             <td>{{ counter.type }}</td>
             <td>{{ counter.attendance_block }}</td>

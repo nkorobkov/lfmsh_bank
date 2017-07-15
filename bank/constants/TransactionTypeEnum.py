@@ -5,3 +5,6 @@ class TransactionTypeEnum(Enum):
     general_money = 'general_money'
     p2p = 'p2p'
     seminar = 'seminar'
+    fac_attend = 'fac_attend'
+    lecture = 'lecture'
+    workout = 'workout'

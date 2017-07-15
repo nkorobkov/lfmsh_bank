@@ -59,9 +59,9 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
     if request.method == 'POST':
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
-            created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if update_of:
                 get_object_or_404(Transaction, id=update_of).substitute()
+            created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()

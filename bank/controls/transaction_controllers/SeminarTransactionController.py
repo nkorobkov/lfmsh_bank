@@ -12,9 +12,8 @@ class SeminarTransactionController(TableTransactionController):
     template_url = 'bank/add/add_seminar.html'
 
     @staticmethod
-    def get_blank_form():
-        students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
-        return formset_factory(SeminarKernelForm, max_num=len(students_query))
+    def _get_kernel_form():
+        return SeminarKernelForm
 
     @staticmethod
     def get_initial_form_data(creator_username):
@@ -61,24 +60,26 @@ class SeminarTransactionController(TableTransactionController):
                                                       formset_data, update_of)
 
         reader = User.objects.get(username=first_form['receiver'])
+        Attendance.new_attendance(reader, 1,
+                                  AttendanceType.objects.get(name=AttendanceTypeEnum.seminar_pass.value),
+                                  first_form['description'], first_form['date'],
+                                  new_transaction, first_form['block'])
+
         Money.new_money(reader, money_reward,
                         MoneyType.objects.get(name=MoneyTypeEnum.seminar_pass.value),
                         first_form['description'],
                         new_transaction)
 
-        Attendance.new_attendance(reader, 1,
-                                  AttendanceType.objects.get(name=AttendanceTypeEnum.seminar_pass.value),
-                                  first_form['description'], first_form['block'], first_form['date'],
-                                  new_transaction)
+
 
         for atomic_data in formset_data:
             attended = atomic_data['attended']
             if attended:
                 receiver = User.objects.get(username=atomic_data['receiver_username'])
                 Attendance.new_attendance(receiver, 1,
-                                AttendanceType.objects.get(name=AttendanceTypeEnum.seminar_attend.value),
-                                first_form['description'], first_form['block'], first_form['date'],
-                                new_transaction)
+                                          AttendanceType.objects.get(name=AttendanceTypeEnum.seminar_attend.value),
+                                          first_form['description'], first_form['date'],
+                                          new_transaction, first_form['block'])
         return new_transaction
 
     @staticmethod

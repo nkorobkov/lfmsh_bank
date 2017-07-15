@@ -5,18 +5,22 @@
     <div class="row">
         <div class="col-md-6">
             <h2>Транзакция успешно добавлена</h2>
-            {% include 'bank/transaction_lists/transaction.html'%}
+            {% include 'bank/transaction_lists/transaction.html' %}
 
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3">
-            <a class="btn btn-default" href="{% url 'bank:index' %}"> Домой</a>
-            <a class="btn btn-default" href="{% url 'bank:update_transaction' transaction.type.name transaction.id %}"> Поправить</a>
-            <a class="btn btn-default" href="{% url 'bank:add_transaction_from_template' type_name=transaction.type.name from_template=transaction.id %}"> Добавить Еще одну по шаблону</a>
-            <a class="btn btn-default" href="{% url 'bank:decline' transaction.id %}"> ААА! Отменить</a>
-
+        <div class="col-sm-12">
+            <a type="button" class="btn btn-default" href="{% url 'bank:index' %}"> Домой</a>
+            <a type="button" class="btn btn-default"
+               href="{% url 'bank:update_transaction' transaction.type.name transaction.id %}"> Поправить</a>
+            <a type="button" class="btn btn-default"
+               href="{% url 'bank:add_transaction_from_template' type_name=transaction.type.name from_template=transaction.id %}">
+                Добавить Еще одну по шаблону</a>
+            <a type="button" class="btn btn-default" href="{% url 'bank:decline' transaction.id %}"> ААА! Отменить</a>
         </div>
     </div>
+    <br>
+    <br>
 
 {% endblock %}

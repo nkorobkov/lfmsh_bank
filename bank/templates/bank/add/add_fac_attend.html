@@ -1,0 +1,18 @@
+{% extends "bank/add/all_students_general_attendance.html" %}
+
+{% block header %}
+    <h1> Посещение факультатива </h1>
+{% endblock %}
+
+{% block additional_fields %}
+    {% load bootstrap3 %}
+    <div class="col-sm-6">
+        {% bootstrap_field formset.forms.0.block %}
+    </div>
+{% endblock %}
+
+{% block additional_hidden_fields %}
+    {% if not forloop.counter0 == 0 %}
+        {{ form.block.as_hidden }}
+    {% endif %}
+{% endblock %}

@@ -4,7 +4,7 @@ __author__ = 'Insolia'
 SIGN = '@'
 
 
-ZARYADKA_BUDGET = 25.
+WORKOUT_BUDGET = 25.
 P2P_BUFFER = 40.
 p2p_proc = 0.7
 daily_tax = -20
@@ -19,7 +19,12 @@ NUMBER_OF_OTR = 4
 INITIAL_MONEY = 180
 INITIAL_MONEY_DESC = 'Поздравляем с началом экономической игры!'
 BUDGET = 80  # exam budget
+
 LAB_PENALTY = 20
+LECTURE_PENALTY = 10
+
+
+
 INITIAL_STEP_SEM = 10
 SEM_STEP = 5
 SEM_NOT_READ_PEN = 100

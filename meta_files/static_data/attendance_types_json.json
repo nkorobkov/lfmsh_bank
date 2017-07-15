@@ -5,7 +5,7 @@
       "readable_local": "Обязательная учебная программа",
       "fac_pass": "Зачет за факультатив",
       "fac_attend": "Посещение факультатива",
-      "lecture": "Посещение лекции",
+      "lecture_attend": "Посещение лекции",
       "seminar_attend": "Посещение семинара",
       "seminar_pass": "Проведение семинара"
     },
@@ -27,6 +27,12 @@
       "readable_local": "Сертификаты за мероприятия",
       "first_place_certificate": "Сертификат за первое место"
     }
+  },
+  "fine":{
+    "readable_general": "Штрафы",
+    "study": {
+      "readable_local": "Штрафы за учебную программу",
+      "lecture_miss": "Пропуск Лекции"
+    }
   }
-
 }

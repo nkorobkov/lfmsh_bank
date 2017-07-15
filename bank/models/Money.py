@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import CASCADE
 from django.utils.timezone import now
+
+from bank.constants import SIGN
 from bank.models import MoneyType, Transaction
 from .AtomicTransaction import AtomicTransaction
 
@@ -29,6 +31,8 @@ class Money(AtomicTransaction):
         self._switch_counted(False)
 
     def _switch_counted(self, value):
+        if self.counted == value:
+            raise AttributeError
         super()._switch_counted(value)
         creator = self.related_transaction.creator.account
         receiver = self.receiver.account
@@ -40,3 +44,6 @@ class Money(AtomicTransaction):
             receiver.balance += self.value
         creator.save()
         receiver.save()
+
+    def get_value(self):
+        return '{} {}'.format(str(super().get_value()), SIGN)

@@ -16,9 +16,11 @@ class AtomicTypeField(forms.ModelChoiceField):
     def to_python(self, value):
         return value
 
+
 class MyDateField(forms.DateField):
     def to_python(self, value):
         return str(value)
+
 
 class MyBlockField(forms.ModelChoiceField):
     def to_python(self, value):
@@ -33,9 +35,17 @@ class ReceiverField(forms.ModelChoiceField):
         return '{} {}'.format(user.account.party, user.account.long_name())
 
 
-class GeneralMoneyKernelForm(forms.Form):
+class TableKernelForm(forms.Form):
     student_name = forms.CharField(label='Name', max_length=200)
     student_party = forms.IntegerField(label='Party')
+    # technical fields not to be used on UI
+    receiver_username = forms.CharField(max_length=200)
+    creator_username = forms.CharField(max_length=200)
+
+
+
+
+class GeneralMoneyKernelForm(TableKernelForm):
     value = forms.IntegerField(label='Value', required=False, min_value=1)
 
     # fields that will be used only once from first instance of formset.
@@ -47,26 +57,39 @@ class GeneralMoneyKernelForm(forms.Form):
                                            related_transaction_type__name=TransactionTypeEnum.general_money.value),
                                        required=True, empty_label=None, to_field_name="name")
 
-    # technical fields not to be used on UI
-    receiver_username = forms.CharField(max_length=200)
-    creator_username = forms.CharField(max_length=200)
 
-
-class SeminarKernelForm(forms.Form):
-    student_name = forms.CharField(label='Name', max_length=200)
-    student_party = forms.IntegerField(label='Party')
+class AttendKernelForm(TableKernelForm):
     attended = forms.BooleanField(required=False)
 
     # fields that will be used only once from first instance of formset.
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
                                   required=True)
+
+    date = MyDateField(initial=datetime.date.today, label="Дата проведения")
+
+class FacAttendForm(AttendKernelForm):
+    block = MyBlockField(label='Блок факультатива',
+                                   queryset=AttendanceBlock.objects.filter(
+                                    related_attendance_types__name__in=[AttendanceTypeEnum.fac_attend.value]),
+                                   required=True, empty_label='Блок', to_field_name='name')
+
+
+class LectureForm(AttendKernelForm):
+    pass
+
+
+class WorkoutForm(AttendKernelForm):
+    pass
+
+
+class SeminarKernelForm(AttendKernelForm):
+    # fields that will be used only once from first instance of formset.
     receiver = ReceiverField(label="Докладчик",
                              queryset=User.objects.filter(
                                  groups__name__in=[UserGroups.student.value]).order_by('account__party',
                                                                                        'last_name'),
                              empty_label="Жертва", to_field_name="username")
 
-    date = MyDateField(initial=datetime.date.today, label="Дата проведения")
     block = MyBlockField(label='Блок семинара',
                                    queryset=AttendanceBlock.objects.filter(
                                        related_attendance_types__name__in=[AttendanceTypeEnum.seminar_pass.value]),
@@ -104,9 +127,6 @@ class SeminarKernelForm(forms.Form):
     discussion_choices = [(0, "Нет или почти нет"), (1, "Непродолжительное"), (1, "Продолжительное")]
     discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices, label="6. Вызвал ли семинар обсуждение среди слушателей?")
 
-    # technical fields not to be used on UI
-    receiver_username = forms.CharField(max_length=200)
-    creator_username = forms.CharField(max_length=200)
 
 
 class GeneralMoneyFormSet(BaseFormSet):

@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.db import models
 
-from bank.constants import States
+from bank.constants import States, SIGN
 from bank.models import TransactionType, TransactionState
 
 
@@ -71,7 +71,13 @@ class Transaction(models.Model):
         return len(set([at.receiver.username for at in atomics]))
 
     def money_count(self):
-        return sum([a.value for a in self.related_money_atomics.all()])
+        money_sum = sum([a.value for a in self.related_money_atomics.all()])
+        if money_sum > 9.99:
+            return int(money_sum)
+        return money_sum
+
+    def money_count_string(self):
+        return '{} {}'.format(str(self.money_count()), SIGN)
 
     def get_creation_timestamp(self):
         return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")

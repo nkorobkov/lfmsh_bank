@@ -2,9 +2,10 @@ import json
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.views.decorators.csrf import csrf_exempt
 
 
-
+@csrf_exempt
 def get_user_transactions(request):
     user = request.user
     if not user.is_authenticated():
@@ -17,7 +18,7 @@ def get_user_transactions(request):
             "counters": [t.to_python() for t in user.received_attendance.all()]}
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-
+@csrf_exempt
 def get_session(request):
     if request.method == "POST":
         try:

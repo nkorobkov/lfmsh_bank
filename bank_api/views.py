@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -20,11 +21,13 @@ def get_user_transactions(request):
 
 @csrf_exempt
 def get_session(request):
+
     if request.method == "POST":
         try:
-            username = request.POST['login']
-            password = request.POST['password']
-        except(KeyError):
+            request_data = json.loads(request.body)
+            username = request_data['login']
+            password = request_data['password']
+        except(KeyError, JSONDecodeError, TypeError):
             return HttpResponseBadRequest()
 
         user = authenticate(request, username=username, password=password)

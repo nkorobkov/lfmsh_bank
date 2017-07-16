@@ -1,5 +1,4 @@
 import json
-from json import JSONDecodeError
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -27,7 +26,7 @@ def get_session(request):
             request_data = json.loads(request.body)
             username = request_data['login']
             password = request_data['password']
-        except(KeyError, JSONDecodeError, TypeError):
+        except(KeyError, TypeError):
             return HttpResponseBadRequest()
 
         user = authenticate(request, username=username, password=password)

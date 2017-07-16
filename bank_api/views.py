@@ -23,7 +23,7 @@ def get_session(request):
 
     if request.method == "POST":
         try:
-            request_data = json.loads(request.body)
+            request_data = json.loads(str(request.body, 'utf-8'))
             username = request_data['login']
             password = request_data['password']
         except(KeyError, TypeError):

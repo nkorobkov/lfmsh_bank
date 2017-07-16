@@ -47,3 +47,14 @@ class Money(AtomicTransaction):
 
     def get_value(self):
         return '{} {}'.format(str(super().get_value()), SIGN)
+
+    def to_python(self):
+        return {
+            "type": self.type.readable_name,
+            "value": self.value,
+            "receiver": self.receiver.account.long_name(),
+            "counted": self.counted,
+            "description": self.description,
+            "update_timestamp": self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
+            "creation_timestamp": self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
+        }

@@ -82,3 +82,13 @@ class Transaction(models.Model):
     def get_creation_timestamp(self):
         return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
 
+    def to_python(self):
+        return {
+            "creator": self.creator.account.long_name(),
+            "creation_timestamp": self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
+            "state": self.state.readable_name,
+            "type": self.type.readable_name,
+            "money": [t.to_python() for t in self.related_money_atomics.all()],
+            "counters": [t.to_python() for t in self.related_attendance_atomics.all()],
+        }
+

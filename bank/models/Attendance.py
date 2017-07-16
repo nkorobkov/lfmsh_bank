@@ -49,3 +49,17 @@ class Attendance(AtomicTransaction):
 
     def __str__(self):
         return "{} {} {} {}".format(str(self.attendance_block), str(self.receiver ), str(self.date ), str(self.counted))
+
+    def to_python(self):
+        return {
+            "type": self.type.readable_name,
+            "value": self.value,
+            "receiver": self.receiver.account.long_name(),
+            "counted": self.counted,
+            "description": self.description,
+            "update_timestamp": self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
+            "creation_timestamp": self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
+            "attendance_block": self.attendance_block.readable_name if self.attendance_block else "null",
+            "date": self.date.strftime("%d.%m"),
+
+        }

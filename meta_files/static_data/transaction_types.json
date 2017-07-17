@@ -39,7 +39,13 @@
     "money": [
       "radio_help",
       "art_help",
-      "staff_help"
+      "staff_help",
+      "class_pass",
+      "olympiad",
+      "olympiad_problem",
+      "territory_cleaning",
+      "else",
+      "reward"
     ],
     "attendance": []
   },

@@ -19,10 +19,16 @@ class PurchaseTransactionController(TableTransactionController):
 
     @staticmethod
     def get_initial_form_data(creator_username):
-        initial = super(PurchaseTransactionController, PurchaseTransactionController).get_initial_form_data(
-            creator_username)
-        for in_data in initial:
-            in_data['money_type'] = MoneyTypeEnum.staff_help.value
+        students_query = TableTransactionController._get_student_query()
+        initial = [
+            {'student_name': '{} {}crt.'.format(user.account.name_with_balance(), str(user.account.get_counter(AttendanceTypeEnum.book_certificate.value))),
+             'student_party': user.account.party,
+             'receiver_username': user.username,
+             'creator_username': creator_username,
+             'description': 'stub value',
+             'money_type': MoneyTypeEnum.staff_help.value
+             } for user in students_query]
+        initial[0]['description'] = ''
         return initial
 
     @staticmethod

@@ -18,7 +18,7 @@ class Account(models.Model):
     grade = models.IntegerField(blank=True, default=0)
 
     def get_counter(self, counter_name):
-        return sum([a.value for a in self.user.received_attendance.filter(type__name=counter_name).filter(counted=True)])
+        return int(sum([a.value for a in self.user.received_attendance.filter(type__name=counter_name).filter(counted=True)]))
 
     def __str__(self):
         if self.user.first_name:

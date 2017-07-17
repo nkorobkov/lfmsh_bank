@@ -68,8 +68,15 @@
       "readable_local": "Субсидии",
       "initial": "Начальное начисление"
       }
-  }
-  ,
+  },
+  "else": {
+    "readable_general": "Другое",
+    "else": {
+      "readable_local": "Другое",
+      "else": "Начисление общего назначения",
+      "reward": "Гонорар"
+      }
+  },
   "fine": {
     "readable_general": "Штрафы",
     "fine_general": {

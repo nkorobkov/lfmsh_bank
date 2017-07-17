@@ -4,6 +4,7 @@ from bank.controls.transaction_controllers.ExamTransactionController import Exam
 from bank.controls.transaction_controllers.FacAttendTransactionController import FacAttendTransactionController
 from bank.controls.transaction_controllers.FacPassTransactionController import FacPassTransactionController
 from bank.controls.transaction_controllers.FineTransactionController import FineTransactionController
+from bank.controls.transaction_controllers.LabTransactionController import LabTransactionController
 from bank.controls.transaction_controllers.LectureTransactionController import LectureTransactionController
 from bank.controls.transaction_controllers.PurcaseTransactionController import PurchaseTransactionController
 from bank.controls.transaction_controllers.SeminarTransactionController import SeminarTransactionController
@@ -39,6 +40,8 @@ class TransactionService:
             return FineTransactionController
         if trans_type == TransactionTypeEnum.activity.value:
             return ActivityTransactionController
+        if trans_type == TransactionTypeEnum.lab.value:
+            return LabTransactionController
 
         raise ModuleNotFoundError('no controller for this type')
 

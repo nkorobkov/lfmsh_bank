@@ -43,7 +43,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ]
       },
       "process": {
@@ -57,7 +59,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ]
       },
       "update": {
@@ -71,7 +75,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ]
       },
       "decline": {
@@ -85,7 +91,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ],
         "student": [
           "created_transactions"
@@ -124,7 +132,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ]
       },
       "process": {
@@ -138,7 +148,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ]
       },
       "update": {
@@ -149,7 +161,9 @@
           "fac_pass",
           "fac_attend",
           "seminar",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ]
       },
       "decline": {
@@ -163,7 +177,9 @@
           "fine",
           "purchase",
           "exam",
-          "activity"
+          "activity",
+          "lab",
+          "dining_services"
         ],
         "student": [
           "created_transactions"

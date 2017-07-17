@@ -60,23 +60,23 @@ class ValueKernelForm(TableKernelForm):
 
 class GeneralMoneyKernelForm(ValueKernelForm):
     money_type = AtomicTypeField(label="Тип",
-                                       queryset=MoneyType.objects.filter(
-                                           related_transaction_type__name=TransactionTypeEnum.general_money.value),
-                                       required=True, empty_label=None, to_field_name="name")
+                                 queryset=MoneyType.objects.filter(
+                                     related_transaction_type__name=TransactionTypeEnum.general_money.value),
+                                 required=True, empty_label=None, to_field_name="name")
 
 
 class FineKernelForm(ValueKernelForm):
     money_type = AtomicTypeField(label="Тип",
-                                       queryset=MoneyType.objects.filter(
-                                        related_transaction_type__name=TransactionTypeEnum.fine.value),
-                                       required=True, empty_label=None, to_field_name="name")
+                                 queryset=MoneyType.objects.filter(
+                                     related_transaction_type__name=TransactionTypeEnum.fine.value),
+                                 required=True, empty_label=None, to_field_name="name")
 
 
 class PurchaseKernelForm(ValueKernelForm):
     money_type = AtomicTypeField(label="Вид",
-                                       queryset=MoneyType.objects.filter(
-                                           related_transaction_type__name=TransactionTypeEnum.purchase.value),
-                                       required=True, empty_label=None, to_field_name="name")
+                                 queryset=MoneyType.objects.filter(
+                                     related_transaction_type__name=TransactionTypeEnum.purchase.value),
+                                 required=True, empty_label=None, to_field_name="name")
 
 
 class ActivityKernelForm(TableKernelForm):
@@ -89,9 +89,8 @@ class ActivityKernelForm(TableKernelForm):
                                      related_transaction_type__name=TransactionTypeEnum.activity.value),
                                  required=True, empty_label=None, to_field_name="name")
     cert = forms.BooleanField(required=False)
-    place_choices = [(1, "1"), (2, "2"), (3, "3"),(4,"Участник")]
+    place_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "Участник")]
     place = forms.ChoiceField(widget=PlaceWidget, choices=place_choices, required=False)
-
 
 
 class ExamKernelForm(ValueKernelForm):
@@ -121,6 +120,7 @@ class FacAttendForm(AttendKernelForm):
 
 class LectureForm(AttendKernelForm):
     pass
+
 
 class WorkoutForm(AttendKernelForm):
     pass
@@ -179,6 +179,7 @@ class SeminarKernelForm(AttendKernelForm):
     discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices,
                                    label="6. Вызвал ли семинар обсуждение среди слушателей?")
 
+
 class P2PKernelForm(forms.Form):
     value = forms.IntegerField(label='Value', required=True, min_value=1)  # consider adding validators here
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
@@ -188,6 +189,29 @@ class P2PKernelForm(forms.Form):
                                                                                            'last_name'),
         required=True,
         empty_label="Выберите получателя", to_field_name="username")
+    creator_username = forms.CharField(max_length=200)
+
+
+class LabKernelForm(forms.Form):
+    # TODO add validator that username1 != username2
+    value_1 = forms.IntegerField(label='Баксы первому пионеру', required=True, min_value=1)
+    value_2 = forms.IntegerField(label='Баксы второму пионеру', required=True, min_value=1)
+    receiver_username_1 = ReceiverField(
+        queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).order_by('account__party',
+                                                                                           'last_name'),
+        required=True,
+        empty_label="Первый Пионер", to_field_name="username", label="Первый пионер")
+    receiver_username_2 = ReceiverField(
+        queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).order_by('account__party',
+                                                                                           'last_name'),
+        required=True,
+        empty_label="Второй пионер", to_field_name="username",label="Второй пионер")
+
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
+                                  required=True)
+
+    date = MyDateField(initial=datetime.date.today, label="Дата cдачи отчета")
+
     creator_username = forms.CharField(max_length=200)
 
 

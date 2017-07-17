@@ -129,5 +129,15 @@
       "bread_cut"
     ],
     "attendance": []
+  },
+  {
+    "name": "lab",
+    "readable_name": "Лабораторная работа",
+    "money": [
+      "lab_pass"
+    ],
+    "attendance": [
+      "lab_pass"
+    ]
   }
 ]

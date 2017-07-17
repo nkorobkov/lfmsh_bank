@@ -5,31 +5,47 @@
 
     <h1>Лабораторная работа</h1>
 
-    <form action={% url 'bank:add_transaction' type_name=type_name %} method="post">
+
+    {% if update_of %}
+        <form action={% url 'bank:update_transaction' type_name=type_name update_of=update_of %} method="post">
+
+    {% elif from_template %}
+        <form action={% url 'bank:add_transaction_from_template' type_name=type_name from_template=from_template %} method="post">
+    {% else %}
+        <form action={% url 'bank:add_transaction' type_name=type_name %} method="post">
+
+    {% endif %}
+
+    {% load bootstrap3 %}
 
         {% csrf_token %}
         {{ formset.management_form }}
         {{ formset.forms.0.creator_username.as_hidden }}
 
-        {% if formset.forms.0.errors %}
-                    <div class="alert alert-danger">{{ formset.forms.0.errors}}</div>
-
-                {% endif %}
         <div class="row">
-            <div class="col-md-4">
-                <label for="{{ formset.forms.0.description.id_for_label }}">Комментарий:</label>
-                {{ formset.forms.0.description }}
+
+            <div class="col-md-6 col-lg-3">
+                {% bootstrap_field formset.forms.0.receiver_username_1 %}
             </div>
-            <div class="col-md-4">
-                <label for="{{ formset.forms.0.receiver_username.id_for_label }}">Получатель:</label>
-                {{ formset.forms.0.receiver_username }}
+            <div class="col-md-6 col-lg-3">
+                {% bootstrap_field formset.forms.0.value_1 %}
             </div>
-            <div class="col-md-4">
-                <label for="{{ formset.forms.0.value.id_for_label }}">Сумма:</label>
-                {{ formset.forms.0.value }}
+            <div class="col-md-6 col-lg-3">
+                {% bootstrap_field formset.forms.0.receiver_username_2 %}
+            </div>
+            <div class="col-md-6 col-lg-3">
+                {% bootstrap_field formset.forms.0.value_2 %}
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-6">
+                {% bootstrap_field formset.forms.0.description %}
+            </div>
+             <div class="col-md-6">
+                {% bootstrap_field formset.forms.0.date %}
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <input type="submit" value="Начислить!" class="btn btn-default"/>

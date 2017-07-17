@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequ
 
 from bank.controls.TransactionService import TransactionService
 from bank.controls.stats_controller import get_student_stats
-from bank.helper_functions import get_perm_name, get_students_markup
+from bank.helper_functions import get_perm_name, get_students_markup, get_next_missed_lec_penalty
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
@@ -27,7 +27,7 @@ def index(request):
     log.info(request.user.last_name + ' index')
     student_stats = get_student_stats(request.user)
     transaction_types = TransactionType.objects.all()
-    transaction_type_info = [ # TODO change to resolve perm on server
+    transaction_type_info = [  # TODO change to resolve perm on server
         {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
         transaction_types]
     counters = get_counters_of_user_who_is(request.user, request.user, 'self')
@@ -302,8 +302,14 @@ def get_counters_of_user_who_is(user, target_user, group):
         return None
 
     all_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True)
-    result = {}
+    info = {"study_needed": STUDY_NEEDED, "fac_pass_needed": FAC_PASS_NEEDED.get(target_user.account.grade),
+            "lab_pass_needed": LAB_PASS_NEEDED.get(target_user.account.grade)}
+    counters_val = {}
     for counter_type in AttendanceType.objects.all():
         counter_sum = sum([c.value for c in all_counters.filter(type=counter_type)])
-        result.update({counter_type.readable_name: int(counter_sum)})
-    return result
+        counters_val.update({counter_type.name: int(counter_sum)})
+    info.update({"study": counters_val.get(AttendanceTypeEnum.fac_attend.value) + counters_val.get(
+        AttendanceTypeEnum.seminar_attend.value)})
+    info.update(
+        {"next_missed_lec_fine": get_next_missed_lec_penalty(counters_val.get(AttendanceTypeEnum.lecture_miss.value))})
+    return {"val": counters_val, "info": info}

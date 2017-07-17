@@ -18,9 +18,10 @@ DS_REWARD = {
     'potato': 60., "bread_cut": 60., "serving": 60.
 }
 
-sem_needed = 18
-lab_pass_needed = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}
-fac_pass_needed = {7: 0, 8: 0, 9: 1, 10: 1, 11: 1}
+STUDY_NEEDED = 18
+LAB_PASS_NEEDED = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}
+FAC_PASS_NEEDED = {7: 0, 8: 0, 9: 1, 10: 1, 11: 1}
+
 LAB_PENALTY = 20
 LECTURE_PENALTY = 10
 

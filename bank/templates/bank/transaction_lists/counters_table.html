@@ -23,10 +23,10 @@
             {% if not viewer_role == 'creator' %}
                 <td>{{ counter.related_transaction.creator.account.long_name }}</td>
             {% endif %}
-            <td>{% include 'bank/transaction_lists/counted_marker.html' with counted=counter.counted %}</td>
+            <td>{{ counter.get_value }} {% include 'bank/transaction_lists/counted_marker.html' with counted=counter.counted %}</td>
             <td>{{ counter.description }}</td>
             <td>{{ counter.type }}</td>
-            <td>{{ counter.attendance_block }}</td>
+            <td>{% if counter.attendance_block %}{{ counter.attendance_block }}{% else %}---{% endif %}</td>
             <td>{{ counter.get_date }}</td>
 
         </tr>

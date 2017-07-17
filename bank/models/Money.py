@@ -46,7 +46,13 @@ class Money(AtomicTransaction):
         receiver.save()
 
     def get_value(self):
-        return '{} {}'.format(str(super().get_value()), SIGN)
+        if abs(self.value) > 9.9:
+            v = int(self.value)
+        else:
+            v = round(self.value, 1)
+        if v > 0:
+            return '+{} {}'.format(str(v), SIGN)
+        return '{} {}'.format(str(v), SIGN)
 
     def to_python(self):
         return {

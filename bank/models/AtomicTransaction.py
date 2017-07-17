@@ -27,10 +27,6 @@ class AtomicTransaction(models.Model):
     def get_creation_timestamp(self):
         return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
 
-    def get_value(self):
-        if abs(self.value) > 9.9:
-            return int(self.value)
-        return round(self.value, 1)
 
 '''
     @classmethod

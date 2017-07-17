@@ -9,7 +9,6 @@ sem_needed = 18
 activity_money = {1: 20, 2: 15, 3: 10, 4: 5}
 
 
-
 def get_students_markup(students):
     endtable = []
     starttable = []
@@ -22,23 +21,6 @@ def get_students_markup(students):
     return {'markup': {'endtable': endtable, 'starttable': starttable}}
 
 
-'''
-
-def lec(score, sum_score, budget, num_of_attendants):
-    print(num_of_attendants, sum_score)
-    print(score, end=' ')
-    sc = max(0, (float(score))) ** (0.5)
-
-    print(sc, end=' ')
-    value = max(0., (float(budget) * num_of_attendants) * sc / (float(sum_score)))
-    print(value)
-    return value
-'''
-
-def get_tax_desc():
-    return str('Поздравляем 👑Глеба Бурдонова👑 с получением Золотого Аккаунта Банка ЛФМШ!', 'utf-8')
-
-
 def sem_fac_penalty(n):
     step = SEM_STEP
     s = INITIAL_STEP_SEM
@@ -49,7 +31,11 @@ def sem_fac_penalty(n):
 
     return a
 
+
+def get_next_missed_lec_penalty(missed):
+    return (missed + 1) * LECTURE_PENALTY
+
+
 def get_perm_name(*args):
     args = map(str, args)
     return 'bank.' + '_'.join(args)
-

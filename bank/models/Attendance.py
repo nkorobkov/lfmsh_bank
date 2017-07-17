@@ -47,6 +47,11 @@ class Attendance(AtomicTransaction):
     def get_date(self):
         return self.date.strftime("%d.%m")
 
+    def get_value(self):
+        if self.value >= 0:
+            return '+{}'.format(str(int(self.value)))
+        return '{}'.format(str(int(self.value)))
+
     def __str__(self):
         return "{} {} {} {}".format(str(self.attendance_block), str(self.receiver ), str(self.date ), str(self.counted))
 

@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 
 from bank.constants import MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
@@ -51,7 +53,7 @@ class PurchaseTransactionController(TableTransactionController):
                                 new_transaction)
                 if certificate_value:
                     Attendance.new_attendance(receiver, -certificate_value, attendance_type, first_form['description'],
-                                              None, new_transaction)
+                                              datetime.date.today(), new_transaction)
         return new_transaction
 
     @staticmethod

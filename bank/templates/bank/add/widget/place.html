@@ -1,0 +1,16 @@
+{% with id=widget.attrs.id %}
+        {% for group, options, index in widget.optgroups %}
+            {% for option in options %}
+                    <label class="btn {% if option.selected %} active {% endif %}">
+                        <input type="radio" name="{{ option.name }}"
+                                    value="{{ option.value }}" {% if option.selected %} checked {% endif %}
+                        {% for name, value in option.attrs.items %}
+                            {% if value is not False %}
+                                {{ name }}{% if value is not True %}="{{ value }}"{% endif %}
+                            {% endif %}
+                        {% endfor %}/>
+                    {{ option.label }}
+                    </label>
+            {% endfor %}
+        {% endfor %}
+{% endwith %}

@@ -1,0 +1,58 @@
+{% extends "bank/add/all_students_table_form.html" %}
+
+
+
+
+{% block header_row %}
+    <tr>
+        <th>Пионер</th>
+        <th>{{ value_show_name }}</th>
+        <th>Сетификат</th>
+    </tr>
+{% endblock %}
+
+
+{% block before_table %}
+    {% load bootstrap3 %}
+
+    <div class="row">
+        <div class="col-sm-6">
+            {% bootstrap_field formset.forms.0.description %}
+        </div>
+        <div class="col-sm-6">
+            {% bootstrap_field formset.forms.0.date %}
+        </div>
+        <div class="col-sm-6">
+            {% bootstrap_field formset.forms.0.money_type %}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% block regular_row %}
+    <tr>
+        <td>
+            {{ form.student_name.value }}
+        </td>
+        <td>
+            {% if not forloop.counter0 == 0 %}
+                {{ form.description.as_hidden }}
+                {{ form.money_type.as_hidden }}
+
+            {% endif %}
+
+            {{ form.student_name.as_hidden }}
+            {{ form.student_party.as_hidden }}
+            {{ form.receiver_username.as_hidden }}
+            {{ form.creator_username.as_hidden }}
+
+            {{ form.date.as_hidden }}
+            <div class="btn-group" data-toggle="buttons">
+                {{ form.place }}
+            </div>
+        </td>
+        <td>{{ form.cert }}</td>
+    </tr>
+{% endblock %}

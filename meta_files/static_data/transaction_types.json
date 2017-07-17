@@ -104,14 +104,29 @@
   {
     "name": "tax",
     "readable_name": "Налог",
-    "money": ["tax"],
+    "money": [
+      "tax"
+    ],
     "attendance": []
   },
   {
     "name": "purchase",
     "readable_name": "Покупка",
     "money": [
-      "goods", "books", "service", "auction"
+      "goods",
+      "books",
+      "service",
+      "auction"
+    ],
+    "attendance": []
+  },
+  {
+    "name": "dining_services",
+    "readable_name": "Дежурство по столовой",
+    "money": [
+      "potato",
+      "serving",
+      "bread_cut"
     ],
     "attendance": []
   }

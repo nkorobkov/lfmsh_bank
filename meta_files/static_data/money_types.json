@@ -3,13 +3,13 @@
     "readable_general": "Учеба",
     "obligatory_studies": {
       "readable_local": "Обязательная учебная программа",
-      "fac_pass": "Зачет за факультатив",
+      "fac_pass": "Зачет по факультативу",
       "exam": "Экзамен",
       "seminar_pass": "Проведение семинара"
     },
     "optional_studies": {
       "readable_local": "Необязательная учебная программа",
-      "class_pass": "Зачет за кружок",
+      "class_pass": "Зачет по кружку",
       "olympiad": "Олимпиада",
       "olympiad_problem": "Решение Убойных Задач"
     }

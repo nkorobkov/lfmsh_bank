@@ -12,3 +12,4 @@ class TransactionTypeEnum(Enum):
     purchase = 'purchase'
     fac_pass = 'fac_pass'
     exam = 'exam'
+    activity = 'activity'

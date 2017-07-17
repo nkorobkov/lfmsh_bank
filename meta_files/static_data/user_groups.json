@@ -42,7 +42,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ]
       },
       "process": {
@@ -55,7 +56,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ]
       },
       "update": {
@@ -68,7 +70,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ]
       },
       "decline": {
@@ -81,7 +84,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ],
         "student": [
           "created_transactions"
@@ -119,7 +123,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ]
       },
       "process": {
@@ -132,7 +137,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ]
       },
       "update": {
@@ -142,7 +148,8 @@
           "workout",
           "fac_pass",
           "fac_attend",
-          "seminar"
+          "seminar",
+          "activity"
         ]
       },
       "decline": {
@@ -155,7 +162,8 @@
           "seminar",
           "fine",
           "purchase",
-          "exam"
+          "exam",
+          "activity"
         ],
         "student": [
           "created_transactions"

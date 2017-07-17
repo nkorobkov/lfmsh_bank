@@ -3,6 +3,7 @@ import datetime
 
 from django import forms
 from django.contrib.auth.models import User
+from django.forms.widgets import ChoiceWidget
 from django.shortcuts import get_object_or_404
 
 from bank.constants import UserGroups, P2P_BUFFER, AttendanceTypeEnum
@@ -35,6 +36,12 @@ class ReceiverField(forms.ModelChoiceField):
         return '{} {}'.format(user.account.party, user.account.long_name())
 
 
+class PlaceWidget(ChoiceWidget):
+    input_type = 'radio'
+    template_name = 'bank/add/widget/place.html'
+    option_template_name = ''
+
+
 class TableKernelForm(forms.Form):
     student_name = forms.CharField(label='Name', max_length=200)
     student_party = forms.IntegerField(label='Party')
@@ -46,7 +53,7 @@ class TableKernelForm(forms.Form):
 class ValueKernelForm(TableKernelForm):
     value = forms.IntegerField(label='Value', required=False, min_value=1)
 
-    # fields that will be used only once from first instance of formset.
+    # field that will be used only once from first instance of formset.
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
                                   required=True)
 
@@ -70,6 +77,21 @@ class PurchaseKernelForm(ValueKernelForm):
                                        queryset=MoneyType.objects.filter(
                                            related_transaction_type__name=TransactionTypeEnum.purchase.value),
                                        required=True, empty_label=None, to_field_name="name")
+
+
+class ActivityKernelForm(TableKernelForm):
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
+                                  required=True)
+
+    date = MyDateField(initial=datetime.date.today, label="Дата проведения")
+    money_type = AtomicTypeField(label="Вид",
+                                 queryset=MoneyType.objects.filter(
+                                     related_transaction_type__name=TransactionTypeEnum.activity.value),
+                                 required=True, empty_label=None, to_field_name="name")
+    cert = forms.BooleanField(required=False)
+    place_choices = [(1, "1"), (2, "2"), (3, "3"),(4,"Участник")]
+    place = forms.ChoiceField(widget=PlaceWidget, choices=place_choices, required=False)
+
 
 
 class ExamKernelForm(ValueKernelForm):

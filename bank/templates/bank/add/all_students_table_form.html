@@ -23,7 +23,6 @@
 {% block before_table %}
 {% endblock %}
 
-<!-- may be reuse this form later for exam, fine, workout, lecture, and other pio list transaction types -->
 <div class="row">
     {% for form in formset %}
         {% if forloop.counter in markup.starttable %}
@@ -31,10 +30,9 @@
             <h4>{{ form.student_party.value }} Отряд</h4>
             <table class="table">
 
-            <tr>
-                <th>Пионер</th>
-                <th>{{ value_show_name }}</th>
-            </tr>
+            {% block header_row %}
+            {% endblock %}
+
         {% endif %}
     {% block regular_row %}
     {% endblock %}

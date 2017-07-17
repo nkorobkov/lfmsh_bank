@@ -14,3 +14,5 @@ class MoneyTypeEnum(Enum):
     exam = 'exam'
     fac_pass = 'fac_pass'
     books = 'books'
+    evening_activity = 'evening_activity'
+    sport_activity = 'sport_activity'

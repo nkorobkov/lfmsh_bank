@@ -24,6 +24,10 @@ LECTURE_PENALTY = 10
 ACTIVITY_REWARD = {'sport_activity': {'single': [20., 15., 10., 5.]},
                    'evening_activity': {'single': [20., 15., 10.], 'team': [120., 100., 80.]},
                    'day_activity': {'single': [20., 15., 10.], 'team': [120., 100., 80.]}}
+
+DS_REWARD = {
+    'potato': 60., "bread_cut": 60., "serving": 60.
+}
 BOOK_CERTIFICATE_VALUE = 50
 INITIAL_STEP_SEM = 10
 SEM_STEP = 5

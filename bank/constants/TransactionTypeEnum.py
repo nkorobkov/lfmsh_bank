@@ -14,3 +14,4 @@ class TransactionTypeEnum(Enum):
     exam = 'exam'
     activity = 'activity'
     lab = "lab"
+    ds = 'dining_services'

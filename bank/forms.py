@@ -126,6 +126,13 @@ class WorkoutForm(AttendKernelForm):
     pass
 
 
+class DSKernelForm(AttendKernelForm):
+    money_type = AtomicTypeField(label="Вид Дежурства",
+                                 queryset=MoneyType.objects.filter(
+                                     related_transaction_type__name=TransactionTypeEnum.ds.value),
+                                 required=True, empty_label=None, to_field_name="name")
+
+
 class SeminarKernelForm(AttendKernelForm):
     # fields that will be used only once from first instance of formset.
     receiver = ReceiverField(label="Докладчик",

@@ -17,3 +17,4 @@ class MoneyTypeEnum(Enum):
     evening_activity = 'evening_activity'
     sport_activity = 'sport_activity'
     lab_pass = "lab_pass"
+    potato = 'potato'

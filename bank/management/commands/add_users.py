@@ -7,8 +7,9 @@ from django.utils.crypto import random
 
 from transliterate import translit
 
-from bank.constants import UserGroups
-from bank.models import Account
+from bank.constants import UserGroups, BANKIR_USERNAME, TransactionTypeEnum, MoneyTypeEnum, INITIAL_MONEY, \
+    INITIAL_MONEY_DESC
+from bank.models import Account, TransactionType, MoneyType, Transaction, Money
 from main.settings import BASE_DIR
 
 
@@ -35,9 +36,10 @@ class Command(BaseCommand):
 
         if self.flush_all_users():
 
-            self.add_users(Command.STUDENT_DATA, Command.STUDENT_DATA_OUT, UserGroups.student.value)
-            self.add_users(Command.STAFF_DATA,Command.STAFF_DATA_OUT, UserGroups.staff.value)
             self.add_bank_user()
+            self.add_users(Command.STUDENT_DATA, Command.STUDENT_DATA_OUT, UserGroups.student.value)
+            self.add_users(Command.STAFF_DATA, Command.STAFF_DATA_OUT, UserGroups.staff.value)
+            self.add_initial_money(UserGroups.student.value)
 
     @staticmethod
     def flush_all_users():
@@ -88,7 +90,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def add_bank_user():
-        login = "bankir"
+        login = BANKIR_USERNAME
         password = Command.generate_password(8)
         new_u = User.objects.create_user(first_name="Банкир", last_name="ЛФМШ", username=login,
                                              password=password)
@@ -99,12 +101,22 @@ class Command(BaseCommand):
         group.user_set.add(new_u)
 
         
-        out = open(BASE_DIR + Command.STATIC_DATA_PATH + Command.STAFF_DATA, 'w')
+        out = open(BASE_DIR + Command.STATIC_DATA_PATH + "bankir.txt", 'w')
         out.write(' Банкир ЛФМШ \n')
         out.write('Login: ' + login + ' Password: ' + password)
         print("admin:   ", login, password)
 
-        
+    @staticmethod
+    def add_initial_money(group_name):
+        creator = User.objects.get(username=BANKIR_USERNAME)
+        t_type = TransactionType.objects.get(name=TransactionTypeEnum.general_money.value)
+        money_type = MoneyType.objects.get(name=MoneyTypeEnum.initial.value)
+        new_transaction = Transaction.new_transaction(creator, t_type, {})
+        for student in User.objects.filter(groups__name=group_name):
+            Money.new_money(student, INITIAL_MONEY, money_type, INITIAL_MONEY_DESC, new_transaction)
+        new_transaction.process()
+
+
 
     @staticmethod
     def generate_password(length):

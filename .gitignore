@@ -19,3 +19,4 @@ main/__pycache__
 *.pyc
 meta_files/users_data/staff_out.txt
 meta_files/users_data/student_out.txt
+bankir.txt

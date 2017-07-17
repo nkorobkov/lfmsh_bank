@@ -4,12 +4,10 @@ import datetime
 from django import forms
 from django.contrib.auth.models import User
 from django.forms.widgets import ChoiceWidget
-from django.shortcuts import get_object_or_404
 
-from bank.constants import UserGroups, P2P_BUFFER, AttendanceTypeEnum
+from bank.constants import UserGroups, AttendanceTypeEnum
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
 from bank.models import MoneyType, AttendanceBlock
-from django.forms import BaseFormSet, ModelChoiceField
 
 
 # -*- coding: utf-8 -*-

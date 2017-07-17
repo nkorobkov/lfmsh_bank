@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
-from bank.constants import UserGroups, MoneyTypeEnum, TransactionTypeEnum, P2P_BUFFER
+from bank.constants import MoneyTypeEnum, TransactionTypeEnum
 from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.forms import P2PKernelForm
 from bank.models import Transaction, MoneyType, Money, TransactionType

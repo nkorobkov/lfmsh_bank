@@ -18,3 +18,5 @@ class MoneyTypeEnum(Enum):
     sport_activity = 'sport_activity'
     lab_pass = "lab_pass"
     potato = 'potato'
+    tax = 'tax'
+    initial = 'initial'

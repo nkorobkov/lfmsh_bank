@@ -15,3 +15,4 @@ class TransactionTypeEnum(Enum):
     activity = 'activity'
     lab = "lab"
     ds = 'dining_services'
+    tax = 'tax'

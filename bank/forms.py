@@ -186,14 +186,14 @@ class SeminarKernelForm(AttendKernelForm):
 
 
 class P2PKernelForm(forms.Form):
-    value = forms.IntegerField(label='Value', required=True, min_value=1)  # consider adding validators here
-    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
+    value = forms.IntegerField(label='Сумма', required=True, min_value=1)  # consider adding validators here
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Комментарий',
                                   required=True)
     receiver_username = ReceiverField(
         queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).order_by('account__party',
                                                                                            'last_name'),
         required=True,
-        empty_label="Выберите получателя", to_field_name="username")
+        empty_label="Выберите получателя", to_field_name="username", label="Получатель")
     creator_username = forms.CharField(max_length=200)
 
 

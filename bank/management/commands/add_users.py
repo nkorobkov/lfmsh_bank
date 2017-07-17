@@ -37,6 +37,7 @@ class Command(BaseCommand):
 
             self.add_users(Command.STUDENT_DATA, Command.STUDENT_DATA_OUT, UserGroups.student.value)
             self.add_users(Command.STAFF_DATA,Command.STAFF_DATA_OUT, UserGroups.staff.value)
+            self.add_bank_user()
 
     @staticmethod
     def flush_all_users():
@@ -84,6 +85,26 @@ class Command(BaseCommand):
             out.write('Login: ' + login + ' Password: ' + password)
             print(' '.join(person), login, password)
 
+
+    @staticmethod
+    def add_bank_user():
+        login = "bankir"
+        password = Command.generate_password(8)
+        new_u = User.objects.create_user(first_name="Банкир", last_name="ЛФМШ", username=login,
+                                             password=password)
+        new_u.save()
+        new_a = Account(user=new_u, middle_name="", grade=0, party=0)
+        new_a.save()
+        group = Group.objects.get(name='admin')
+        group.user_set.add(new_u)
+
+        
+        out = open(BASE_DIR + Command.STATIC_DATA_PATH + Command.STAFF_DATA, 'w')
+        out.write(' Банкир ЛФМШ \n')
+        out.write('Login: ' + login + ' Password: ' + password)
+        print("admin:   ", login, password)
+
+        
 
     @staticmethod
     def generate_password(length):

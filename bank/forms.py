@@ -1,9 +1,12 @@
 # coding=utf-8
 import datetime
+import string
 
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.forms.widgets import ChoiceWidget
+from transliterate.utils import _
 
 from bank.constants import UserGroups, AttendanceTypeEnum
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
@@ -87,7 +90,7 @@ class ActivityKernelForm(TableKernelForm):
                                      related_transaction_type__name=TransactionTypeEnum.activity.value),
                                  required=True, empty_label=None, to_field_name="name")
     cert = forms.BooleanField(required=False)
-    place_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "Участник"), (5,"-")]
+    place_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "Участник"), (5, "-")]
     place = forms.ChoiceField(widget=PlaceWidget, choices=place_choices, required=False)
 
 
@@ -188,7 +191,8 @@ class SeminarKernelForm(AttendKernelForm):
 class P2PKernelForm(forms.Form):
     def __init__(self, creator, *args, **kwargs):
         super(P2PKernelForm, self).__init__(*args, **kwargs)
-        self.fields['value'] = forms.IntegerField(max_value=creator.account.balance, label="Сумма", min_value=1, required=True)
+        self.fields['value'] = forms.IntegerField(max_value=creator.account.balance, label="Сумма", min_value=1,
+                                                  required=True)
         self.fields['receiver_username'] = ReceiverField(
             queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).exclude(
                 username=creator.username).order_by('account__party',
@@ -230,8 +234,25 @@ class LabKernelForm(forms.Form):
         receiver_username_2 = cleaned_data.get("receiver_username_2")
 
         if receiver_username_1 and receiver_username_2 and receiver_username_1 == receiver_username_2:
-            self.add_error('receiver_username_2',  "Пожалуйста выберите разных пионеров как партнеров по лабе")
-            self.add_error('receiver_username_1',  "Пожалуйста выберите разных пионеров как партнеров по лабе")
+            self.add_error('receiver_username_2', "Пожалуйста выберите разных пионеров как партнеров по лабе")
+            self.add_error('receiver_username_1', "Пожалуйста выберите разных пионеров как партнеров по лабе")
+
+
+class RelativePathField(forms.CharField):
+    def validate(self, value):
+        super(forms.CharField, self).validate(value)
+        allowed = string.ascii_letters + string.digits + "/"
+        for c in value:
+            if c not in allowed:
+                raise ValidationError(
+                    _('Недопустимый символ в пути: %(value)s'),
+                    params={'value': c},
+                )
+
+
+class UploadFileForm(forms.Form):
+    path = RelativePathField(max_length=100, label="Путь", help_text="В пути допускаются только английские буквы цифры и /")
+    file = forms.FileField(label="Выберите файл")
 
 
 '''

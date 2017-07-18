@@ -20,6 +20,10 @@
   {
     "name": "staff",
     "permissions": {
+      "upload":
+      {
+        "self":["files"]
+      },
       "see": {
         "self": [
           "received_transactions",
@@ -107,6 +111,10 @@
   {
     "name": "admin",
     "permissions": {
+      "upload":
+      {
+        "self":["files"]
+      },
       "see": {
         "self": [
           "balance",

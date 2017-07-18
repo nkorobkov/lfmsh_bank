@@ -1,0 +1,52 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+        {% load bootstrap3 %}
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Загрузка файлов в архив</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <p> На этой странице вы можете загрузить свои материалы в файловый архив.<br>
+                Все что вы отправите станет доступно всем пионерам. Удалить файл нельзя.<br>
+                Пожалуйста не загружайте файлы в корневой каталог (пустой путь) без необходимости.<br>
+                Вы можете создавать вложенные директории просто указав их в пути к файлу. Само имя файла указывать не
+                нужно.<br>
+
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form action={% url 'bank:upload' %} method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% csrf_token %}
+                        {% bootstrap_field form.path %}
+                        {% bootstrap_field form.file %}
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Загрузить" class="btn btn-default"/>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}

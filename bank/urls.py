@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^manage/(?P<user_group>[a-zA-z]+)/pr(?P<to_process>[0-9]+)$', views.manage, name='manage_process'),
     url(r'^manage/(?P<user_group>[a-zA-z]+)/dc(?P<to_decline>[0-9]+)$', views.manage, name='manage_decline'),
 
+    url(r'^upload/$', views.upload_file, name='upload'),
+
     url(r'^media/$', views.media, name='media'),
 
 

@@ -56,18 +56,9 @@
                     <li><a href="{% url 'bank:index' %}">Домой</a></li>
                     <li><a href="{% url 'bank:my_transactions' %}">Мои транзакции</a></li>
                     <li><a href="{% url 'bank:media' %}">Файловый архив</a></li>
-                    <!----{% if user.account.can_add_trans %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Add Trans <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'bank:add_sem' %}">Семинар</a></li>
-                        <li><a href="{% url 'bank:add_zaryadka' %}">Зарядка</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{% url 'bank:add_special' %}">Свободная</a></li>
-                    </ul>
-                </li>
-                {% endif %} ---->
+                    {% if 'bank.upload_self_files' in request.user.get_all_permissions %}
+                    <li><a href="{% url 'bank:upload' %}">Загрузить файл</a></li>
+                    {% endif %}
                 {% endif %}
 
 

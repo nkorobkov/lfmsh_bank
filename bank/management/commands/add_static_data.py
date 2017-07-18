@@ -136,12 +136,14 @@ class Command(BaseCommand):
             name = group['name']
             permissions = group['permissions']
             group_model = Group.objects.get(name=name)
+            content_type = ContentType.objects.get_for_model(TransactionType)
+
             for action, per_action_perm in permissions.items():
                 for target, perm_list in per_action_perm.items():
                     for perm in perm_list:
                         print(Command.make_perm_name(action, target, perm))
-
-                        p = Permission.objects.get(name=Command.make_perm_name(action, target, perm))
+                        name = Command.make_perm_name(action, target, perm)
+                        p = Permission.objects.get_or_create(name=name, codename=name, content_type=content_type)[0]
                         group_model.permissions.add(p)
 
             group_model.save()

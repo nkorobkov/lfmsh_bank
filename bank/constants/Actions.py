@@ -7,4 +7,5 @@ class Actions(Enum):
     decline = 'decline'
     see = 'see'
     update = 'update'
+    upload = "upload"
 

@@ -2,8 +2,9 @@ import ast
 import logging
 import json
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
-
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseRedirect
+from os import path
+import os
 from bank.controls.TransactionService import TransactionService
 from bank.controls.stats_controller import get_student_stats, get_report_student_stats
 from bank.helper_functions import get_perm_name, get_students_markup, get_next_missed_lec_penalty
@@ -11,6 +12,8 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
+
+from main.settings import MEDIA_ROOT, BASE_DIR
 from .forms import *
 from django_tables2 import RequestConfig
 from .tables import *
@@ -162,13 +165,31 @@ def manage(request, user_group, to_decline=None, to_process=None):
     return render(request, 'bank/transaction_lists/manage.html', render_dict)
 
 
-@permission_required('bank.see_super_table', login_url='bank:index')
+@permission_required(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions"), login_url='bank:index')
 def super_table(request):
     table = TransTable(Transaction.objects.all(), order_by='-creation_date')
     RequestConfig(request).configure(table)
     table.paginate(per_page=500)
-
     return render(request, 'bank/s_table.html', {'trans': table})
+
+
+
+@permission_required(get_perm_name(Actions.upload.value, "self", "files"), login_url='bank:index')
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['file']
+            local_path = form.cleaned_data['path'].strip('/')
+            user_path = path.join(MEDIA_ROOT, local_path, f.name)
+            os.makedirs(path.dirname(user_path), exist_ok=True)
+            with open(user_path, 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+            return render(request, 'bank/files/success_upload.html', {"filename": f.name})
+    else:
+        form = UploadFileForm(initial={"path": request.user.username + "/"})
+    return render(request, 'bank/files/file_upload.html', {'form': form})
 
 
 def media(request):

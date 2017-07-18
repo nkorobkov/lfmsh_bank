@@ -24,7 +24,7 @@ SECRET_KEY = 'bfryo(aj_3=r2-&j!ine44c(abng&b)ya1*i8(7o+zx^m53m8)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.c9users.io']
 
 CACHES = {
     'default': {
@@ -104,5 +104,6 @@ LOGIN_URL = 'bank:login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 STATIC_URL = "/static/"

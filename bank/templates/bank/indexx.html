@@ -13,7 +13,10 @@
 
             <div class="col-sm-6">
                 <div class="text-left">
-                    <h3> Ваш баланс {{ request.user.account.get_balance }}</h3>
+                    <h3> Ваш баланс:
+                        {{ request.user.account.get_balance }}{% if counters.val.book_certificate %}, Сертификаты:
+                            {{ counters.val.book_certificate }} <span
+                                    class="glyphicon glyphicon-book"></span> {% endif %}</h3>
                 </div>
             </div>
         {% endif %}

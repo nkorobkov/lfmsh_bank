@@ -44,8 +44,8 @@ class Account(models.Model):
 
     def get_balance(self):
         if abs(self.balance) > 9.99:
-            return '{} {}'.format(str(int(self.balance)), SIGN)
-        return '{} {}'.format(str(round(self.balance, 1)), SIGN)
+            return '{}{}'.format(str(int(self.balance)), SIGN)
+        return '{}{}'.format(str(round(self.balance, 1)), SIGN)
 
     def get_all_money(self):
         a = list(self.user.received_money.all()) + list(itertools.chain(

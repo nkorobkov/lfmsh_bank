@@ -1,7 +1,5 @@
 {% if counters %}
-
-    <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-md-4">
             <h4>Обязательная учебная программа</h4>
 
             <i>Семинары/Факультативы:</i> {{ counters.info.study }} ({{ counters.val.seminar_attend }}/{{ counters.val.fac_attend }})  из {{ counters.info.study_needed }}<br>
@@ -15,7 +13,5 @@
                 <i>Пропущено лекций: {{ counters.val.lecture_missed }} <br>
                 <i>Штраф за следующую пропущенную лекцию:</i> {{ couners.info.next_missed_lec_fine }}<br>
             {% endif %}
-
         </div>
-    </div>
 {% endif %}

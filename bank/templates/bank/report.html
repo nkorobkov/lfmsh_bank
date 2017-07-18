@@ -1,0 +1,67 @@
+{% load staticfiles %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_css %}
+
+<!-- Display django.contrib.messages as Bootstrap alerts -->
+{% bootstrap_messages %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!---link rel="icon" href="http://crest.my/v2/wp-content/uploads/2015/10/email.png"--->
+    <link rel="stylesheet" href={% static "django_tables2/themes/paleblue/css/screen.css" %}/>
+    <link rel="stylesheet" href={% static "bank/style.css" %}/>
+    <!---link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"--->
+    <title>Банк ЛФМШ</title>
+</head>
+
+<body>
+
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <h4> Сводка балансов по состоянию на {% now 'd число H:i' %}</h4>
+    </div>
+</div>
+<div class="row">
+
+    {% for acc in accounts_info %}
+        {% if forloop.counter in markup.starttable %}
+            <div class="col-xs-6">
+            <h4>{{ acc.party }} Отряд</h4>
+            <table class="table table-bordered table-condensed">
+            <tr>
+                <th>Пионер</th>
+                <th>Балланс</th>
+            </tr>
+        {% endif %}
+    <tr>
+        <td>{{ acc.name }}</td>
+        <td>{{ acc.str_balance }}</td>
+    </tr>
+
+    {% if forloop.counter in markup.endtable %}
+        </table>
+        </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12">
+        Сумма денег у пионеров: {{ sum_money }}@, Среднее значение: {{ mean_money }}@
+    </div>
+</div>
+
+
+</body>

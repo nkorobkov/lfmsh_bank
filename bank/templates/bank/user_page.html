@@ -9,7 +9,7 @@
         <div class="row">
             {% if can_see_balance or can_see_counters %}
                 <div class="col-sm-4">
-                    <h3>Балланс {{ host.account.get_balance }} {% if counters.val.book_certificate %}, Сертификаты: {{ counters.val.book_certificate }} <span
+                    <h3>Балланс: {{ host.account.get_balance }} {% if counters.val.book_certificate %}, Сертификаты: {{ counters.val.book_certificate }} <span
                     class="glyphicon glyphicon-book"></span> {% endif %}</h3>
 
 
@@ -19,7 +19,7 @@
 
 
             {% if can_see_balance or can_see_counters %}
-                <div class="col-sm-8"> {% include 'bank/counters.html' %}</div>
+        {% include 'bank/counters.html' %}
             {% endif %}
 
         </div>

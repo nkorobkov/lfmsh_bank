@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequ
 from os import path
 import os
 from bank.controls.TransactionService import TransactionService
-from bank.controls.stats_controller import get_student_stats, get_report_student_stats
+from bank.controls.stats_controller import get_student_stats, get_report_student_stats, get_counters_of_user_who_is
 from bank.helper_functions import get_perm_name, get_students_markup, get_next_missed_lec_penalty
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
@@ -191,6 +191,12 @@ def upload_file(request):
         form = UploadFileForm(initial={"path": request.user.username + "/"})
     return render(request, 'bank/files/file_upload.html', {'form': form})
 
+def report(request):
+    render_dict = get_report_student_stats(request.user)
+    students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
+    render_dict.update(get_students_markup(students_query))
+    return render(request, 'bank/report.html', render_dict)
+
 
 def media(request):
     return redirect('/media/')
@@ -261,21 +267,3 @@ def user_can_decline(request, updated_transaction):
             
             return True
     return False
-
-
-def get_counters_of_user_who_is(user, target_user, group):
-    if not user.has_perm(get_perm_name(Actions.see.value, group, "attendance")):
-        return None
-
-    all_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True)
-    info = {"study_needed": STUDY_NEEDED, "fac_pass_needed": FAC_PASS_NEEDED.get(target_user.account.grade),
-            "lab_pass_needed": LAB_PASS_NEEDED.get(target_user.account.grade)}
-    counters_val = {}
-    for counter_type in AttendanceType.objects.all():
-        counter_sum = sum([c.value for c in all_counters.filter(type=counter_type)])
-        counters_val.update({counter_type.name: int(counter_sum)})
-    info.update({"study": counters_val.get(AttendanceTypeEnum.fac_attend.value) + counters_val.get(
-        AttendanceTypeEnum.seminar_attend.value)})
-    info.update(
-        {"next_missed_lec_fine": get_next_missed_lec_penalty(counters_val.get(AttendanceTypeEnum.lecture_miss.value))})
-    return {"val": counters_val, "info": info}

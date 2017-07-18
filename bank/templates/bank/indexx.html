@@ -26,8 +26,9 @@
 
     <!-- self transactions  -->
     <div class="row">
-        {% if 'bank.see_self_received_transactions' in request.user.get_all_permissions or 'bank.see_self_created_transactions' in request.user.get_all_permissions %}
-            <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4">
+            {% if 'bank.see_self_received_transactions' in request.user.get_all_permissions or 'bank.see_self_created_transactions' in request.user.get_all_permissions %}
+
                 <h4> Списки транзакций </h4>
                 <a href="{% url 'bank:my_transactions' %}"> Мои транзакции</a><br>
 
@@ -38,17 +39,32 @@
 
                 {% if st_stats.created_staff_len %}
                     <a href="{% url 'bank:manage' 'staff' %}">Педсоставские
-                        транзакции <span class="badge">{{ st_stats.created_staff_len }}</span></a>
+                        транзакции <span class="badge">{{ st_stats.created_staff_len }}</span></a><br>
                 {% endif %}
 
-            </div>
-        {% endif %}
-        <!-- other users list-->
-        <div class="col-sm-6 col-md-4">
-            <h4> Списки пользователей </h4>
-            <a href="{% url 'bank:students' %}"> Пионеры</a><br>
-            <a href="{% url 'bank:staff' %}"> Педсостав</a>
-        </div>
+                {% if 'bank.see_student_balance' in request.user.get_all_permissions or 'bank.see_staff_balance' in request.user.get_all_permissions %}
+
+                    <h4> Списки пользователей </h4>
+                    {% if 'bank.see_student_balance' in request.user.get_all_permissions %}
+                        <a href="{% url 'bank:students' %}"> Пионеры</a><br>
+                    {% endif %}
+                    {% if 'bank.see_staff_balance' in request.user.get_all_permissions %}
+                        <a href="{% url 'bank:staff' %}"> Педсостав</a>
+                    {% endif %}
+                {% endif %}
+
+                {% if 'bank.see_student_balance' in request.user.get_all_permissions %}
+                    <h4>Статистика</h4>
+                        Суммарные деньги пионеров: {{ st_stats.sum_money }} @<br>
+                        Средний балланс: {{ st_stats.mean_money }}<br>
+                    <a href="{% url 'bank:report' %}" target="_blank"> Сгенерировать репорт</a>
+
+                {% endif %}
+
+                </div>
+            {% endif %}
+
+
         <!-- add transaction-->
 
         <div class="col-sm-6 col-md-4">
@@ -60,23 +76,14 @@
                 {% endif %}
             {% endfor %}
         </div>
-    </div>
 
-
-
-    {% if 'bank.see_self_attendance' in request.user.get_all_permissions %}
-        {% include 'bank/counters.html' %}
-    {% endif %}
-
-
-    <div class="row">
-
-        {% if st_stats.sum_money %}
-            <div class="col-sm-6">
-                Суммарные деньги пионеров: {{ st_stats.sum_money }} @
-            </div>
+        {% if 'bank.see_self_attendance' in request.user.get_all_permissions %}
+            {% include 'bank/counters.html' %}
         {% endif %}
     </div>
+
+
+
 
 
 

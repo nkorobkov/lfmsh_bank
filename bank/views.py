@@ -38,12 +38,16 @@ def index(request):
 
 @login_required
 def add_transaction(request, type_name, update_of=None, from_template=None):
-    if update_of:
-        updated_transaction = get_object_or_404(Transaction, id=update_of)
-        if not user_can_update(request, updated_transaction):
-            return HttpResponseForbidden()
+    if update_of or from_template:
+        source = update_of if update_of else from_template       
+        updated_transaction = get_object_or_404(Transaction, id=source)
+        
+        if update_of and not user_can_update(request, updated_transaction):
+            return HttpResponseForbidden("У вас нет прав на изменение этой транзакции")
+        if from_template and not user_can_use_template(request, updated_transaction):
+            return HttpResponseForbidden("Эту транзакцию нельзя использовать как шаблон")
         if not updated_transaction.type.name == type_name:
-            return HttpResponseBadRequest('Transaction type do not match updated transaction type')
+            return HttpResponseBadRequest("Тип транзакции из шаблона не совпадает с типом указанным в адресной строке")
 
     elif not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
         log.warning(request.user.get_username() + ' access denied on add trans ' + type_name)
@@ -65,7 +69,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()
-            return render(request, 'bank/add/success.html', {'transaction': created_transaction})
+            return render(request, 'bank/add/success.html', {'transaction': created_transaction, 'can_use_tmp': user_can_use_template(request,created_transaction), 'can_update': user_can_update(request, created_transaction), 'can_decline': user_can_decline(request,created_transaction)})
 
     else:  # if GET
         # prepare empty form
@@ -80,10 +84,10 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
 def decline(request, transaction_id):
     declined_transaction = get_object_or_404(Transaction, id=transaction_id)
     if not user_can_decline(request, declined_transaction):
-        return HttpResponseForbidden()
+        return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")
     if request.method == 'POST':
         declined_transaction.decline()
-        return render(request, 'bank/decline/decline_success.html', {'transaction': declined_transaction})
+        return render(request, 'bank/decline/decline_success.html', {'transaction': declined_transaction, 'can_use_tmp': user_can_use_template(request,declined_transaction)})
 
     else:  # GET
         return render(request, 'bank/decline/decline_confirm.html', {'transaction': declined_transaction})
@@ -142,88 +146,20 @@ def manage(request, user_group, to_decline=None, to_process=None):
         if transaction.creator.groups.filter(name__in=[user_group]).exists():
             transaction.decline()
         else:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")
 
     if to_process and can_process:
-        get_object_or_404(Transaction, id=to_process).process()
+        transaction = get_object_or_404(Transaction, id=to_process)
+        if transaction.creator.groups.filter(name__in=[user_group]).exists():
+            transaction.process()
+        else:
+            return HttpResponseForbidden("У вас нет прав начислить эту транзакцию")
 
     render_dict = {"transactions": Transaction.objects.filter(creator__groups__name__in=[user_group]).filter(
         state__name=States.created.value)}
     render_dict.update({'can_process': can_process, 'can_decline': can_decline})
     render_dict.update({'user_group': user_group})
     return render(request, 'bank/transaction_lists/manage.html', render_dict)
-
-
-@permission_required('bank.view_pio_trans_list', login_url='bank:index')
-def meta_list(request, trans_id):
-    trans = Transaction.objects.get(pk=trans_id)
-    if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
-        return redirect(reverse('bank:index'))
-    transactions = trans.meta_link.all()[0].transactions.all()
-    # print transactions
-    return render(request, 'bank/transaction_lists/my_trans_list_ped.html', {'out_trans': transactions})
-
-
-@permission_required('bank.add_transaction', login_url='bank:index')
-def trans_red(request, trans_id):
-    trans = Transaction.objects.get(pk=trans_id)
-    if trans.creator != request.user and not request.user.has_perm('bank.del_foreign_trans'):
-        return redirect(reverse('bank:index'))
-    dec_trans_ok(request, trans_id)  # delete what we have
-    print(trans_id)
-    # reverse to specific form
-    type = trans.type
-    if type.name == 'zar':
-        return redirect(reverse('bank:add_zaryadka', kwargs={'meta_link_pk': int(trans_id)}))
-    if type.name == 'lec':
-        return redirect(reverse('bank:add_exam', kwargs={'meta_link_pk': int(trans_id)}))
-
-
-@permission_required('bank.view_pio_trans_list', login_url='bank:index')
-def trans_list(request, username):
-    user_group_name = User.objects.get(username=username).groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[
-        0].name
-
-    if user_group_name != 'pioner' and not request.user.has_perm('bank.view_ped_trans_list'):
-        return redirect(reverse('bank:index'))
-
-    t_user = User.objects.get(username=username)
-
-    in_trans = Transaction.objects.filter(recipient=t_user).order_by('-creation_date')
-    out_trans = Transaction.objects.filter(creator=t_user).order_by('-creation_date')
-
-    return render(request, 'bank/transaction_lists/admin_trans_list.html',
-                  {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name, 'user': t_user})
-
-
-@permission_required('bank.manage_trans', login_url='bank:index')
-def manage_p2p(request):
-    if request.method == "POST":
-
-        print((request.POST))
-
-        con_trans = []
-        dec_trans = []
-
-        for pk in range(50000):
-            if 'c_' + str(pk) in request.POST:
-                t = Transaction.objects.get(pk=pk)
-                if request.POST['c_' + str(pk)] == 'confirm':
-                    print('confirm' + str(t.pk))
-                    t.status = TransactionState.objects.get(name='PR')
-                    t.count()
-
-                    con_trans.append(t)
-
-                if request.POST['c_' + str(pk)] == 'cancel':
-                    print('cancel' + str(t.pk))
-                    t.status = TransactionState.objects.get(name='DA')
-                    t.save()
-                    dec_trans.append(t)
-
-    trans = Transaction.objects.filter(status__name='AD').order_by('creation_date')
-
-    return render(request, 'bank/transaction_lists/admin_p2p_list.html', {'trans': trans})
 
 
 @permission_required('bank.see_super_table', login_url='bank:index')
@@ -277,8 +213,13 @@ def user_can_update(request, updated_transaction):
     if not updated_transaction.state.possible_transitions.all().filter(name=States.substituted.value).exists():
         return False
     if updated_transaction.creator.username == request.user.username:
-        if request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name)):
-            return True
+        return request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name))
+    else:
+        return False
+    
+def user_can_use_template(request, template_trans):
+    if template_trans.creator.username == request.user.username:
+        return request.user.has_perm(get_perm_name(Actions.create.value, 'self', template_trans.type.name))
     else:
         return False
 
@@ -290,9 +231,13 @@ def user_can_decline(request, updated_transaction):
         if request.user.has_perm(get_perm_name(Actions.decline.value, 'self', updated_transaction.type.name)):
             return True
     else:
+        print(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
+                name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
+                                               'created_transaction'))
         if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
                 name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
-                                               'created_transaction')):
+                                               'created_transactions')):
+            
             return True
     return False
 

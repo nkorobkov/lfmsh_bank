@@ -13,7 +13,9 @@
     <div class="row">
         <div class="col-sm-3">
             <a class="btn btn-default" href="{% url 'bank:index' %}"> Домой</a>
+            {% if can_use_tmp %}
             <a class="btn btn-default" href="{% url 'bank:add_transaction_from_template' type_name=transaction.type.name from_template=transaction.id %}"> Добавить Еще одну по шаблону</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

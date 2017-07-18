@@ -12,12 +12,19 @@
     <div class="row">
         <div class="col-sm-12">
             <a type="button" class="btn btn-default" href="{% url 'bank:index' %}"> Домой</a>
-            <a type="button" class="btn btn-default"
-               href="{% url 'bank:update_transaction' transaction.type.name transaction.id %}"> Поправить</a>
-            <a type="button" class="btn btn-default"
-               href="{% url 'bank:add_transaction_from_template' type_name=transaction.type.name from_template=transaction.id %}">
+            {% if can_update %}
+                <a type="button" class="btn btn-default"
+                    href="{% url 'bank:update_transaction' transaction.type.name transaction.id %}"> Поправить</a>
+            {% endif %}
+            {% if can_use_tmp %}
+                <a type="button" class="btn btn-default"
+                    href="{% url 'bank:add_transaction_from_template' type_name=transaction.type.name from_template=transaction.id %}">
                 Добавить Еще одну по шаблону</a>
-            <a type="button" class="btn btn-default" href="{% url 'bank:decline' transaction.id %}"> ААА! Отменить</a>
+            {% endif %}
+            {% if can_decline %}
+                <a type="button" class="btn btn-default" href="{% url 'bank:decline' transaction.id %}"> ААА! Отменить</a>
+            {% endif %}
+            
         </div>
     </div>
     <br>

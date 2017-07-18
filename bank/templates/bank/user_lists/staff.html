@@ -12,7 +12,7 @@
         </tr>
         {% for u in staff %}
             <tr>
-                <td>{{ u.account.long_name }}</td>
+                <td><a href="{% url 'bank:user' u.username%}">{{ u.account.long_name }}</a></td>
                 {% if can_see_balance %}
                     <td>{{ u.account.get_balance }}</td>
                 {% endif %}

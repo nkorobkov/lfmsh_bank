@@ -87,7 +87,7 @@ class ActivityKernelForm(TableKernelForm):
                                      related_transaction_type__name=TransactionTypeEnum.activity.value),
                                  required=True, empty_label=None, to_field_name="name")
     cert = forms.BooleanField(required=False)
-    place_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "Участник")]
+    place_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "Участник"), (5,"-")]
     place = forms.ChoiceField(widget=PlaceWidget, choices=place_choices, required=False)
 
 
@@ -186,14 +186,19 @@ class SeminarKernelForm(AttendKernelForm):
 
 
 class P2PKernelForm(forms.Form):
-    value = forms.IntegerField(label='Сумма', required=True, min_value=1)  # consider adding validators here
-    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Комментарий',
+    def __init__(self, creator, *args, **kwargs):
+        super(P2PKernelForm, self).__init__(*args, **kwargs)
+        self.fields['value'] = forms.IntegerField(max_value=creator.account.balance, label="Сумма", min_value=1, required=True)
+        self.fields['receiver_username'] = ReceiverField(
+            queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).exclude(
+                username=creator.username).order_by('account__party',
+                                                    'last_name'),
+            required=True,
+            empty_label="Выберите получателя", to_field_name="username", label="Получатель")
+
+    description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}),
+                                  label='Комментарий',
                                   required=True)
-    receiver_username = ReceiverField(
-        queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).order_by('account__party',
-                                                                                           'last_name'),
-        required=True,
-        empty_label="Выберите получателя", to_field_name="username", label="Получатель")
     creator_username = forms.CharField(max_length=200)
 
 
@@ -210,7 +215,7 @@ class LabKernelForm(forms.Form):
         queryset=User.objects.filter(groups__name__in=[UserGroups.student.value]).order_by('account__party',
                                                                                            'last_name'),
         required=True,
-        empty_label="Второй пионер", to_field_name="username",label="Второй пионер")
+        empty_label="Второй пионер", to_field_name="username", label="Второй пионер")
 
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}), label='Описание',
                                   required=True)
@@ -218,6 +223,15 @@ class LabKernelForm(forms.Form):
     date = MyDateField(initial=datetime.date.today, label="Дата cдачи отчета")
 
     creator_username = forms.CharField(max_length=200)
+
+    def clean(self):
+        cleaned_data = super(LabKernelForm, self).clean()
+        receiver_username_1 = cleaned_data.get("receiver_username_1")
+        receiver_username_2 = cleaned_data.get("receiver_username_2")
+
+        if receiver_username_1 and receiver_username_2 and receiver_username_1 == receiver_username_2:
+            self.add_error('receiver_username_2',  "Пожалуйста выберите разных пионеров как партнеров по лабе")
+            self.add_error('receiver_username_1',  "Пожалуйста выберите разных пионеров как партнеров по лабе")
 
 
 '''

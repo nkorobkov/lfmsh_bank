@@ -11,8 +11,8 @@ from bank.models import Transaction, MoneyType, Money, TransactionType, Attendan
 class LabTransactionController(TransactionController):
     template_url = 'bank/add/add_lab.html'
 
-    @staticmethod
-    def get_blank_form():
+    @classmethod
+    def get_blank_form(cls, creator_username):
         lab_formset = formset_factory(LabKernelForm, max_num=1)
         return lab_formset
 

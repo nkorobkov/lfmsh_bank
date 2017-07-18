@@ -50,7 +50,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
         return HttpResponseForbidden()
 
     controller = TransactionService.get_controller_for(type_name)
-    TransactionFormset = controller.get_blank_form()
+    TransactionFormset = controller.get_blank_form(creator_username=request.user.username)
     if update_of or from_template:
         source = update_of if update_of else from_template
         initial = json.loads(get_object_or_404(Transaction, id=source).creation_map)

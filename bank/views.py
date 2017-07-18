@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 
 from bank.controls.TransactionService import TransactionService
-from bank.controls.stats_controller import get_student_stats
+from bank.controls.stats_controller import get_student_stats, get_report_student_stats
 from bank.helper_functions import get_perm_name, get_students_markup, get_next_missed_lec_penalty
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required

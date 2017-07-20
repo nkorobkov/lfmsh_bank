@@ -32,6 +32,13 @@
         <h4> Сводка балансов по состоянию на {% now 'd число H:i' %}</h4>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <i> <b>Детализация</b>: [Сумма заработанных денег:(доход от учебы + доход от мероприятий + доход от спорта + доход от работы)]</i>
+    </div>
+</div>
 <div class="row">
 
     {% for acc in accounts_info %}
@@ -42,11 +49,16 @@
             <tr>
                 <th>Пионер</th>
                 <th>Балланс</th>
+                <th>Сертификаты</th>
+                <th>Детализация</th>
             </tr>
         {% endif %}
     <tr>
         <td>{{ acc.name }}</td>
         <td>{{ acc.str_balance }}</td>
+        <td>{{ acc.counters.val.book_certificate }}<span
+                    class="glyphicon glyphicon-book"></span></td>
+        <td>{{ acc.earned_all|floatformat:"0" }}: {{ acc.earned_studies|floatformat:"0" }}+{{ acc.earned_activity|floatformat:"0" }}+{{ acc.earned_sport|floatformat:"0" }}+{{ acc.earned_work |floatformat:"0"}}</td>
     </tr>
 
     {% if forloop.counter in markup.endtable %}
@@ -55,13 +67,9 @@
     {% endif %}
     {% endfor %}
 </div>
-
 <div class="row">
-
     <div class="col-xs-12">
         Сумма денег у пионеров: {{ sum_money }}@, Среднее значение: {{ mean_money }}@
     </div>
 </div>
-
-
 </body>

@@ -1,3 +1,4 @@
+import functools
 from django.contrib.auth.models import User
 
 from bank.constants import UserGroups, Actions, States, AttendanceTypeEnum, STUDY_NEEDED, LAB_PASS_NEEDED, \
@@ -55,7 +56,7 @@ def get_report_student_stats(user):
                 'party': acc.party,
                 'balance_calculated': get_balance_change_from_money_list(money, acc.user.username),
                 'earned_all': get_balance_change_from_money_list(
-                    filter(lambda m: m.type.group_general not in ['fine', 'purchase'], money), acc.user.username),
+                    filter(lambda m: m.type.group_general not in ['fine', 'purchase', 'technicals'], money), acc.user.username),
                 'earned_work': get_balance_change_from_money_list(
                     filter(lambda m: m.type.group_general == 'work', money), acc.user.username),
                 'earned_fine': get_balance_change_from_money_list(
@@ -69,10 +70,29 @@ def get_report_student_stats(user):
                 'counters': get_counters_of_user_who_is(user, acc.user, UserGroups.student.value)
             }
             accounts_info.append(acc_info)
+
+        best_activity = max(get_list_from_dict_list_by_key(accounts_info, 'earned_activity'))
+        best_work = max(get_list_from_dict_list_by_key(accounts_info, 'earned_work'))
+        best_sport = max(get_list_from_dict_list_by_key(accounts_info, 'earned_sport'))
+        best_studies = max(get_list_from_dict_list_by_key(accounts_info, 'earned_studies'))
+        best_all = max(get_list_from_dict_list_by_key(accounts_info, 'earned_all'))
+        best_balance = max(get_list_from_dict_list_by_key(accounts_info, 'balance_stored'))
+
+        for acc_info in accounts_info:
+            acc_info['is_best_activity'] = acc_info['earned_activity'] == best_activity
+            acc_info['is_best_work'] = acc_info['earned_work'] == best_work
+            acc_info['is_best_sport'] = acc_info['earned_sport'] == best_sport
+            acc_info['is_best_studies'] = acc_info['earned_studies'] == best_studies
+            acc_info['is_best_all'] = acc_info['earned_all'] == best_all
+            acc_info['is_best_balance'] = acc_info['balance_stored'] == best_balance
+
+
         stats.update({"accounts_info": accounts_info})
 
     return stats
 
+def get_list_from_dict_list_by_key(dict_list, keyy):
+    return [dict[keyy] for dict in dict_list]
 
 def get_balance_change_from_money_list(money_list, username):
     r = 0

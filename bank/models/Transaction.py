@@ -25,6 +25,7 @@ class Transaction(models.Model):
         return new_transaction
 
     def process(self):
+        # TODO improve safety
         if self.can_be_transitioned_to(States.processed.value):
             if not self.state.counted:
                 for atomic in self.get_all_atomics():

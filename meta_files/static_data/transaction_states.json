@@ -15,7 +15,7 @@
     "name": "declined",
     "readable_name": "Отменена",
     "counted": false,
-    "possible_transitions": ["processed"]
+    "possible_transitions": []
   },
   {
     "name": "substituted",

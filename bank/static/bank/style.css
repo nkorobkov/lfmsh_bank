@@ -29,12 +29,19 @@
     }
 }
 
-   .my-success > td {
-        background-color: #dff0d8;
-    }
-   .my-danger > td {
-        background-color: #f2dede;
-    }
-   .my-warning > td {
-        background-color: #fcf8e3;
-    }
+.my-success > td {
+    background-color: #dff0d8;
+}
+.my-danger > td {
+    background-color: #f2dede;
+}
+.my-warning > td {
+    background-color: #fcf8e3;
+}
+
+.green{
+    color: forestgreen;
+}
+.red{
+    color: mediumvioletred;
+}

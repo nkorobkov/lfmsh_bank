@@ -21,7 +21,7 @@
                 <td>{{ money.related_transaction.creator.account.long_name }}</td>
             {% endif %}
 
-            <td>{{ money.get_value }} {% include 'bank/transaction_lists/counted_marker.html' with counted=money.counted %}</td>
+            <td><span class="{% if money.value > 0 %} green{% else %}red{% endif %}">{{ money.get_value }}</span> {% include 'bank/transaction_lists/counted_marker.html' with counted=money.counted %}</td>
             <td>{{ money.description }}</td>
             <td>{{ money.type }}</td>
         </tr>

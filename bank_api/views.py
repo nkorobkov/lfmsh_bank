@@ -15,9 +15,8 @@ def get_user_transactions(request):
             "username": user.username,
             "first_name": user.first_name,
             "last_name": user.last_name,
-            "balance_changes": [t.to_python() for t in user.received_money.all()] + [t.to_python() for t in user.account.get_all_money()],
+            "balance_changes": [t.to_python() for t in user.account.get_all_money()],
             "counters": [t.to_python() for t in user.received_attendance.all()]}
-    print(data['balance_changes'])
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 @csrf_exempt

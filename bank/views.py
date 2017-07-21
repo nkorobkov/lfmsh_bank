@@ -41,6 +41,10 @@ def index(request):
 
 @login_required
 def add_transaction(request, type_name, update_of=None, from_template=None):
+    if not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
+        log.warning(request.user.get_username() + ' access denied on add trans ' + type_name)
+        return HttpResponseForbidden()
+
     if update_of or from_template:
         source = update_of if update_of else from_template       
         updated_transaction = get_object_or_404(Transaction, id=source)
@@ -52,9 +56,6 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
         if not updated_transaction.type.name == type_name:
             return HttpResponseBadRequest("Тип транзакции из шаблона не совпадает с типом указанным в адресной строке")
 
-    elif not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
-        log.warning(request.user.get_username() + ' access denied on add trans ' + type_name)
-        return HttpResponseForbidden()
 
     controller = TransactionService.get_controller_for(type_name)
     TransactionFormset = controller.get_blank_form(creator_username=request.user.username)
@@ -71,7 +72,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
-                created_transaction.process()
+                created_transaction.process() # update should be inside.
             return render(request, 'bank/add/success.html', {'transaction': created_transaction, 'can_use_tmp': user_can_use_template(request,created_transaction), 'can_update': user_can_update(request, created_transaction), 'can_decline': user_can_decline(request,created_transaction)})
 
     else:  # if GET
@@ -164,7 +165,7 @@ def manage(request, user_group, to_decline=None, to_process=None):
     render_dict.update({'user_group': user_group})
     return render(request, 'bank/transaction_lists/manage.html', render_dict)
 
-
+# TODO make st
 @permission_required(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions"), login_url='bank:index')
 def super_table(request):
     table = TransTable(Transaction.objects.all(), order_by='-creation_date')
@@ -258,12 +259,10 @@ def user_can_decline(request, updated_transaction):
         if request.user.has_perm(get_perm_name(Actions.decline.value, 'self', updated_transaction.type.name)):
             return True
     else:
-        print(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
-                name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
-                                               'created_transaction'))
+
         if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
                 name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
                                                'created_transactions')):
-            
+            # list move to constants.
             return True
     return False

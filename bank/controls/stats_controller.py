@@ -1,12 +1,8 @@
-import functools
-from django.contrib.auth.models import User
-
 from bank.constants import UserGroups, Actions, States, AttendanceTypeEnum, STUDY_NEEDED, LAB_PASS_NEEDED, \
-    FAC_PASS_NEEDED
+    FAC_PASS_NEEDED, BALANCE_DANGER, BALANCE_WARNING
 from bank.helper_functions import get_perm_name, get_next_missed_lec_penalty, get_students_markup
 from bank.models import Money, Account, Transaction, Attendance, AttendanceType
 import statistics
-
 
 def get_student_stats(user):
     stats = {}
@@ -42,9 +38,9 @@ def get_report_student_stats(user):
         balances = [a.balance for a in student_accounts]
         stats.update({
             'sum_money': int(sum(balances)),
-            'mean_money': int(statistics.mean(balances))
+            'mean_money': int(statistics.mean(balances)),
+            'st_dev': round(statistics.stdev(balances),2),
         })
-
         accounts_info = []
         for acc in student_accounts:
             money = acc.get_all_money()
@@ -84,7 +80,15 @@ def get_report_student_stats(user):
             acc_info['is_best_sport'] = acc_info['earned_sport'] == best_sport
             acc_info['is_best_studies'] = acc_info['earned_studies'] == best_studies
             acc_info['is_best_all'] = acc_info['earned_all'] == best_all
-            acc_info['is_best_balance'] = acc_info['balance_stored'] == best_balance
+            if BALANCE_DANGER < acc_info['balance_stored'] < BALANCE_WARNING:
+                acc_info['row_class'] = 'warning'
+            elif acc_info['balance_stored'] <= BALANCE_DANGER:
+                acc_info['row_class'] = 'danger'
+            elif acc_info['balance_stored'] == best_balance:
+                acc_info['row_class'] = 'my-success'
+            else:
+                acc_info['row_class'] = ''
+
 
 
         stats.update({"accounts_info": accounts_info})

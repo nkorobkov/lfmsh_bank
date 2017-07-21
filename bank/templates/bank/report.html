@@ -36,7 +36,8 @@
 <div class="row">
     <div class="col-xs-12">
 
-        <i> <b>Детализация</b>: [Сумма заработанных денег:(доход от учебы + доход от мероприятий + доход от спорта + доход от работы)]</i>
+        <i> <b>Детализация</b>: [Сумма заработанных денег:(доход от учебы + доход от мероприятий + доход от спорта +
+            доход от работы)]</i>
     </div>
 </div>
 <div class="row">
@@ -49,16 +50,20 @@
             <tr>
                 <th>Пионер</th>
                 <th>Балланс</th>
-                <th>Сертификаты</th>
                 <th>Детализация</th>
+                <th>Серт. <span
+                        class="glyphicon glyphicon-book"></span></th>
+
             </tr>
         {% endif %}
-    <tr>
+    <tr class="{{ acc.row_class }}">
         <td>{{ acc.name }}</td>
-        <td>{{ acc.str_balance }}</td>
+        <td><span class="{% if acc.is_best_balance %}bold{% endif %}">{{ acc.str_balance }}</span></td>
+
+        <td> <span class="{% if acc.is_best_all %}bold{% endif %}">{{ acc.earned_all|floatformat:"0" }}</span>:<span class="{% if acc.is_best_studies %}bold{% endif %}">{{ acc.earned_studies|floatformat:"0" }}</span>+<span class="{% if acc.is_best_activity %}bold{% endif %}">{{ acc.earned_activity|floatformat:"0" }}</span>+<span class="{% if acc.is_best_sport %}bold{% endif %}">{{ acc.earned_sport|floatformat:"0" }}</span>+<span class="{% if acc.is_best_work %}bold{% endif %}">{{ acc.earned_work |floatformat:"0" }}</span></td>
+
         <td>{{ acc.counters.val.book_certificate }}<span
-                    class="glyphicon glyphicon-book"></span></td>
-        <td>{{ acc.earned_all|floatformat:"0" }}: {{ acc.earned_studies|floatformat:"0" }}+{{ acc.earned_activity|floatformat:"0" }}+{{ acc.earned_sport|floatformat:"0" }}+{{ acc.earned_work |floatformat:"0"}}</td>
+                class="glyphicon glyphicon-book"></span></td>
     </tr>
 
     {% if forloop.counter in markup.endtable %}
@@ -68,8 +73,13 @@
     {% endfor %}
 </div>
 <div class="row">
-    <div class="col-xs-12">
-        Сумма денег у пионеров: {{ sum_money }}@, Среднее значение: {{ mean_money }}@
+    <div class="col-xs-12" style="font-size: 16px">
+
+        Сумма денег у пионеров: {{ sum_money }}@ <br>
+        Среднее значение: {{ mean_money }}@ <br>
+        Средне квадратичное отклонение: {{ st_dev}} <br>
+        Значение П критерия для теста Шапиро-Уилка {{ sh_wil }}
+
     </div>
 </div>
 </body>

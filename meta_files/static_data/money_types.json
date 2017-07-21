@@ -3,10 +3,10 @@
     "readable_general": "Учеба",
     "obligatory_studies": {
       "readable_local": "Обязательная учебная программа",
-      "fac_pass": "Зачет по факультативу",
+      "fac_pass_reward": "Зачет по факультативу",
       "exam": "Экзамен",
-      "seminar_pass": "Проведение семинара",
-      "lab_pass": "Лабораторная работа"
+      "seminar_pass_reward": "Проведение семинара",
+      "lab_pass_reward": "Лабораторная работа"
     },
     "optional_studies": {
       "readable_local": "Необязательная учебная программа",
@@ -38,58 +38,60 @@
     "readable_general": "Спорт",
     "participation": {
       "readable_local": "Участие в спортивном мероприятии",
-      "workout": "Зарядка",
+      "workout_reward": "Зарядка",
       "sport_activity": "Спортивное Мероприятие"
-      }
+    }
   },
-
   "activity": {
     "readable_general": "Мероприятие",
     "activity": {
       "readable_local": "Мероприятие",
       "day_activity": "Дневное Мероприятие",
       "evening_activity": "Вечернее Мероприятие"
-      }
+    },
+    "rewards": {
+      "readable_local": "Гонорары",
+      "reward": "Гонорар"
+    }
   },
   "p2p": {
     "readable_general": "Переводы",
     "p2p": {
       "readable_local": "Личный перевод",
       "p2p": "Личный перевод"
-      }
+    }
   },
   "technicals": {
     "readable_general": "Технические Типы",
     "tax": {
       "readable_local": "Налог",
       "tax": "Ежедневный налог"
-      },
+    },
     "subs": {
       "readable_local": "Субсидии",
       "initial": "Начальное начисление"
-      }
+    }
   },
   "else": {
     "readable_general": "Другое",
     "else": {
       "readable_local": "Другое",
-      "else": "Начисление общего назначения",
-      "reward": "Гонорар"
-      }
+      "else": "Начисление общего назначения"
+    }
   },
   "fine": {
     "readable_general": "Штрафы",
     "fine_general": {
       "readable_local": "Нарушения общего характера",
       "fine_lang": "Упортребление ненормативной лексики",
-      "fine_schedule":"Нарушение распорядка дня",
-      "fine_safety":"Нарушение техники безопасности",
-      "fine_clean":"Невыполнение санитарных норм",
-      "fine_sub":"Невыполнение требований вожатого",
-      "fine_moral":"Аморальное поведение",
-      "fine_damage":"Причинение вреда имуществу лагеря",
-      "fine_any":"Штраф"
-      },
+      "fine_schedule": "Нарушение распорядка дня",
+      "fine_safety": "Нарушение техники безопасности",
+      "fine_clean": "Невыполнение санитарных норм",
+      "fine_sub": "Невыполнение требований вожатого",
+      "fine_moral": "Аморальное поведение",
+      "fine_damage": "Причинение вреда имуществу лагеря",
+      "fine_any": "Штраф"
+    },
     "fine_study": {
       "readable_local": "Невыполнение требований учебной программы",
       "fine_lecture": "Пропуск лекции",
@@ -97,7 +99,7 @@
       "fine_lab": "Невыполнение нормы по лабораторным работам",
       "fine_fac": "Невыполнение нормы по факультативам",
       "fine_attend": "Невыполнение нормы по посещению занятий обязательной учебной программы"
-      }
+    }
   },
   "purchase": {
     "readable_general": "Покупка",
@@ -107,6 +109,6 @@
       "goods": "Покупка товаров",
       "service": "Покупка услуг",
       "auction": "Покупка на аукционе"
-      }
+    }
   }
 }

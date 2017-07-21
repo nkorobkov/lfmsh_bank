@@ -4,7 +4,7 @@
     "readable_name": "Лекция",
     "start_time": "09:00:00",
     "end_time": "10:30:00",
-    "related_attendance_types": ["lecture"]
+    "related_attendance_types": ["lecture_attend"]
   },
   {
     "name": "seminar_1",

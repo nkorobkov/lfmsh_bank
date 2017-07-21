@@ -8,8 +8,7 @@
       "lab_pass": "Отчет по лабораторной работе",
       "lecture_attend": "Посещение лекции",
       "seminar_attend": "Посещение семинара",
-      "seminar_pass": "Проведение семинара",
-      "lecture": "Посещение лекции"
+      "seminar_pass": "Проведение семинара"
     },
     "optional_studies": {
       "readable_local": "Не обязательная учебная программа",

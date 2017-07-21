@@ -6,3 +6,13 @@
     right:0;
     left:0;
 }
+
+.bold{
+    font-weight:bold;
+}
+
+
+.table > tbody > tr.success > td{
+
+   background-color: #dff0d8;
+}

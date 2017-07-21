@@ -72,8 +72,17 @@ class Command(BaseCommand):
                 for type_name, type_readable_name in local_group_value.items():
                     if type_name == 'readable_local':
                         continue
-
-                    atomic_type, created = model.objects.get_or_create(group_general=general_group_name,
+                    if model.objects.filter(name=type_name).exists():
+                        print('changing atomic type', type_name)
+                        atomic_type = model.objects.get(name=type_name)
+                        setattr(atomic_type, 'group_general', general_group_name)
+                        setattr(atomic_type, 'group_local', local_group_name)
+                        setattr(atomic_type, 'readable_group_local', local_group_readable_name)
+                        setattr(atomic_type, 'readable_group_general', general_group_readable_name)
+                        setattr(atomic_type, 'readable_name', type_readable_name)
+                    else:
+                        print('creating atomic type', type_name)
+                        atomic_type = model.objects.create(group_general=general_group_name,
                                                                        group_local=local_group_name,
                                                                        readable_group_local=local_group_readable_name,
                                                                        readable_group_general=general_group_readable_name,
@@ -154,17 +163,20 @@ class Command(BaseCommand):
         for block_data in blocks_data:
 
             if AttendanceBlock.objects.filter(name = block_data['name']).exists():
+                print('changing att block', block_data['name'])
                 block = AttendanceBlock.objects.get(name = block_data['name'])
-                block.readable_name = block_data['readable_name']
-                block.start_time = Command.time_from_string(
-                    block_data['start_time'])
-                block.end_time = Command.time_from_string(
-                    block_data['end_time'])
+
+                setattr(block, 'readable_name', block_data['readable_name'])
+                setattr(block, 'start_time', Command.time_from_string(
+                    block_data['start_time']))
+                setattr(block, 'end_time', Command.time_from_string(
+                    block_data['end_time']))
                 for att_type_name in block_data['related_attendance_types']:
                     att_type = AttendanceType.objects.get(name=att_type_name)
                     block.related_attendance_types.add(att_type)
                 block.save()
             else:
+                print('creating att block', block_data['name'])
                 block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'],
                                                                        readable_name=block_data['readable_name'],
                                                                        start_time=Command.time_from_string(

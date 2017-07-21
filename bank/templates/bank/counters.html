@@ -9,9 +9,9 @@
             <i>Отчеты по лабораторным работам:</i> {{ counters.val.lab_pass }}
             из {{ counters.info.lab_pass_needed }}<br>
             <i>Посещено лекций:</i> {{ counters.val.lecture_attend }}<br>
-            {% if counters.val.lecture_missed %}
-                <i>Пропущено лекций: {{ counters.val.lecture_missed }} <br>
-                <i>Штраф за следующую пропущенную лекцию:</i> {{ couners.info.next_missed_lec_fine }}<br>
+            {% if counters.val.lecture_miss %}
+                <i>Пропущено лекций: {{ counters.val.lecture_miss }} <br>
+                <i>Штраф за следующую пропущенную лекцию:</i> {{ counters.info.next_missed_lec_fine }}@<br>
             {% endif %}
         </div>
 {% endif %}

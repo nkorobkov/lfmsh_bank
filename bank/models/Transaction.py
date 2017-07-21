@@ -8,7 +8,7 @@ from bank.models import TransactionType, TransactionState
 
 
 class Transaction(models.Model):
-    creator = models.ForeignKey(User, related_name='created_transactions', on_delete=models.PROTECT, null=False)
+    creator = models.ForeignKey(User, related_name='created_transactions', on_delete=models.CASCADE, null=False)
     creation_map = models.CharField(max_length=262143)
     creation_timestamp = models.DateTimeField(auto_now_add=True)
     type = models.ForeignKey(TransactionType, on_delete=models.PROTECT, null=False)

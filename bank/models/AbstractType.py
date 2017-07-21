@@ -2,7 +2,7 @@ from django.db import models
 
 
 class AbstractType(models.Model):
-    name = models.CharField(max_length=127)
+    name = models.CharField(max_length=127,unique=True)
     readable_name = models.CharField(max_length=511)
 
     def __str__(self):

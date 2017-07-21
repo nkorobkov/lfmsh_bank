@@ -11,7 +11,7 @@
     "name": "workout",
     "readable_name": "Зарядка",
     "money": [
-      "workout"
+      "workout_reward"
     ],
     "attendance": [
       "workout"
@@ -53,7 +53,7 @@
     "name": "seminar",
     "readable_name": "Семинар",
     "money": [
-      "seminar_pass"
+      "seminar_pass_reward"
     ],
     "attendance": [
       "seminar_attend",
@@ -67,14 +67,14 @@
       "fine_lecture"
     ],
     "attendance": [
-      "lecture"
+      "lecture_attend"
     ]
   },
   {
     "name": "fac_pass",
     "readable_name": "Зачет по факультативу",
     "money": [
-      "fac_pass"
+      "fac_pass_reward"
     ],
     "attendance": [
       "fac_pass"
@@ -140,7 +140,7 @@
     "name": "lab",
     "readable_name": "Лабораторная работа",
     "money": [
-      "lab_pass"
+      "lab_pass_reward"
     ],
     "attendance": [
       "lab_pass"

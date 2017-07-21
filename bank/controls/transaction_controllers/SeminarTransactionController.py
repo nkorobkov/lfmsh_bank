@@ -34,7 +34,8 @@ class SeminarTransactionController(TableTransactionController):
              'presentation_quality_3': 0,
              'unusual_things': 0,
              'materials': 0,
-             'discussion': 0
+             'discussion': 0,
+             'general_quality': 0
 
              } for user in students_query]
 
@@ -91,7 +92,8 @@ class SeminarTransactionController(TableTransactionController):
                 'presentation_quality_3',
                 'unusual_things',
                 'materials',
-                'discussion']
+                'discussion',
+                'general_quality']
 
     @staticmethod
     def _get_reward_from_mark(mark):

@@ -52,6 +52,9 @@
             <div class="col-sm-12 col-lg-6">
                 {% bootstrap_field formset.forms.0.discussion %}
             </div>
+            <div class="col-sm-12 col-lg-6">
+                {% bootstrap_field formset.forms.0.general_quality %}
+            </div>
         </div>
         </div>
     </div>
@@ -73,7 +76,7 @@
                 {{ form.knowledge_quality.as_hidden }}{{ form.presentation_quality.as_hidden }}
                 {{ form.presentation_quality_2.as_hidden }}{{ form.presentation_quality_3.as_hidden }}
                 {{ form.materials.as_hidden }}{{ form.discussion.as_hidden }}{{ form.unusual_things.as_hidden }}
-                {{ form.date.as_hidden }}{{ form.receiver.as_hidden }}{{ form.block.as_hidden }}
+                {{ form.date.as_hidden }}{{ form.receiver.as_hidden }}{{ form.block.as_hidden }}{{ form.general_quality.as_hidden }}
 
             {% endif %}
             {{ form.student_name.as_hidden }}{{ form.student_party.as_hidden }}

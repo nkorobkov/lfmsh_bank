@@ -187,6 +187,10 @@ class SeminarKernelForm(AttendKernelForm):
     discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices,
                                    label="6. Вызвал ли семинар обсуждение среди слушателей?")
 
+    general_choices = [(-1, "-1"), (0, "0"), (1, "1"), (2, "2"), (3, "3")]
+    general_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=general_choices,
+                                   label="7. Дополнительные баллы на ваше усмотрение.")
+
 
 class P2PKernelForm(forms.Form):
     def __init__(self, creator, *args, **kwargs):

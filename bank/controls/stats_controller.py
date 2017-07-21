@@ -15,8 +15,6 @@ def get_student_stats(user):
             'mean_money': int(statistics.mean(balances))
         })
 
-        print(stats)
-
     if user.has_perm(get_perm_name(Actions.process.value, UserGroups.student.value, "created_transactions")):
         stats.update({'created_students_len': Transaction.objects.filter(
             creator__groups__name__in=[UserGroups.student.value]).filter(state__name=States.created.value).__len__()})

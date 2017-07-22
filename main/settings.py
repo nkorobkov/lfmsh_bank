@@ -74,6 +74,30 @@ TEMPLATES = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'bank_log':{
+            'handlers': ['console'],
+            'level': "INFO",
+        },
+        'bank_api_log':{
+            'handlers': ['console'],
+            'level': "INFO",
+        }
+    },
+}
+
 WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database

@@ -81,7 +81,7 @@ class Transaction(models.Model):
         return '{} {}'.format(str(self.money_count()), SIGN)
 
     def get_creation_timestamp(self):
-        return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
+        return self.creation_timestamp.strftime("%d.%m, %H:%M")
 
     def to_python(self):
         return {

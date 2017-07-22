@@ -14,14 +14,13 @@ urlpatterns = [
 
     url(r'^students$', views.students, name='students'),
     url(r'^staff$', views.staff, name='staff'),
+    url(r'^user/(?P<username>.+)/$', views.user, name='user'),
 
     url(r'^add_transaction/(?P<type_name>[^/]+)/tmp(?P<from_template>[0-9]+)/$', views.add_transaction,
         name='add_transaction_from_template'),
     url(r'^add_transaction/(?P<type_name>[^/]+)/upd(?P<update_of>[0-9]+)/$', views.add_transaction,
         name='update_transaction'),
     url(r'^add_transaction/(?P<type_name>.+)/$', views.add_transaction, name='add_transaction'),
-
-    url(r'^user/(?P<username>.+)/$', views.user, name='user'),
 
     url(r'^decline/(?P<transaction_id>[0-9]+)/$', views.decline, name='decline'),
 
@@ -35,7 +34,7 @@ urlpatterns = [
 
     url(r'^media/$', views.media, name='media'),
 
-
+    url(r'^monitor_table/$', views.monitor_table, name='monitor_table'),
 ]
 '''
         url(r'^trans_list/(?P<username>.+)/$', views.trans_list, name='trans_list'),

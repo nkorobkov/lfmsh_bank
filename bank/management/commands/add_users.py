@@ -95,7 +95,7 @@ class Command(BaseCommand):
         new_u = User.objects.create_user(first_name="Банкир", last_name="ЛФМШ", username=login,
                                              password=password)
         new_u.save()
-        new_a = Account(user=new_u, middle_name="", grade=0, party=0)
+        new_a = Account(user=new_u, middle_name="Ф", grade=0, party=0)
         new_a.save()
         group = Group.objects.get(name='admin')
         group.user_set.add(new_u)

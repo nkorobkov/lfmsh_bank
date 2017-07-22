@@ -174,14 +174,13 @@ def manage(request, user_group, to_decline=None, to_process=None):
     return render(request, 'bank/transaction_lists/manage.html', render_dict)
 
 
-# TODO make st
 @permission_required(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions"),
                      login_url='bank:index')
-def super_table(request):
-    table = TransTable(Transaction.objects.all(), order_by='-creation_date')
+def monitor_table(request):
+    table = TransTable(Transaction.objects.all(), order_by='-date_created')
     RequestConfig(request).configure(table)
-    table.paginate(per_page=500)
-    return render(request, 'bank/s_table.html', {'trans': table})
+    table.paginate(per_page=200)
+    return render(request, 'bank/monitor_table.html', {'trans': table})
 
 
 @permission_required(get_perm_name(Actions.upload.value, "self", "files"), login_url='bank:index')

@@ -23,11 +23,7 @@ class Account(models.Model):
             sum([a.value for a in self.user.received_attendance.filter(type__name=counter_name).filter(counted=True)]))
 
     def __str__(self):
-        if self.user.first_name:
-            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '. ' + str(
-                self.balance) + '@'
-        else:
-            return self.user.last_name
+        return self.short_name() + self.get_balance() if self.balance else ""
 
     def name_with_balance(self):
         return '{} {} {}'.format(self.user.last_name, self.user.first_name, self.get_balance())
@@ -36,8 +32,7 @@ class Account(models.Model):
         return self.user.last_name + ' ' + self.user.first_name
 
     def short_name(self):
-        if self.user.first_name:
-
+        if len(self.user.first_name)>0 and len(self.user.account.middle_name)>0:
             return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '.'
         else:
             return self.user.last_name

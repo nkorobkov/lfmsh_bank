@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.shortcuts import get_object_or_404
 
 from bank.constants import States, SIGN
 from bank.models import TransactionType, TransactionState
@@ -17,18 +18,30 @@ class Transaction(models.Model):
 
     @classmethod
     def new_transaction(cls, creator, type, creation_map, update_of=None):
+        updated = get_object_or_404(Transaction, id=update_of) if update_of else None
+        if update_of:
+            if updated.creator != creator or updated.type != type:
+                raise ValueError("Попытка изменить тип или создателя транзакции")
+
         create_state = TransactionState.objects.get(name=States.created.value)
 
         new_transaction = cls(creator=creator, type=type,
-                              creation_map=json.dumps(creation_map), update_of=Transaction.objects.get(id=update_of) if update_of else None, state=create_state)
+                              creation_map=json.dumps(creation_map), update_of=updated, state=create_state)
         new_transaction.save()
         return new_transaction
 
     def process(self):
-        # TODO improve safety
+        if self.update_of:
+            updated = self.update_of
+            try:
+                updated.substitute()
+            except AttributeError:
+                raise AttributeError('Попытка изменить транзакцию которую нельзя изменить')
+
         if self.can_be_transitioned_to(States.processed.value):
             if not self.state.counted:
                 for atomic in self.get_all_atomics():
+
                     atomic.apply()
             self.state = TransactionState.objects.get(name=States.processed.value)
             self.save()
@@ -61,7 +74,10 @@ class Transaction(models.Model):
         return list(self.related_attendance_atomics.all()) + list(self.related_money_atomics.all())
 
     def can_be_transitioned_to(self, state_name):
-        return len(self.state.possible_transitions.filter(name=state_name)) > 0
+        for a in self.get_all_atomics():
+            if not a.counted == self.state.counted:
+                return False
+        return self.state.possible_transitions.filter(name=state_name).exists()
 
     def __str__(self):
         return "{}@ для {} пионеров".format(sum([a.value for a in list(self.related_money_atomics.all())]),

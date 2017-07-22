@@ -1,8 +1,7 @@
-import ast
 import logging
 import json
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from os import path
 import os
 from bank.controls.TransactionService import TransactionService
@@ -10,16 +9,13 @@ from bank.controls.stats_controller import get_student_stats, get_report_student
 from bank.helper_functions import get_perm_name, get_students_markup, get_next_missed_lec_penalty
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User, Group
-from django.core.urlresolvers import reverse
 
-from main.settings import MEDIA_ROOT, BASE_DIR
+from bank.models import *
+from main.settings import MEDIA_ROOT
 from .forms import *
 from django_tables2 import RequestConfig
 from .tables import *
 from .constants import *
-import time
-import pprint
 
 log = logging.getLogger(__name__)
 
@@ -67,8 +63,6 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
     if request.method == 'POST':
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
-            if update_of:
-                get_object_or_404(Transaction, id=update_of).substitute()
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
@@ -247,7 +241,7 @@ def user_can_update(request, updated_transaction):
     """
     can update only self transactions with rights
     """
-    if not updated_transaction.state.possible_transitions.all().filter(name=States.substituted.value).exists():
+    if not updated_transaction.can_be_transitioned_to(States.substituted.value):
         return False
     if updated_transaction.creator.username == request.user.username:
         return request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name))
@@ -263,7 +257,7 @@ def user_can_use_template(request, template_trans):
 
 
 def user_can_decline(request, updated_transaction):
-    if not updated_transaction.state.possible_transitions.all().filter(name=States.declined.value).exists():
+    if not updated_transaction.can_be_transitioned_to(States.declined.value):
         return False
     if updated_transaction.creator.username == request.user.username:
         if request.user.has_perm(get_perm_name(Actions.decline.value, 'self', updated_transaction.type.name)):
@@ -271,8 +265,7 @@ def user_can_decline(request, updated_transaction):
     else:
 
         if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
-                name__in=[UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]).name,
+                name__in=PERMISSION_RESPONSIBLE_GROUPS).name,
                                                'created_transactions')):
-            # list move to constants.
             return True
     return False

@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
 
-from bank.constants import UserGroups, Actions
+from bank.constants import UserGroups, Actions, PERMISSION_RESPONSIBLE_GROUPS
 from bank.models import TransactionState, MoneyType, AttendanceType, TransactionType, AttendanceBlock
 from main.settings import BASE_DIR
 
@@ -83,10 +83,10 @@ class Command(BaseCommand):
                     else:
                         print('creating atomic type', type_name)
                         atomic_type = model.objects.create(group_general=general_group_name,
-                                                                       group_local=local_group_name,
-                                                                       readable_group_local=local_group_readable_name,
-                                                                       readable_group_general=general_group_readable_name,
-                                                                       name=type_name, readable_name=type_readable_name)
+                                                           group_local=local_group_name,
+                                                           readable_group_local=local_group_readable_name,
+                                                           readable_group_general=general_group_readable_name,
+                                                           name=type_name, readable_name=type_readable_name)
                     atomic_type.save()
 
     @staticmethod
@@ -121,7 +121,7 @@ class Command(BaseCommand):
     @staticmethod
     def add_groups_permissions():
         per_group_permissions = [Actions.see, Actions.process, Actions.decline]
-        targets = [u.value for u in UserGroups] + ['self']
+        targets = [u.value for u in PERMISSION_RESPONSIBLE_GROUPS] + ['self']
         for target in targets:
             for perm in per_group_permissions:
                 direction_modificators = ['created']
@@ -162,9 +162,9 @@ class Command(BaseCommand):
         blocks_data = Command.read_file_as_json(Command.BLOCKS_DATA)
         for block_data in blocks_data:
 
-            if AttendanceBlock.objects.filter(name = block_data['name']).exists():
+            if AttendanceBlock.objects.filter(name=block_data['name']).exists():
                 print('changing att block', block_data['name'])
-                block = AttendanceBlock.objects.get(name = block_data['name'])
+                block = AttendanceBlock.objects.get(name=block_data['name'])
 
                 setattr(block, 'readable_name', block_data['readable_name'])
                 setattr(block, 'start_time', Command.time_from_string(
@@ -189,8 +189,7 @@ class Command(BaseCommand):
                     block.related_attendance_types.add(att_type)
                 block.save()
 
-
-    @ staticmethod
+    @staticmethod
     def read_file_as_json(path):
         f = open(BASE_DIR + Command.STATIC_DATA_PATH + path)
         return json.JSONDecoder().decode(f.read())

@@ -1,8 +1,12 @@
 # coding=utf-8
+from bank.constants.UserGroups import UserGroups
+
 __author__ = 'Insolia'
 
 SIGN = '@'
 BANKIR_USERNAME = 'bank_manager'
+
+PERMISSION_RESPONSIBLE_GROUPS = [UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]
 
 DAILY_TAX = 20
 BOOK_CERTIFICATE_VALUE = 50

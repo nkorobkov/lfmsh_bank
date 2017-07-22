@@ -211,7 +211,6 @@ class P2PKernelForm(forms.Form):
 
 
 class LabKernelForm(forms.Form):
-    # TODO add validator that username1 != username2
     value_1 = forms.IntegerField(label='Баксы первому пионеру', required=True, min_value=1)
     value_2 = forms.IntegerField(label='Баксы второму пионеру', required=True, min_value=1)
     receiver_username_1 = ReceiverField(
@@ -257,52 +256,3 @@ class RelativePathField(forms.CharField):
 class UploadFileForm(forms.Form):
     path = RelativePathField(max_length=100, label="Путь", help_text="В пути допускаются только английские буквы цифры и /")
     file = forms.FileField(label="Выберите файл")
-
-
-'''
-class RecipientModelChoiceField(ModelChoiceField):
-    def label_from_instance(self, account):
-        return str(account.otr) + ' ' + (account.long_name())
-
-
-class SprecialTransForm(forms.Form):
-    
-    #class Meta:
-    #    model = Transaction
-    #    fields = ('recipient', 'value', 'description')
-    
-
-    recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
-        label="Получатель")
-
-    type = forms.ModelChoiceField(queryset=TransactionType.objects.all().exclude(name='p2p').exclude(group1='fine'),
-                                  label='Тип')
-
-    value = forms.IntegerField(label='Сумма', min_value=0)
-
-    description = forms.CharField(max_length=1000, widget=forms.Textarea, label='Описание')
-
-
-class LabTransForm(forms.Form):
-    recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
-        label='Получатель')
-
-    description = forms.CharField(max_length=400, widget=forms.Textarea, label='Описание')
-
-    value = forms.IntegerField(label='Сумма', min_value=0)
-
-
-class FineTransForm(forms.Form):
-    recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
-                                                                                                                'user__last_name'),
-                                          label='Пионер')
-
-    type = forms.ModelChoiceField(queryset=TransactionType.objects.all().filter(group1='fine'),
-                                  label='Тип штрафа')
-    value = forms.IntegerField(label='Сумма штрафа', max_value=2000, min_value=0,
-                               help_text='Ну в 90% случаев штрафуют за мат 10 бачей (c)Ахмеджанов')
-
-    description = forms.CharField(label='Пояснение', max_length=1000, widget=forms.Textarea)
-'''

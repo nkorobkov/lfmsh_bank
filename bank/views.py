@@ -30,8 +30,9 @@ def index(request):
     log.info(request.user.last_name + ' index')
     student_stats = get_student_stats(request.user)
     transaction_types = TransactionType.objects.all()
-    transaction_type_info = [  # TODO change to resolve perm on server
-        {"name": t.name, "readable_name": t.readable_name, "create_permission": "bank.create_self_" + t.name} for t in
+    transaction_type_info = [
+        {"name": t.name, "readable_name": t.readable_name,
+         "can_create": request.user.has_perm(get_perm_name(Actions.create.value, "self", t.name))} for t in
         transaction_types]
     counters = get_counters_of_user_who_is(request.user, request.user, 'self')
     return render(request, 'bank/indexx.html',
@@ -46,16 +47,15 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
         return HttpResponseForbidden()
 
     if update_of or from_template:
-        source = update_of if update_of else from_template       
+        source = update_of if update_of else from_template
         updated_transaction = get_object_or_404(Transaction, id=source)
-        
+
         if update_of and not user_can_update(request, updated_transaction):
             return HttpResponseForbidden("У вас нет прав на изменение этой транзакции")
         if from_template and not user_can_use_template(request, updated_transaction):
             return HttpResponseForbidden("Эту транзакцию нельзя использовать как шаблон")
         if not updated_transaction.type.name == type_name:
             return HttpResponseBadRequest("Тип транзакции из шаблона не совпадает с типом указанным в адресной строке")
-
 
     controller = TransactionService.get_controller_for(type_name)
     TransactionFormset = controller.get_blank_form(creator_username=request.user.username)
@@ -72,8 +72,14 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
-                created_transaction.process() # update should be inside.
-            return render(request, 'bank/add/success.html', {'transaction': created_transaction, 'can_use_tmp': user_can_use_template(request,created_transaction), 'can_update': user_can_update(request, created_transaction), 'can_decline': user_can_decline(request,created_transaction)})
+                created_transaction.process()  # update should be inside.
+            return render(request, 'bank/add/success.html', {'transaction': created_transaction,
+                                                             'can_use_tmp': user_can_use_template(request,
+                                                                                                  created_transaction),
+                                                             'can_update': user_can_update(request,
+                                                                                           created_transaction),
+                                                             'can_decline': user_can_decline(request,
+                                                                                             created_transaction)})
 
     else:  # if GET
         # prepare empty form
@@ -91,7 +97,9 @@ def decline(request, transaction_id):
         return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")
     if request.method == 'POST':
         declined_transaction.decline()
-        return render(request, 'bank/decline/decline_success.html', {'transaction': declined_transaction, 'can_use_tmp': user_can_use_template(request,declined_transaction)})
+        return render(request, 'bank/decline/decline_success.html', {'transaction': declined_transaction,
+                                                                     'can_use_tmp': user_can_use_template(request,
+                                                                                                          declined_transaction)})
 
     else:  # GET
         return render(request, 'bank/decline/decline_confirm.html', {'transaction': declined_transaction})
@@ -165,14 +173,15 @@ def manage(request, user_group, to_decline=None, to_process=None):
     render_dict.update({'user_group': user_group})
     return render(request, 'bank/transaction_lists/manage.html', render_dict)
 
+
 # TODO make st
-@permission_required(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions"), login_url='bank:index')
+@permission_required(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions"),
+                     login_url='bank:index')
 def super_table(request):
     table = TransTable(Transaction.objects.all(), order_by='-creation_date')
     RequestConfig(request).configure(table)
     table.paginate(per_page=500)
     return render(request, 'bank/s_table.html', {'trans': table})
-
 
 
 @permission_required(get_perm_name(Actions.upload.value, "self", "files"), login_url='bank:index')
@@ -191,6 +200,7 @@ def upload_file(request):
     else:
         form = UploadFileForm(initial={"path": request.user.username + "/"})
     return render(request, 'bank/files/file_upload.html', {'form': form})
+
 
 def report(request):
     render_dict = get_report_student_stats(request.user)
@@ -244,7 +254,8 @@ def user_can_update(request, updated_transaction):
         return request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name))
     else:
         return False
-    
+
+
 def user_can_use_template(request, template_trans):
     if template_trans.creator.username == request.user.username:
         return request.user.has_perm(get_perm_name(Actions.create.value, 'self', template_trans.type.name))

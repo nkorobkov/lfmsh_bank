@@ -70,7 +70,7 @@
         <div class="col-sm-6 col-md-4">
             <h4> Добавить транзакцию </h4>
             {% for transaction_type in transaction_type_info %}
-                {% if transaction_type.create_permission in request.user.get_all_permissions %}
+                {% if transaction_type.can_create %}
                     <a href="{% url 'bank:add_transaction' transaction_type.name %}">
                         {{ transaction_type.readable_name }} </a><br>
                 {% endif %}

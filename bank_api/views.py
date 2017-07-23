@@ -19,7 +19,7 @@ def get_user_transactions(request):
     user = request.user
     log.info('api user info call from {}'.format(user.account.long_name()))
 
-    if user.has_perm(get_perm_name(Actions.see.value, "self", "balance")) and user.has_perm(get_perm_name(Actions.see.value, "self", "attendance")):
+    if not (user.has_perm(get_perm_name(Actions.see.value, "self", "balance")) and user.has_perm(get_perm_name(Actions.see.value, "self", "attendance"))):
         return HttpResponseForbidden("user do not have perm to see this info")
 
     data = {"balance": user.account.balance,

@@ -90,7 +90,7 @@ def decline(request, transaction_id):
     declined_transaction = get_object_or_404(Transaction, id=transaction_id)
     log.info(
         "Decline transaction from {}, transaction={}".format(request.user.account.long_name(),
-                                                                          created_transaction))
+                                                                          declined_transaction))
 
     if not user_can_decline(request, declined_transaction):
         return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")

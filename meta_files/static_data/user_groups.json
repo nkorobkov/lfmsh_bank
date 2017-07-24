@@ -20,9 +20,10 @@
   {
     "name": "staff",
     "permissions": {
-      "upload":
-      {
-        "self":["files"]
+      "upload": {
+        "self": [
+          "files"
+        ]
       },
       "see": {
         "self": [
@@ -111,9 +112,10 @@
   {
     "name": "admin",
     "permissions": {
-      "upload":
-      {
-        "self":["files"]
+      "upload": {
+        "self": [
+          "files"
+        ]
       },
       "see": {
         "self": [
@@ -123,6 +125,7 @@
         ],
         "student": [
           "balance",
+          "attendance",
           "received_transactions",
           "created_transactions"
         ],
@@ -178,6 +181,9 @@
           "fac_pass",
           "fac_attend",
           "seminar",
+          "fine",
+          "purchase",
+          "exam",
           "activity",
           "lab",
           "dining_services"

@@ -121,7 +121,7 @@ class Command(BaseCommand):
     @staticmethod
     def add_groups_permissions():
         per_group_permissions = [Actions.see, Actions.process, Actions.decline]
-        targets = [u.value for u in PERMISSION_RESPONSIBLE_GROUPS] + ['self']
+        targets = PERMISSION_RESPONSIBLE_GROUPS + ['self']
         for target in targets:
             for perm in per_group_permissions:
                 direction_modificators = ['created']

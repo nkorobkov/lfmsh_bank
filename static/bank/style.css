@@ -11,8 +11,37 @@
     font-weight:bold;
 }
 
+@media print {
+    .my-success > td {
+        background-color: #dff0d8 !important;
+        -webkit-print-color-adjust: exact;
 
-.table > tbody > tr.success > td{
+    }
+    .my-warning > td {
+        background-color: #fcf8e3 !important;
+        -webkit-print-color-adjust: exact;
 
-   background-color: #dff0d8;
+    }
+    .my-danger > td {
+        background-color: #f2dede !important;
+        -webkit-print-color-adjust: exact;
+
+    }
+}
+
+.my-success > td {
+    background-color: #dff0d8;
+}
+.my-danger > td {
+    background-color: #f2dede;
+}
+.my-warning > td {
+    background-color: #fcf8e3;
+}
+
+.green{
+    color: forestgreen;
+}
+.red{
+    color: mediumvioletred;
 }

@@ -4,6 +4,7 @@ from bank.helper_functions import get_perm_name, get_next_missed_lec_penalty, ge
 from bank.models import Money, Account, Transaction, Attendance, AttendanceType
 import statistics
 
+
 def get_student_stats(user):
     stats = {}
 
@@ -37,7 +38,7 @@ def get_report_student_stats(user):
         stats.update({
             'sum_money': int(sum(balances)),
             'mean_money': int(statistics.mean(balances)),
-            'st_dev': round(statistics.stdev(balances),2),
+            'st_dev': round(statistics.stdev(balances), 2),
         })
         accounts_info = []
         for acc in student_accounts:
@@ -50,7 +51,8 @@ def get_report_student_stats(user):
                 'party': acc.party,
                 'balance_calculated': get_balance_change_from_money_list(money, acc.user.username),
                 'earned_all': get_balance_change_from_money_list(
-                    filter(lambda m: m.type.group_general not in ['fine', 'purchase', 'technicals'], money), acc.user.username),
+                    filter(lambda m: m.type.group_general not in ['fine', 'purchase', 'technicals'], money),
+                    acc.user.username),
                 'earned_work': get_balance_change_from_money_list(
                     filter(lambda m: m.type.group_general == 'work', money), acc.user.username),
                 'earned_fine': get_balance_change_from_money_list(
@@ -87,14 +89,14 @@ def get_report_student_stats(user):
             else:
                 acc_info['row_class'] = ''
 
-
-
         stats.update({"accounts_info": accounts_info})
 
     return stats
 
+
 def get_list_from_dict_list_by_key(dict_list, keyy):
     return [dict[keyy] for dict in dict_list]
+
 
 def get_balance_change_from_money_list(money_list, username):
     r = 0

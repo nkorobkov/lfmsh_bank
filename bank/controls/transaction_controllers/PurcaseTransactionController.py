@@ -21,7 +21,8 @@ class PurchaseTransactionController(TableTransactionController):
     def get_initial_form_data(creator_username):
         students_query = TableTransactionController._get_student_query()
         initial = [
-            {'student_name': '{} {}crt.'.format(user.account.name_with_balance(), str(user.account.get_counter(AttendanceTypeEnum.book_certificate.value))),
+            {'student_name': '{} {}crt.'.format(user.account.name_with_balance(), str(
+                user.account.get_counter(AttendanceTypeEnum.book_certificate.value))),
              'student_party': user.account.party,
              'receiver_username': user.username,
              'creator_username': creator_username,
@@ -52,11 +53,11 @@ class PurchaseTransactionController(TableTransactionController):
                 if money_type.name == MoneyTypeEnum.books.value:
                     money_value, certificate_value = PurchaseTransactionController._get_certificate_split(receiver,
                                                                                                           value)
-
-                Money.new_money(receiver, -money_value,
-                                money_type,
-                                first_form['description'],
-                                new_transaction)
+                if money_value:
+                    Money.new_money(receiver, -money_value,
+                                    money_type,
+                                    first_form['description'],
+                                    new_transaction)
                 if certificate_value:
                     Attendance.new_attendance(receiver, -certificate_value, attendance_type, first_form['description'],
                                               datetime.date.today(), new_transaction)

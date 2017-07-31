@@ -1,0 +1,63 @@
+balances for Щепин К. М.17020@ differs more than 10
+balances for Щепин К. М.17020@ differs more than 10
+balances for Щепин К. М.17020@ differs more than 10
+WARNING 2017-07-31 13:27:50,708 balances for Щепин К. М.17020@ differs more than 10
+ERROR 2017-07-31 13:31:05,400 Internal Server Error: /bank/add_transaction/lecture/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 1254, in to_python
+    parsed = parse_date(value)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/utils/dateparse.py", line 64, in parse_date
+    return datetime.date(**kw)
+ValueError: year 0 is out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 66, in add_transaction
+    created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/controls/transaction_controllers/LectureTransactionController.py", line 44, in get_transaction_from_form_data
+    new_transaction, attendance_block_name=attendance_block_name)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/models/Attendance.py", line 26, in new_attendance
+    new_att.save()
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/base.py", line 806, in save
+    force_update=force_update, update_fields=update_fields)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/base.py", line 836, in save_base
+    updated = self._save_table(raw, cls, force_insert, force_update, using, update_fields)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/base.py", line 922, in _save_table
+    result = self._do_insert(cls._base_manager, using, fields, update_pk, raw)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/base.py", line 961, in _do_insert
+    using=using, raw=raw)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 1061, in _insert
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/compiler.py", line 1098, in execute_sql
+    for sql, params in self.as_sql():
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/compiler.py", line 1051, in as_sql
+    for obj in self.query.objs
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/compiler.py", line 1051, in <listcomp>
+    for obj in self.query.objs
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/compiler.py", line 1050, in <listcomp>
+    [self.prepare_value(field, self.pre_save_val(field, obj)) for field in fields]
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/compiler.py", line 990, in prepare_value
+    value = field.get_db_prep_save(value, connection=self.connection)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 766, in get_db_prep_save
+    prepared=False)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 1297, in get_db_prep_value
+    value = self.get_prep_value(value)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 1292, in get_prep_value
+    return self.to_python(value)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 1261, in to_python
+    params={'value': value},
+django.core.exceptions.ValidationError: ["'0000-07-31' value has the correct format (YYYY-MM-DD) but it is an invalid date."]
+ERROR 2017-07-31 13:31:05,812 "POST /bank/add_transaction/lecture/ HTTP/1.1" 500 272202

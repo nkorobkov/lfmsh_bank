@@ -1,8 +1,14 @@
+import math
+
+import logging
+
 from bank.constants import UserGroups, Actions, States, AttendanceTypeEnum, OBL_STUDY_NEEDED, BALANCE_DANGER, \
     BALANCE_WARNING
 from bank.helper_functions import get_perm_name
 from bank.models import Account, Transaction, Attendance, AttendanceType
 import statistics
+
+log = logging.getLogger("unexpected_things_logger")
 
 
 def get_student_stats(user):
@@ -66,6 +72,8 @@ def get_report_student_stats(user):
                 'counters': get_counters_of_user_who_is(user, acc.user, UserGroups.student.value)
             }
             accounts_info.append(acc_info)
+            if math.fabs(acc_info['balance_calculated'] - acc_info['balance_stored']) > 10:
+                log.warning("balances for {} differs more than {}".format(acc, 10))
 
         best_activity = max(get_list_from_dict_list_by_key(accounts_info, 'earned_activity'))
         best_work = max(get_list_from_dict_list_by_key(accounts_info, 'earned_work'))

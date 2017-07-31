@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.utils.timezone import now
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -77,23 +78,51 @@ TEMPLATES = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        }
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, "main/", "warning_log.log"),
+            'formatter': 'simple'
+
+        },
+        'errors_file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, "main/", "error_log.log"),
+            'formatter': 'simple'
+        }
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'errors_file'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
-        'bank_log':{
+        'bank_log': {
             'handlers': ['console'],
             'level': "INFO",
+
         },
-        'bank_api_log':{
+        'bank_api_log': {
             'handlers': ['console'],
             'level': "INFO",
+
+        },
+
+        'unexpected_things_logger': {
+            'handlers': ['file'],
+            'level': "WARNING",
+
         }
     },
 }

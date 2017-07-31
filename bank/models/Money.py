@@ -56,6 +56,8 @@ class Money(AtomicTransaction):
 
     def to_python(self):
         return {
+            "general_group": self.type.readable_group_general,
+            "local_group": self.type.readable_group_local,
             "type": self.type.readable_name,
             "value": self.value,
             "receiver": self.receiver.account.long_name(),

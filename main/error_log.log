@@ -61,3 +61,131 @@ Traceback (most recent call last):
     params={'value': value},
 django.core.exceptions.ValidationError: ["'0000-07-31' value has the correct format (YYYY-MM-DD) but it is an invalid date."]
 ERROR 2017-07-31 13:31:05,812 "POST /bank/add_transaction/lecture/ HTTP/1.1" 500 272202
+ERROR 2017-07-31 13:47:07,729 Internal Server Error: /bank_api/money/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank_api/views.py", line 69, in get_students_money
+    for money in Money.objects.filter(counted=True, related_transaction__creator__groups__in=[UserGroups.staff.value]):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 782, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 800, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1261, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1287, in _add_q
+    allow_joins=allow_joins, split_subq=split_subq,
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1217, in build_filter
+    condition = lookup_class(lhs, value)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/lookups.py", line 24, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/related_lookups.py", line 56, in get_prep_lookup
+    self.rhs = [target_field.get_prep_value(v) for v in self.rhs]
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/related_lookups.py", line 56, in <listcomp>
+    self.rhs = [target_field.get_prep_value(v) for v in self.rhs]
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 962, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: 'staff'
+ERROR 2017-07-31 13:47:08,041 "GET /bank_api/money/ HTTP/1.1" 500 125060
+ERROR 2017-07-31 13:48:20,303 Internal Server Error: /bank_api/money/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank_api/views.py", line 69, in get_students_money
+    for money in Money.objects.filter(counted=True, related_transaction__creator__groups__contains=[UserGroups.staff.value]):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 782, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 800, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1261, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1287, in _add_q
+    allow_joins=allow_joins, split_subq=split_subq,
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1212, in build_filter
+    raise FieldError('Related Field got invalid lookup: {}'.format(lookups[0]))
+django.core.exceptions.FieldError: Related Field got invalid lookup: contains
+ERROR 2017-07-31 13:48:20,531 "GET /bank_api/money/ HTTP/1.1" 500 108185
+ERROR 2017-07-31 13:48:40,723 Internal Server Error: /bank_api/money/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank_api/views.py", line 69, in get_students_money
+    for money in Money.objects.filter(counted=True, related_transaction__creator__groups__in=UserGroups.staff.value):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 782, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 800, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1261, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1287, in _add_q
+    allow_joins=allow_joins, split_subq=split_subq,
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1212, in build_filter
+    raise FieldError('Related Field got invalid lookup: {}'.format(lookups[0]))
+django.core.exceptions.FieldError: Related Field got invalid lookup: contains
+ERROR 2017-07-31 13:48:41,212 "GET /bank_api/money/ HTTP/1.1" 500 108169
+ERROR 2017-07-31 13:48:47,026 Internal Server Error: /bank_api/money/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank_api/views.py", line 69, in get_students_money
+    for money in Money.objects.filter(counted=True, related_transaction__creator__groups__in=UserGroups.staff.value):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 782, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/query.py", line 800, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1261, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1287, in _add_q
+    allow_joins=allow_joins, split_subq=split_subq,
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1217, in build_filter
+    condition = lookup_class(lhs, value)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/lookups.py", line 24, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/related_lookups.py", line 56, in get_prep_lookup
+    self.rhs = [target_field.get_prep_value(v) for v in self.rhs]
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/related_lookups.py", line 56, in <listcomp>
+    self.rhs = [target_field.get_prep_value(v) for v in self.rhs]
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py", line 962, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: 's'
+ERROR 2017-07-31 13:48:47,398 "GET /bank_api/money/ HTTP/1.1" 500 125149

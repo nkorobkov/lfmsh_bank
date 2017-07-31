@@ -6,7 +6,7 @@ from os import path
 import os
 from bank.controls.TransactionService import TransactionService
 from bank.controls.stats_controller import get_student_stats, get_report_student_stats, get_counters_of_user_who_is
-from bank.helper_functions import get_perm_name, get_students_markup, get_next_missed_lec_penalty
+from bank.helper_functions import get_perm_name, get_students_markup
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 

@@ -1,7 +1,7 @@
-from bank.constants import UserGroups, Actions, States, AttendanceTypeEnum, STUDY_NEEDED, LAB_PASS_NEEDED, \
-    FAC_PASS_NEEDED, BALANCE_DANGER, BALANCE_WARNING
-from bank.helper_functions import get_perm_name, get_next_missed_lec_penalty, get_students_markup
-from bank.models import Money, Account, Transaction, Attendance, AttendanceType
+from bank.constants import UserGroups, Actions, States, AttendanceTypeEnum, OBL_STUDY_NEEDED, BALANCE_DANGER, \
+    BALANCE_WARNING
+from bank.helper_functions import get_perm_name
+from bank.models import Account, Transaction, Attendance, AttendanceType
 import statistics
 
 
@@ -115,8 +115,8 @@ def get_counters_of_user_who_is(user, target_user, group):
         return None
 
     all_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True)
-    info = {"study_needed": STUDY_NEEDED, "fac_pass_needed": FAC_PASS_NEEDED.get(target_user.account.grade),
-            "lab_pass_needed": LAB_PASS_NEEDED.get(target_user.account.grade)}
+    info = {"study_needed": OBL_STUDY_NEEDED, "fac_pass_needed": target_user.account.fac_needed(),
+            "lab_pass_needed": target_user.account.lab_needed()}
     counters_val = {}
     for counter_type in AttendanceType.objects.all():
         counter_sum = sum([c.value for c in all_counters.filter(type=counter_type)])
@@ -124,5 +124,5 @@ def get_counters_of_user_who_is(user, target_user, group):
     info.update({"study": counters_val.get(AttendanceTypeEnum.fac_attend.value) + counters_val.get(
         AttendanceTypeEnum.seminar_attend.value)})
     info.update(
-        {"next_missed_lec_fine": get_next_missed_lec_penalty(counters_val.get(AttendanceTypeEnum.lecture_miss.value))})
+        {"next_missed_lec_fine": target_user.account.get_next_missed_lec_penalty()})
     return {"val": counters_val, "info": info}

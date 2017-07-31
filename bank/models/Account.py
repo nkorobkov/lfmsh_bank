@@ -1,8 +1,10 @@
 import itertools
 from django.db import models
 from django.contrib.auth.models import User
+from numpy.f2py.crackfortran import n
 
-from bank.constants import SIGN
+from bank.constants import SIGN, SEM_NOT_READ_PEN, AttendanceTypeEnum, LAB_PENALTY, STEP_OBL_STD, \
+    INITIAL_STEP_OBL_STD, LAB_PASS_NEEDED, OBL_STUDY_NEEDED, FAC_PASS_NEEDED, FAC_PENALTY, LECTURE_PENALTY
 
 '''
 Extention of a User Class
@@ -32,7 +34,7 @@ class Account(models.Model):
         return self.user.last_name + ' ' + self.user.first_name
 
     def short_name(self):
-        if len(self.user.first_name)>0 and len(self.user.account.middle_name)>0:
+        if len(self.user.first_name) > 0 and len(self.user.account.middle_name) > 0:
             return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.middle_name[0] + '.'
         else:
             return self.user.last_name
@@ -48,37 +50,50 @@ class Account(models.Model):
 
         a.sort(key=lambda t: t.creation_timestamp)
         return a
-    '''
-    def get_penalty(self):
-        p = 0
-        p += max(0, (self.lab_needed() - int(self.lab_passed))) * LAB_PENALTY  # labs
-        p += hf.sem_fac_penalty(max(0, (hf.sem_needed - int(self.sem_fac_attend))))  # semfac attend
-        p += SEM_NOT_READ_PEN * max(0, 1 - int(self.sem_read))
-        return p
-    
+
+    def get_final_study_fine(self):
+        """
+        There is three maor things you can be charged for
+        1. not making a seminar
+        2. Not attending enough obligatory studies (sem_attend, fac_attend)
+        3. Not passing enough labs
+        4. Not passing enough facs
+
+        :return: positive value of fine
+        """
+        fine = 0
+        fine += self.get_sem_fine()
+        fine += self.get_obl_study_fine()
+        fine += self.get_lab_fine()
+        fine += self.get_fac_fine()
+
+        return fine
+
+    def get_sem_fine(self):
+        return SEM_NOT_READ_PEN * max(0, 1 - int(self.get_counter(AttendanceTypeEnum.seminar_pass.value)))
+
+    def get_lab_fine(self):
+        return max(0, (self.lab_needed() - int(self.get_counter(AttendanceTypeEnum.lab_pass.value)))) * LAB_PENALTY
+
+    def get_obl_study_fine(self):
+        deficit = max(0, (OBL_STUDY_NEEDED - int(
+            self.get_counter(AttendanceTypeEnum.seminar_attend.value) + self.get_counter(
+                AttendanceTypeEnum.fac_attend.value))))
+        single_fine = INITIAL_STEP_OBL_STD
+        fine = 0
+        for i in range(deficit):
+            fine += single_fine
+            single_fine += STEP_OBL_STD
+        return fine
+
+    def get_fac_fine(self):
+        return max(0, (self.fac_needed() - int(self.get_counter(AttendanceTypeEnum.fac_pass.value)))) * FAC_PENALTY
+
     def lab_needed(self):
-        return constants.lab_pass_needed[self.grade]
+        return LAB_PASS_NEEDED[self.grade]
 
     def fac_needed(self):
-        return constants.fac_pass_needed[self.grade]
+        return FAC_PASS_NEEDED[self.grade]
 
-    def sem_att_needed(self):
-        return constants.sem_needed
-
-    def sem_att_w(self):
-        print(100 * int(self.sem_fac_attend) / self.sem_att_needed())
-        return (100 * int(self.sem_fac_attend) / self.sem_att_needed())
-
-    def lab_passed_w(self):
-
-        print(100 * int(self.lab_passed) / self.lab_needed())
-        return (100 * int(self.lab_passed) / self.lab_needed())
-
-    def fac_passed_w(self):
-        if self.fac_needed():
-            print(100 * int(self.fac_passed) / self.fac_needed())
-            return (100 * int(self.fac_passed) / self.fac_needed())
-
-    def sem_read_w(self):
-
-        return int(self.sem_read) * 100'''
+    def get_next_missed_lec_penalty(self):
+        return (self.get_counter(AttendanceTypeEnum.lecture_miss.value) + 1) * LECTURE_PENALTY

@@ -2,23 +2,31 @@
   {
     "name": "lecture",
     "readable_name": "Лекция",
-    "start_time": "09:00:00",
-    "end_time": "10:30:00",
+    "start_time": "09:45:00",
+    "end_time": "11:00:00",
     "related_attendance_types": ["lecture_attend"]
   },
   {
     "name": "seminar_1",
     "readable_name": "Первый блок семинаров",
-    "start_time": "11:00:00",
-    "end_time": "11:40:00",
+    "start_time": "11:15:00",
+    "end_time": "11:50:00",
     "related_attendance_types": ["seminar_attend","seminar_pass"]
 
   },
   {
     "name": "seminar_2",
     "readable_name": "Второй блок семинаров",
-    "start_time": "11:40:00",
-    "end_time": "12:20:00",
+    "start_time": "11:55:00",
+    "end_time": "12:30:00",
+    "related_attendance_types": ["seminar_attend","seminar_pass"]
+
+  },
+  {
+    "name": "seminar_3",
+    "readable_name": "Третий блок семинаров",
+    "start_time": "12:31:00",
+    "end_time": "13:30:00",
     "related_attendance_types": ["seminar_attend","seminar_pass"]
 
   },
@@ -33,8 +41,8 @@
   {
     "name": "fac_1",
     "readable_name": "Первый блок Факультативов",
-    "start_time": "11:00:00",
-    "end_time": "12:30:00",
+    "start_time": "11:30:00",
+    "end_time": "12:25:00",
     "related_attendance_types": ["fac_attend"]
 
   },
@@ -42,7 +50,7 @@
     "name": "fac_2",
     "readable_name": "Второй блок Факультативов",
     "start_time": "12:30:00",
-    "end_time": "13:30:00",
+    "end_time": "13:25:00",
     "related_attendance_types": ["fac_attend"]
 
   }

@@ -1,8 +1,6 @@
 import itertools
 from django.db import models
 from django.contrib.auth.models import User
-from numpy.f2py.crackfortran import n
-
 from bank.constants import SIGN, SEM_NOT_READ_PEN, AttendanceTypeEnum, LAB_PENALTY, STEP_OBL_STD, \
     INITIAL_STEP_OBL_STD, LAB_PASS_NEEDED, OBL_STUDY_NEEDED, FAC_PASS_NEEDED, FAC_PENALTY, LECTURE_PENALTY
 

@@ -183,7 +183,7 @@ class SeminarKernelForm(AttendKernelForm):
     unusual_things = forms.ChoiceField(widget=forms.RadioSelect, choices=unusual_things_choices,
                                        label="5.в Можете ли Вы отметить что-то необычное в форме проведения семинара?")
 
-    discussion_choices = [(0, "Нет или почти нет"), (1, "Непродолжительное"), (1, "Продолжительное")]
+    discussion_choices = [(0, "Нет или почти нет"), (1, "Непродолжительное"), (2, "Продолжительное")]
     discussion = forms.ChoiceField(widget=forms.RadioSelect, choices=discussion_choices,
                                    label="6. Вызвал ли семинар обсуждение среди слушателей?")
 

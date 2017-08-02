@@ -11,7 +11,7 @@ def get_students_markup(students):
         marker += len(students.filter(account__party=party))
         endtable.append(marker)
 
-    return {'markup': {'endtable': endtable, 'starttable': starttable}}
+    return {'markup': {'endtable': endtable, 'starttable': starttable, 'rowbreak': endtable[1]}}
 
 
 def get_session_day():

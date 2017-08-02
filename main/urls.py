@@ -7,8 +7,8 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-
     url(r'^bank/', include('bank.urls', namespace='bank')),
-    url(r'^bank_api/', include('bank_api.urls', namespace='bank_api'))
+    url(r'^bank_api/', include('bank_api.urls', namespace='bank_api')),
+    url(r'^$', include('bank.urls', namespace='bank'))
 
 ]

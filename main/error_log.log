@@ -189,3 +189,39 @@ Traceback (most recent call last):
     return int(value)
 ValueError: invalid literal for int() with base 10: 's'
 ERROR 2017-07-31 13:48:47,398 "GET /bank_api/money/ HTTP/1.1" 500 125149
+ERROR 2017-08-02 12:01:15,657 Internal Server Error: /bank/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 26, in index
+    log.info("index page request from {}".format(request.user.account.long_name()))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/utils/functional.py", line 239, in inner
+    return func(self._wrapped, *args)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/fields/related_descriptors.py", line 406, in __get__
+    self.related.get_accessor_name()
+django.db.models.fields.related_descriptors.RelatedObjectDoesNotExist: User has no account.
+ERROR 2017-08-02 12:01:15,800 "GET /bank/ HTTP/1.1" 500 80469
+ERROR 2017-08-02 12:02:48,657 Internal Server Error: /bank/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 28, in index
+    print(datetime.date.today() - FIRST_DAY_DATE)
+TypeError: unsupported operand type(s) for -: 'datetime.date' and 'datetime.datetime'
+ERROR 2017-08-02 12:02:48,762 "GET /bank/ HTTP/1.1" 500 73020

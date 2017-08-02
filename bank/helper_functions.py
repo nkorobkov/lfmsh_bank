@@ -14,6 +14,15 @@ def get_students_markup(students):
     return {'markup': {'endtable': endtable, 'starttable': starttable}}
 
 
+def get_session_day():
+    day = (datetime.date.today() - FIRST_DAY_DATE).days + 1
+    return day
+
+
+def get_tax_from_session_day(day):
+    return TAX_FROM_DAY[day]
+
+
 def get_perm_name(*args):
     args = map(str, args)
     return 'bank.' + '_'.join(args)

@@ -1,5 +1,6 @@
 # coding=utf-8
 from bank.constants.UserGroups import UserGroups
+import datetime
 
 __author__ = 'Insolia'
 
@@ -7,6 +8,8 @@ SIGN = '@'
 BANKIR_USERNAME = 'bank_manager'
 
 PERMISSION_RESPONSIBLE_GROUPS = [UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]
+
+FIRST_DAY_DATE = datetime.datetime(2017, 8, 1, 0, 0).date()
 
 DAILY_TAX = 20
 BOOK_CERTIFICATE_VALUE = 50
@@ -40,3 +43,28 @@ NUM_OF_PARTIES = 4
 
 BALANCE_DANGER = 0
 BALANCE_WARNING = 30
+
+
+TAX_FROM_DAY = {
+    1: 0,
+    2: 5,
+    3: 7,
+    4: 9,
+    5: 12,
+    6: 15,
+    7: 18,
+    8: 20,
+    9: 22,
+    10: 23,
+    11: 24,
+    12: 25,
+    13: 25,
+    14: 25,
+    15: 25,
+    16: 25,
+    17: 25,
+    18: 25,
+    19: 25,
+    20: 25,
+    21: 25
+}

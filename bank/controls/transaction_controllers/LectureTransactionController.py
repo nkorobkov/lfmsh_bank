@@ -35,7 +35,7 @@ class LectureTransactionController(TableTransactionController):
             else:
                 attendance_type_name = AttendanceTypeEnum.lecture_miss.value
                 fine_value = receiver.account.get_next_missed_lec_penalty()
-                Money.new_money(receiver, fine_value, money_type,
+                Money.new_money(receiver, -fine_value, money_type,
                                 first_form['description'], new_transaction)
 
             Attendance.new_attendance(receiver, 1,

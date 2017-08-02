@@ -11,9 +11,8 @@ PERMISSION_RESPONSIBLE_GROUPS = [UserGroups.staff.value, UserGroups.student.valu
 
 FIRST_DAY_DATE = datetime.datetime(2017, 8, 1, 0, 0).date()
 
-DAILY_TAX = 20
 BOOK_CERTIFICATE_VALUE = 50
-INITIAL_MONEY = 180
+INITIAL_MONEY = 130
 INITIAL_MONEY_DESC = 'Поздравляем с началом экономической игры!'
 
 WORKOUT_BUDGET = 25.
@@ -29,13 +28,14 @@ OBL_STUDY_NEEDED = 18
 LAB_PASS_NEEDED = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}
 FAC_PASS_NEEDED = {7: 0, 8: 0, 9: 1, 10: 1, 11: 1}
 
-LAB_PENALTY = 20  # for each unmade lab
-LECTURE_PENALTY = 10  # for each missed on new miss
-FAC_PENALTY = 60  # for each not attended fac
+LAB_PENALTY = 50  # for each unmade lab
+LECTURE_PENALTY_INITIAL = 10
+LECTURE_PENALTY_STEP = 20  # for each missed on new miss
+FAC_PENALTY = 100  # for each not attended fac
 SEM_NOT_READ_PEN = 100
 
 
-INITIAL_STEP_OBL_STD = 10 # for first
+INITIAL_STEP_OBL_STD = 15 # for first
 STEP_OBL_STD = 5  # cumulative constant for each next
 
 

@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.management import BaseCommand
 
-from bank.constants import UserGroups, BANKIR_USERNAME, TransactionTypeEnum, MoneyTypeEnum, DAILY_TAX, FIRST_DAY_DATE, \
-    datetime
+from bank.constants import UserGroups, BANKIR_USERNAME, TransactionTypeEnum, MoneyTypeEnum
 from bank.helper_functions import get_session_day, get_tax_from_session_day
 from bank.models import TransactionType, Transaction, MoneyType, Money
 

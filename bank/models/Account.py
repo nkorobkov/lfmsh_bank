@@ -2,7 +2,8 @@ import itertools
 from django.db import models
 from django.contrib.auth.models import User
 from bank.constants import SIGN, SEM_NOT_READ_PEN, AttendanceTypeEnum, LAB_PENALTY, STEP_OBL_STD, \
-    INITIAL_STEP_OBL_STD, LAB_PASS_NEEDED, OBL_STUDY_NEEDED, FAC_PASS_NEEDED, FAC_PENALTY, LECTURE_PENALTY
+    INITIAL_STEP_OBL_STD, LAB_PASS_NEEDED, OBL_STUDY_NEEDED, FAC_PASS_NEEDED, FAC_PENALTY, \
+    LECTURE_PENALTY_STEP, LECTURE_PENALTY_INITIAL
 
 '''
 Extention of a User Class
@@ -94,4 +95,4 @@ class Account(models.Model):
         return FAC_PASS_NEEDED[self.grade]
 
     def get_next_missed_lec_penalty(self):
-        return (self.get_counter(AttendanceTypeEnum.lecture_miss.value) + 1) * LECTURE_PENALTY
+        return (self.get_counter(AttendanceTypeEnum.lecture_miss.value)) * LECTURE_PENALTY_STEP + LECTURE_PENALTY_INITIAL

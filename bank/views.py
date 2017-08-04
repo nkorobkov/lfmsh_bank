@@ -63,6 +63,11 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
     if request.method == 'POST':
         formset = TransactionFormset(request.POST, initial=initial)
         if formset.is_valid():
+            if update_of:
+                try:
+                    get_object_or_404(Transaction, id=update_of).substitute()
+                except AttributeError:
+                    raise AttributeError('Попытка изменить транзакцию которую нельзя изменить')
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             log.info("Valid add transaction from {}, update={}, transaction={}".format(request.user.account.long_name(), update_of, created_transaction))
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):

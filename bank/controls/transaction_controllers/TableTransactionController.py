@@ -38,8 +38,7 @@ class TableTransactionController(TransactionController):
     @staticmethod
     def _get_student_query():
         return User.objects.filter(groups__name__contains=UserGroups.student.value).order_by('account__party',
-                                                                                             'last_name')
-
+                                                                                             'last_name', 'first_name')
     @classmethod
     def get_blank_form(cls, creator_username):
         students_query = __class__._get_student_query()

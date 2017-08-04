@@ -31,13 +31,6 @@ class Transaction(models.Model):
         return new_transaction
 
     def process(self):
-        if self.update_of:
-            updated = self.update_of
-            try:
-                updated.substitute()
-            except AttributeError:
-                raise AttributeError('Попытка изменить транзакцию которую нельзя изменить')
-
         if self.can_be_transitioned_to(States.processed.value):
             if not self.state.counted:
                 for atomic in self.get_all_atomics():

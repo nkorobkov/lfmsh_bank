@@ -66,11 +66,13 @@ def get_students_money(request):
 
     writer = csv.writer(response)
     writer.writerow(
-        ['value', 'creator', 'creation_date', 'type', 'desc', 'reciver', 'general_group', 'local_group', 'counted',
-         'update_date'])
+        ['value', 'creator', 'creation_date', 'type', 'desc', 'receiver', 'general_group', 'local_group', 'counted',
+         'update_date', 'receiver_username'])
 
     for money in Money.objects.filter(counted=True,
                                       related_transaction__creator__groups__name__in=[UserGroups.staff.value, UserGroups.admin.value]):
-        writer.writerow(money.to_python().values())
+        mon_dic = money.to_python()
+
+        writer.writerow(mon_dic['value'],mon_dic['creator'],mon_dic['creation_date'],mon_dic['type'],mon_dic['desc'],mon_dic['reciver'],mon_dic['reciver'],mon_dic['general_group'],mon_dic['local_group'],mon_dic['counted'],mon_dic['update_date'], money.receiver.username)
 
     return response

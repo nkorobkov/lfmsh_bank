@@ -73,6 +73,6 @@ def get_students_money(request):
                                       related_transaction__creator__groups__name__in=[UserGroups.staff.value, UserGroups.admin.value]):
         mon_dic = money.to_python()
 
-        writer.writerow(mon_dic['value'],mon_dic['creator'],mon_dic['creation_date'],mon_dic['type'],mon_dic['desc'],mon_dic['reciver'],mon_dic['reciver'],mon_dic['general_group'],mon_dic['local_group'],mon_dic['counted'],mon_dic['update_date'], money.receiver.username)
+        writer.writerow([mon_dic['value'], mon_dic['creator'],mon_dic['creation_timestamp'],mon_dic['type'],mon_dic['description'],mon_dic['receiver'],mon_dic['general_group'],mon_dic['local_group'],mon_dic['counted'],mon_dic['update_timestamp'], money.receiver.username])
 
     return response

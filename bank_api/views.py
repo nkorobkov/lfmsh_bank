@@ -65,9 +65,12 @@ def get_students_money(request):
     response['Content-Disposition'] = 'attachment; filename="students_money.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['general_group','local_group','type','value','reciever', 'creator','counted', 'description', 'update_ts','create_ts'])
+    writer.writerow(
+        ['value', 'creator', 'creation_date', 'type', 'desc', 'reciver', 'general_group', 'local_group', 'counted',
+         'update_date'])
 
-    for money in Money.objects.filter(counted=True, related_transaction__creator__groups__name__in=[UserGroups.staff.value]):
+    for money in Money.objects.filter(counted=True,
+                                      related_transaction__creator__groups__name__in=[UserGroups.staff.value, UserGroups.admin.value]):
         writer.writerow(money.to_python().values())
 
     return response

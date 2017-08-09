@@ -43,7 +43,7 @@
             </tr>
         {% endif %}
     <tr>
-        <td><a href="{% url 'bank:user' acc.user.username%}">{{ acc.name }}</a></td>
+        <td><a href="{% url 'bank:user' acc.acc.user.username%}">{{ acc.name }}</a></td>
         <td>{{ acc.counters.val.lab_pass }}</td>
         <td>{{ acc.counters.val.fac_attend }}</td>
         <td>{{ acc.counters.val.seminar_attend }}</td>

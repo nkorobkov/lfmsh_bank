@@ -98,6 +98,11 @@ def get_report_student_stats(user):
                 acc_info['row_class'] = ''
 
         stats.update({"accounts_info": accounts_info})
+        counters_list = get_list_from_dict_list_by_key(accounts_info, 'counters')
+        stats.update({"sum_lab": sum([t['val'][AttendanceTypeEnum.lab_pass.value] for t in counters_list]),
+                      "sum_fac": sum([t['val'][AttendanceTypeEnum.fac_attend.value] for t in counters_list]),
+                      "sum_sem_pass": sum([t['val'][AttendanceTypeEnum.seminar_pass.value] for t in counters_list]),
+                      "sum_sem_attend": sum([t['val'][AttendanceTypeEnum.seminar_attend.value] for t in counters_list])})
 
     return stats
 

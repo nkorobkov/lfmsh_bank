@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^manage/(?P<user_group>[a-zA-z]+)/dc(?P<to_decline>[0-9]+)$', views.manage, name='manage_decline'),
 
     url(r'^report/$', views.report, name='report'),
+    url(r'^study_stats/$', views.study_stats, name='study_stats'),
 
     url(r'^upload/$', views.upload_file, name='upload'),
 

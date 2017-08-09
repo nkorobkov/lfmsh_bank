@@ -69,7 +69,8 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
                 except AttributeError:
                     raise AttributeError('Попытка изменить транзакцию которую нельзя изменить')
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
-            log.info("Valid add transaction from {}, update={}, transaction={}".format(request.user.account.long_name(), update_of, created_transaction))
+            log.info("Valid add transaction from {}, update={}, transaction={}".format(request.user.account.long_name(),
+                                                                                       update_of, created_transaction))
             if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()  # update should be inside.
@@ -95,7 +96,7 @@ def decline(request, transaction_id):
     declined_transaction = get_object_or_404(Transaction, id=transaction_id)
     log.info(
         "Decline transaction from {}, transaction={}".format(request.user.account.long_name(),
-                                                                          declined_transaction))
+                                                             declined_transaction))
 
     if not user_can_decline(request, declined_transaction):
         return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")
@@ -195,7 +196,7 @@ def upload_file(request):
             f = request.FILES['file']
             local_path = form.cleaned_data['path'].strip('/')
             user_path = path.join(MEDIA_ROOT, local_path, f.name)
-            log.info("file uploaded by {},path={}".format(request.user.account.long_name(),user_path))
+            log.info("file uploaded by {},path={}".format(request.user.account.long_name(), user_path))
             os.makedirs(path.dirname(user_path), exist_ok=True)
             with open(user_path, 'wb+') as destination:
                 for chunk in f.chunks():
@@ -211,6 +212,14 @@ def report(request):
     students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
     render_dict.update(get_students_markup(students_query))
     return render(request, 'bank/report.html', render_dict)
+
+
+def study_stats(request):
+    #TODO: rework templates
+    render_dict = get_report_student_stats(request.user)
+    students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
+    render_dict.update(get_students_markup(students_query))
+    return render(request, 'bank/study_stats.html', render_dict)
 
 
 def media(request):

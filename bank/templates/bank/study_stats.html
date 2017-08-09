@@ -1,0 +1,73 @@
+{% load staticfiles %}
+
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_css %}
+
+<!-- Display django.contrib.messages as Bootstrap alerts -->
+{% bootstrap_messages %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href={% static "bank/style.css" %}>
+    <title>Банк ЛФМШ</title>
+</head>
+
+<body>
+
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <h4> Сводка по выполнению обязательной учебной программы на {% now 'd число H:i' %}</h4>
+    </div>
+</div>
+
+<div class="row">
+
+    {% for acc in accounts_info %}
+        {% if forloop.counter in markup.starttable %}
+            <div class="col-xs-6">
+            <h4>{{ acc.party }} Отряд</h4>
+            <table class="table table-bordered table-condensed">
+            <tr>
+                <th>Пионер</th>
+                <th>Сделал Лаб</th>
+                <th>Факультативы</th>
+                <th>Семинары</th>
+            </tr>
+        {% endif %}
+    <tr>
+        <td><a href="{% url 'bank:user' acc.user.username%}">{{ acc.name }}</a></td>
+        <td>{{ acc.counters.val.lab_pass }}</td>
+        <td>{{ acc.counters.val.fac_attend }}</td>
+        <td>{{ acc.counters.val.seminar_attend }}</td>
+    </tr>
+
+    {% if forloop.counter in markup.endtable %}
+        </table>
+        </div>
+    {% endif %}
+
+
+        {% if forloop.counter == markup.rowbreak %}
+            </div>
+            <div class="row">
+    {% endif %}
+
+    {% endfor %}
+</div>
+<div class="row">
+    <div class="col-xs-12" style="font-size: 16px">
+        Всего сделано лаб: {{ sum_lab }} <br>
+        Всего посещено факультативов: {{ sum_fac }} <br>
+        Всего посещено семинаров: {{ sum_sem_attend}} <br>
+        Всего проведено семинаров: {{ sum_sem_pass}} <br>
+    </div>
+</div>
+</body>

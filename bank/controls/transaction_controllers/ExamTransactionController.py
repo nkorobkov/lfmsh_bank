@@ -42,7 +42,7 @@ class ExamTransactionController(TableTransactionController):
 
     @staticmethod
     def _get_exam_reward(value, scores):
-        sum_normalized_score = sum([math.sqrt(s) for s in scores])
+        sum_normalized_score = sum([math.sqrt(max(0, s)) for s in scores])
         num_of_participants = len(scores)
         score = max(0., float(value))
         normalized_score = math.sqrt(score)

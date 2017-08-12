@@ -95,7 +95,7 @@ class ActivityKernelForm(TableKernelForm):
 
 
 class ExamKernelForm(ValueKernelForm):
-    pass
+    value = forms.IntegerField(label='Value', required=False)
 
 
 class FacPassKernelForm(ValueKernelForm):

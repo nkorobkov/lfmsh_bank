@@ -57,7 +57,7 @@ def get_report_student_stats(user):
                 'party': acc.party,
                 'balance_calculated': get_balance_change_from_money_list(money, acc.user.username),
                 'earned_all': get_balance_change_from_money_list(
-                    filter(lambda m: m.type.group_general not in ['fine', 'purchase', 'technicals'], money),
+                    filter(lambda m: m.type.group_general not in ['fine', 'purchase', 'technicals', 'p2p'], money),
                     acc.user.username),
                 'earned_work': get_balance_change_from_money_list(
                     filter(lambda m: m.type.group_general == 'work', money), acc.user.username),

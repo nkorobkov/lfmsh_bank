@@ -25,7 +25,7 @@ SECRET_KEY = 'bfryo(aj_3=r2-&j!ine44c(abng&b)ya1*i8(7o+zx^m53m8)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.c9users.io', '.localhost']
+ALLOWED_HOSTS = ['.c9users.io', '.localhost', '127.0.0.1']
 
 CACHES = {
     'default': {

@@ -55,8 +55,8 @@
 
                 {% if 'bank.see_student_balance' in request.user.get_all_permissions %}
                     <h4>Статистика</h4>
-                        Суммарные деньги пионеров: {{ st_stats.sum_money }} @<br>
-                        Средний баланс: {{ st_stats.mean_money }}<br>
+                    Суммарные деньги пионеров: {{ st_stats.sum_money }} @<br>
+                    Средний баланс: {{ st_stats.mean_money }}<br>
                     <a href="{% url 'bank:report' %}" target="_blank"> Сгенерировать репорт</a><br>
                     <a href="{% url 'bank:study_stats' %}" target="_blank"> Сгенерировать Учебную Стату</a><br>
                 {% endif %}

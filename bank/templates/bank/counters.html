@@ -13,5 +13,8 @@
                 <i>Пропущено лекций: {{ counters.val.lecture_miss }}</i> <br>
                 <i>Штраф за следующую пропущенную лекцию:</i> {{ counters.info.next_missed_lec_fine }}@<br>
             {% endif %}
+            {% if counters.info.expected_fine > 0%}
+            <i>Ожидаемый штраф за невыполнение учебной программы: </i> {{ counters.info.expected_fine }}@
+            {% endif %}
         </div>
 {% endif %}

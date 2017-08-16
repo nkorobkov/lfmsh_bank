@@ -137,5 +137,6 @@ def get_counters_of_user_who_is(user, target_user, group):
     info.update({"study": counters_val.get(AttendanceTypeEnum.fac_attend.value) + counters_val.get(
         AttendanceTypeEnum.seminar_attend.value)})
     info.update(
-        {"next_missed_lec_fine": target_user.account.get_next_missed_lec_penalty()})
+        {"next_missed_lec_fine": target_user.account.get_next_missed_lec_penalty(),
+         "expected_fine": target_user.account.get_final_study_fine()})
     return {"val": counters_val, "info": info}

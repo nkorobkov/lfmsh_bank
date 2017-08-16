@@ -52,7 +52,7 @@ class Account(models.Model):
 
     def get_final_study_fine(self):
         """
-        There is three maor things you can be charged for
+        There is four major things you can be charged for
         1. not making a seminar
         2. Not attending enough obligatory studies (sem_attend, fac_attend)
         3. Not passing enough labs

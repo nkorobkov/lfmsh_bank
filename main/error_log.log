@@ -225,3 +225,99 @@ Traceback (most recent call last):
     print(datetime.date.today() - FIRST_DAY_DATE)
 TypeError: unsupported operand type(s) for -: 'datetime.date' and 'datetime.datetime'
 ERROR 2017-08-02 12:02:48,762 "GET /bank/ HTTP/1.1" 500 73020
+ERROR 2017-08-10 01:07:01,081 Internal Server Error: /bank/study_stats/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 222, in study_stats
+    return render(request, 'bank/study_stats.html', render_dict)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/shortcuts.py", line 30, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/loader.py", line 68, in render_to_string
+    return template.render(context, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/backends/django.py", line 66, in render
+    return self.template.render(context)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/base.py", line 207, in render
+    return self._render(context)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/base.py", line 199, in _render
+    return self.nodelist.render(context)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/defaulttags.py", line 216, in render
+    nodelist.append(node.render_annotated(context))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/template/defaulttags.py", line 458, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/urls/base.py", line 91, in reverse
+    return force_text(iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs)))
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/urls/resolvers.py", line 497, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'user' with arguments '('',)' not found. 1 pattern(s) tried: ['bank/user/(?P<username>.+)/$']
+ERROR 2017-08-10 01:07:01,763 "GET /bank/study_stats/ HTTP/1.1" 500 203791
+ERROR 2017-08-11 14:14:22,610 "GET /static/django-bootstrap/jquery.js HTTP/1.1" 500 59
+ERROR 2017-08-12 15:19:11,301 Internal Server Error: /bank/add_transaction/exam/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 71, in add_transaction
+    created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/controls/transaction_controllers/ExamTransactionController.py", line 35, in get_transaction_from_form_data
+    reward = ExamTransactionController._get_exam_reward(value,scores)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/controls/transaction_controllers/ExamTransactionController.py", line 45, in _get_exam_reward
+    sum_normalized_score = sum([math.sqrt(s) for s in scores])
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/controls/transaction_controllers/ExamTransactionController.py", line 45, in <listcomp>
+    sum_normalized_score = sum([math.sqrt(s) for s in scores])
+ValueError: math domain error
+ERROR 2017-08-12 15:19:11,490 "POST /bank/add_transaction/exam/ HTTP/1.1" 500 191904
+ERROR 2017-08-15 13:17:45,845 Invalid HTTP_HOST header: '127.0.0.1:8000'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+ERROR 2017-08-15 13:21:33,286 Internal Server Error: /bank_api/auth
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 244, in _legacy_get_response
+    response = middleware_method(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/middleware/common.py", line 63, in process_request
+    path = self.get_full_path_with_slash(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/middleware/common.py", line 101, in get_full_path_with_slash
+    'url': request.get_host() + new_path,
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/bank_api/auth/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2017-08-15 13:21:33,363 "POST /bank_api/auth HTTP/1.1" 500 62330
+ERROR 2017-08-15 13:22:34,480 Internal Server Error: /bank_api/auth/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank_api/views.py", line 42, in get_session
+    request_data = json.loads(str(request.body, 'utf-8'))
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/__init__.py", line 354, in loads
+    return _default_decoder.decode(s)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/decoder.py", line 357, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+ERROR 2017-08-15 13:22:34,552 "POST /bank_api/auth/ HTTP/1.1" 500 85692

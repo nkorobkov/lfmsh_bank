@@ -164,3 +164,12 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 
 STATIC_URL = "/static/"
+
+
+# Default settings
+BOOTSTRAP3 = {
+
+    # The URL to the jQuery JavaScript file
+    'jquery_url': os.path.join(STATIC_URL, "bank", "django-bootstrap", "jquery.js"),
+    'base_url': os.path.join(STATIC_URL, "bank", "django-bootstrap", "bootstrap/")
+}

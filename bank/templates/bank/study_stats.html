@@ -40,6 +40,7 @@
                 <th>Сделал Лаб</th>
                 <th>Факультативы</th>
                 <th>Семинары</th>
+                <th>Ожидаемый штраф</th>
             </tr>
         {% endif %}
     <tr>
@@ -47,6 +48,7 @@
         <td>{{ acc.counters.val.lab_pass }}</td>
         <td>{{ acc.counters.val.fac_attend }}</td>
         <td>{{ acc.counters.val.seminar_attend }}</td>
+        <td>{{ acc.counters.info.expected_fine }}@</td>
     </tr>
 
     {% if forloop.counter in markup.endtable %}

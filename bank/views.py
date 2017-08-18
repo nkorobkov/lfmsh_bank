@@ -215,7 +215,7 @@ def report(request):
 
 
 def study_stats(request):
-    #TODO: rework templates
+    # TODO: rework templates
     render_dict = get_report_student_stats(request.user)
     students_query = User.objects.filter(groups__name__contains=UserGroups.student.value)
     render_dict.update(get_students_markup(students_query))
@@ -278,14 +278,23 @@ def user_can_use_template(request, template_trans):
 
 def user_can_decline(request, updated_transaction):
     if not updated_transaction.can_be_transitioned_to(States.declined.value):
+        log.warning(
+            request.user.account.long_name() + " cant decline transaction because transaction can not be transitioned to declined state")
         return False
     if updated_transaction.creator.username == request.user.username:
         if request.user.has_perm(get_perm_name(Actions.decline.value, 'self', updated_transaction.type.name)):
             return True
+        log.warning(
+            request.user.account.long_name() + " cant decline transaction because user do not have rights to decline self created " + updated_transaction.type.name)
+
     else:
 
         if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
                 name__in=PERMISSION_RESPONSIBLE_GROUPS).name,
                                                'created_transactions')):
             return True
+        log.warning(
+            request.user.account.long_name() + " is not owner of transaction and do not have rights to decline " + updated_transaction.creator.groups.get(
+                name__in=PERMISSION_RESPONSIBLE_GROUPS).name + " group. but tries to decline it")
+
     return False

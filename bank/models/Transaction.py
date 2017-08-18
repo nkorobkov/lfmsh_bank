@@ -67,7 +67,7 @@ class Transaction(models.Model):
         return list(self.related_attendance_atomics.all()) + list(self.related_money_atomics.all())
 
     def can_be_transitioned_to(self, state_name):
-        for a in self.get_all_atomics():
+        for a in self.related_money_atomics.all():
             if not a.counted == self.state.counted:
                 return False
         return self.state.possible_transitions.filter(name=state_name).exists()

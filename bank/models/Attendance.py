@@ -13,12 +13,12 @@ class Attendance(AtomicTransaction):
 
     type = models.ForeignKey(AttendanceType)
     attendance_block = models.ForeignKey(AttendanceBlock, on_delete=SET_NULL, null=True,
-                                              related_name='attendances')
+                                         related_name='attendances')
     date = models.DateField()
     related_transaction = models.ForeignKey(Transaction, on_delete=CASCADE, related_name='related_attendance_atomics')
 
     @classmethod
-    def new_attendance(cls, receiver, value, type, description, date, transaction,  attendance_block_name=None):
+    def new_attendance(cls, receiver, value, type, description, date, transaction, attendance_block_name=None):
         attendance_block = AttendanceBlock.objects.get(name=attendance_block_name) if attendance_block_name else None
         new_att = cls(related_transaction=transaction, receiver=receiver, value=value, type=type,
                       description=description, counted=False, update_timestamp=now(), date=date,
@@ -36,7 +36,8 @@ class Attendance(AtomicTransaction):
     def is_valid(self):
         if not self.attendance_block:
             return True
-        for suspicious in Attendance.objects.filter(receiver=self.receiver).filter(date=self.date).filter(counted=True).exclude(id=self.id).all():
+        for suspicious in Attendance.objects.filter(receiver=self.receiver).filter(date=self.date).filter(
+                counted=True).exclude(id=self.id).all():
             if self.attendance_block.clashes_with(suspicious.attendance_block):
                 return False
         return True
@@ -53,7 +54,7 @@ class Attendance(AtomicTransaction):
         return '{}'.format(str(int(self.value)))
 
     def __str__(self):
-        return "{} {} {} {}".format(str(self.attendance_block), str(self.receiver ), str(self.date ), str(self.counted))
+        return "{} {} {} {}".format(str(self.attendance_block), str(self.receiver), str(self.date), str(self.counted))
 
     def to_python(self):
         return {
@@ -68,3 +69,20 @@ class Attendance(AtomicTransaction):
             "date": self.date.strftime("%d.%m"),
 
         }
+
+    def full_info_as_list(self):
+        at_block_info = self.attendance_block.full_info_as_list() if self.attendance_block else ["NA"]
+        return self.type.full_info_as_list() + \
+               [self.date.strftime("%d.%m.%Y")] + \
+               at_block_info + \
+               super(Attendance, self).full_info_as_list() + \
+               self.receiver.account.full_info_as_list() + \
+               self.related_transaction.full_info_as_list()
+
+    def full_info_headers_as_list(self):
+        return self.type.full_info_headers_as_list() + \
+               ["date"] + \
+               ['attendance_block_' + x for x in self.attendance_block.full_info_headers_as_list()] + \
+               super(Attendance, self).full_info_headers_as_list() + \
+               ['receiver_' + x for x in self.receiver.account.full_info_headers_as_list()] + \
+               ['transaction_' + x for x in self.related_transaction.full_info_headers_as_list()]

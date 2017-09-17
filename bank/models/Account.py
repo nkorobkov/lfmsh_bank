@@ -95,4 +95,28 @@ class Account(models.Model):
         return FAC_PASS_NEEDED[self.grade]
 
     def get_next_missed_lec_penalty(self):
-        return (self.get_counter(AttendanceTypeEnum.lecture_miss.value)) * LECTURE_PENALTY_STEP + LECTURE_PENALTY_INITIAL
+        return (
+                   self.get_counter(
+                       AttendanceTypeEnum.lecture_miss.value)) * LECTURE_PENALTY_STEP + LECTURE_PENALTY_INITIAL
+
+    def full_info_as_list(self):
+        return [
+            self.user.first_name,
+            self.user.last_name,
+            self.middle_name,
+            self.user.username,
+            self.party,
+            self.grade,
+            self.balance
+        ]
+
+    def full_info_headers_as_list(self):
+        return [
+            'first_name',
+            'last_name',
+            'middle_name',
+            'username',
+            'party',
+            'grade',
+            'balance'
+        ]

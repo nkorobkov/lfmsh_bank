@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from bank.constants import Actions, UserGroups
 from bank.controls.stats_controller import get_counters_of_user_who_is
 from bank.helper_functions import get_perm_name
-from bank.models import Money
+from bank.models import Money, Attendance
 
 log = logging.getLogger("bank_api_log")
 
@@ -61,18 +61,23 @@ def get_session(request):
 def get_students_money(request):
     if not request.user.has_perm(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions")):
         return HttpResponseForbidden()
+
+    return get_csv_for_model(Money, "money")
+
+
+@csrf_exempt
+def get_students_counters(request):
+    if not request.user.has_perm(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions")):
+        return HttpResponseForbidden()
+
+    return get_csv_for_model(Attendance, "counters")
+
+
+def get_csv_for_model(model, file_name):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="students_money.csv"'
-
+    response['Content-Disposition'] = 'attachment; filename="' + file_name + '.csv"'
     writer = csv.writer(response)
-    writer.writerow(
-        ['value', 'creator', 'creation_date', 'type', 'desc', 'receiver', 'general_group', 'local_group', 'counted',
-         'update_date', 'receiver_username'])
-
-    for money in Money.objects.filter(counted=True,
-                                      related_transaction__creator__groups__name__in=[UserGroups.staff.value, UserGroups.admin.value, UserGroups.student.value]):
-        mon_dic = money.to_python()
-
-        writer.writerow([mon_dic['value'], mon_dic['creator'],mon_dic['creation_timestamp'],mon_dic['type'],mon_dic['description'],mon_dic['receiver'],mon_dic['general_group'],mon_dic['local_group'],mon_dic['counted'],mon_dic['update_timestamp'], money.receiver.username])
-
+    writer.writerow(model.objects.all().first().full_info_headers_as_list())
+    for inst in model.objects.all():
+        writer.writerow(inst.full_info_as_list())
     return response

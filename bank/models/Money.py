@@ -67,3 +67,15 @@ class Money(AtomicTransaction):
             "update_timestamp": self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
             "creation_timestamp": self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
         }
+
+    def full_info_as_list(self):
+        return self.type.full_info_as_list() + \
+               super(Money, self).full_info_as_list() + \
+               self.receiver.account.full_info_as_list() + \
+               self.related_transaction.full_info_as_list()
+
+    def full_info_headers_as_list(self):
+        return self.type.full_info_headers_as_list() + \
+               super(Money, self).full_info_headers_as_list() + \
+               ['receiver_' + x for x in self.receiver.account.full_info_headers_as_list()] + \
+               ['transaction_' + x for x in self.related_transaction.full_info_headers_as_list()]

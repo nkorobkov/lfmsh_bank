@@ -34,7 +34,6 @@ class Transaction(models.Model):
         if self.can_be_transitioned_to(States.processed.value):
             if not self.state.counted:
                 for atomic in self.get_all_atomics():
-
                     atomic.apply()
             self.state = TransactionState.objects.get(name=States.processed.value)
             self.save()
@@ -102,3 +101,16 @@ class Transaction(models.Model):
             "counters": [t.to_python() for t in self.related_attendance_atomics.all()],
         }
 
+    def full_info_as_list(self):
+        return self.creator.account.full_info_as_list() + [
+            self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
+            self.state.readable_name,
+            self.state.counted
+        ] + self.type.full_info_as_list()
+
+    def full_info_headers_as_list(self):
+        return ['creator_' + x for x in self.creator.account.full_info_headers_as_list()] + [
+            'creation_timestamp',
+            'state_name',
+            'counted'
+        ] + self.type.full_info_headers_as_list()

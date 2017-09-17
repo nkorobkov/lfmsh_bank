@@ -17,6 +17,7 @@ main/__pycache__/urls.cpython-36.pyc
 bank/migrations
 main/__pycache__
 *.pyc
+*.log
 meta_files/users_data/staff_out.txt
 meta_files/users_data/student_out.txt
 bankir.txt

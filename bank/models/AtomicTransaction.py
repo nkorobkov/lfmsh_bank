@@ -27,6 +27,24 @@ class AtomicTransaction(models.Model):
     def get_creation_timestamp(self):
         return self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
 
+    def full_info_as_list(self):
+        return [
+            self.value,
+            self.description,
+            self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
+            self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
+            self.counted
+        ]
+
+    def full_info_headers_as_list(self):
+        return [
+            'value',
+            'description',
+            'update_timestamp',
+            'creation_timestamp',
+            'counted'
+        ]
+
 
 '''
     @classmethod

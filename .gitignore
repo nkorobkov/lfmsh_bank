@@ -21,3 +21,5 @@ main/__pycache__
 meta_files/users_data/staff_out.txt
 meta_files/users_data/student_out.txt
 bankir.txt
+*.history
+data_analysis/data

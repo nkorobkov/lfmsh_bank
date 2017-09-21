@@ -16,14 +16,102 @@ urlcolor: blue
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(ggplot2)
+Sys.setlocale("LC_CTYPE", "ru_RU")
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
+```{r data_load, include=FALSE}
+students = as_data_frame(read.csv('../data/student_features.csv'))
+time = as_data_frame(read.csv('../data/time_features.csv'))
+type = as_data_frame(read.csv('../data/type_features.csv'))
+```
 ## Вступление
-
-В рамках смены [Летней Физико-Математической Школы](http://lfmsh.ru/) проводилась экономическая игра. В ходе игры слушателям школы за положительную активность начислялась виртуальная валюта, которую в конце смены можно было потратить на разные полезные штуковины.  
+В августе 2017 года прошла 30 смена [Летней Физико-Математической Школы](http://lfmsh.ru/). 
+В рамках смены традиционно проводилась экономическая игра. В ходе игры слушателям школы за положительную активность начислялась виртуальная валюта, которую в конце смены можно было потратить на разные полезные штуковины.  
 В результате собралось внушительное количество данных о всех перемещениях виртуальных баксов в лагере. Эти данные мы и попробуем осмыслить.
 
 ## Знакомство с Пионерами
+#### Анализ суммарного заработка пионеров
 
-йоу
+```{r earnings_list}
+earnings_list = as.data.frame(students["Заработано.за.смену"])[,1]
+```
+
+Всего в лагерь приехало `r length(students$username)` пионеров закончивших классы с `r min(students$grade)` по `r max(students$grade)`. Для каждого пионера известно сколько виртуальных денег он заработал в течении смены. Всего дети заработали **`r format(round(sum(earnings_list)))`\@** . В среднем на человека пришлось по **`r round(mean(earnings_list))`\@**, самый богатый пионер накопил **`r round(max(earnings_list))`\@**, а самый бедный только **`r round(min(earnings_list))`\@**.  
+
+
+Посмотрим на гистограмму отражающую заработок населения. 
+
+```{r all_students_hist}
+ggplot(students, aes(x = `Заработано.за.смену`)) + 
+  geom_histogram(bins = 40, fill='#56B4E9', col = '#0072B2', alpha=0.3) +
+  geom_vline(xintercept = mean(earnings_list), col='#E69F00')
+
+sel = shapiro.test(earnings_list[earnings_list < 1100])
+```
+
+Не смотря на то что на вид распределение заработка по пионерам слабо отличается он нормального, считать его нормальным мы не можем из за трех значений в самой правой части графика. Эти значения слишком сильно отклоняются от среднего чтобы принять гипотезу о нормальности распределения. Зато если их выкинуть, то оставшиеся значения будут распределены вполне себе нормально (Значение p-value для теста Шапиро-Уилка = `r sel$p.value`).    
+
+На время уберем трех самых богатых пионеров из выборки и построим такие же гистограммы разделив пионеров на группы по калассам.  
+Нормальность распределения внутри группы сохраняется. Значения p-value для теста Шапиро-Уилка по классам приведены в таблице. 
+
+```{r shapiro_by_grade}
+d = function(earnings) shapiro.test(earnings)$p.value
+
+by_grade = students %>%
+  filter(grade < 11, `Заработано.за.смену` < 1100)%>%
+  mutate(grade = factor(grade)) %>%
+  group_by(grade) %>%
+  mutate(mean_in_grade = mean(`Заработано.за.смену`), min_in_grade = as.numeric(mean_cl_boot(`Заработано.за.смену`)['ymin']), max_in_grade = as.numeric(mean_cl_boot(`Заработано.за.смену`)['ymax']))
+
+s2 = by_grade %>%
+  group_by(grade) %>%
+  summarise( Shapiro_test_p_value = d(`Заработано.за.смену`))
+s22 = t(s2$Shapiro_test_p_value)
+colnames(s22) = s2$grade
+a2 = data.frame(Класс = c('p-value'))
+s22 = cbind(a2,s22)
+
+knitr::kable(s22, caption = 'Значеня p-value для теста Шапиро-Вилка при делении на группы по классу')
+
+```
+
+На гистограммах оранжевым отмечено среднее значение заработка по всей выборке, а красным -- внутри гурппы. Красным пунктиром выделены доверительные интервалы среднего значения. Так как из 11 класса приехало всего два человека, их рассматривать не будем.
+
+
+```{r by_grade_plot}
+
+
+ggplot(by_grade, aes(x = `Заработано.за.смену`,group=grade)) + 
+  geom_histogram(bins=30, col = '#0072B2', alpha=0.3) +
+  geom_vline(aes(xintercept = mean(earnings_list[earnings_list<1100])),  col='#E69F00') +
+  facet_grid(grade~.)  + 
+  geom_vline(aes(xintercept = mean_in_grade, group = grade),  col='#D55E00') +
+  geom_vline(aes(xintercept = min_in_grade,  group = grade),linetype="dashed",  col='#D55E00') +
+  geom_vline(aes(xintercept = max_in_grade, group = grade),linetype="dashed",  col='#D55E00') + 
+  scale_x_continuous('Заработок за смену',breaks = function(x) seq(floor(min(x)/50)*50, max(x),50)) + 
+  scale_y_continuous('Количество пионеров', breaks = seq(0, 10, 1))
+```
+
+Из графиков видно что средний заработок 10 класса значимо отличается от среднего заработка 8 и 9 классов.
+
+#### Анализ взаимосвязей категорий заработка
+
+```{r}
+
+ggplot(students, aes(x = `Заработано.за.смену`, y = `Частные.Работа.в.столовой`))+  geom_point()
+
+pairs(select(students, starts_with("Общие"),  -`Общие.Технические.Типы`,-`Общие.Другое`, -`Общие.Переводы`, `Заработано.за.смену`))
+
+cor =  cor(select(students, starts_with("Общие"),  -`Общие.Технические.Типы`,-`Общие.Другое`, -`Общие.Переводы`, `Заработано.за.смену`))
+
+all_cor = cor(select(students,-receiver_username,-username, -first_name, -last_name ))
+all_cor[abs(all_cor) > 0.5]
+cor< -0.5
+
+
+```
+

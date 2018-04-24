@@ -20,10 +20,6 @@ def get_pd(leng):
 
 
 
-
-### execfile('Yanyshev_sucks.py')
-
-
 p_out = open('meta_files/new_passwords.txt', 'w')
 '''
 for u in User.objects.filter(groups__name='pioner'):

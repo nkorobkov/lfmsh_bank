@@ -22,7 +22,12 @@ class AtomicTypeField(forms.ModelChoiceField):
 
 class MyDateField(forms.DateField):
     def to_python(self, value):
-        return str(value)
+        s = str(value)
+        try:
+            datetime.datetime.strptime(s, '%Y-%m-%d')
+        except ValueError:
+            raise ValidationError('Невозможная дата: %(value)s', params={'value': s})
+        return s
 
 
 class MyBlockField(forms.ModelChoiceField):

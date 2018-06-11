@@ -5,12 +5,13 @@ import string
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.forms import BaseFormSet
 from django.forms.widgets import ChoiceWidget
 from transliterate.utils import _
 
 from bank.constants import UserGroups, AttendanceTypeEnum
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
-from bank.models import MoneyType, AttendanceBlock
+from bank.models import MoneyType, AttendanceBlock, Attendance
 
 
 # -*- coding: utf-8 -*-
@@ -189,7 +190,7 @@ class SeminarKernelForm(AttendKernelForm):
 
     general_choices = [(-1, "-1"), (0, "0"), (1, "1"), (2, "2"), (3, "3")]
     general_quality = forms.ChoiceField(widget=forms.RadioSelect, choices=general_choices,
-                                   label="7. Дополнительные баллы на ваше усмотрение.")
+                                        label="7. Дополнительные баллы на ваше усмотрение.")
 
 
 class P2PKernelForm(forms.Form):
@@ -206,6 +207,8 @@ class P2PKernelForm(forms.Form):
 
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}),
                                   label='Комментарий',
+                                  help_text="Пожалуйста напишите за что вы перечисляете деньги,\
+                                   чтобы банкиру и вожатым было проще разобраться и одобрить перевод.",
                                   required=True)
     creator_username = forms.CharField(max_length=200)
 
@@ -254,5 +257,27 @@ class RelativePathField(forms.CharField):
 
 
 class UploadFileForm(forms.Form):
-    path = RelativePathField(max_length=100, label="Путь", help_text="В пути допускаются только английские буквы цифры и /")
+    path = RelativePathField(max_length=100, label="Путь",
+                             help_text="В пути допускаются только английские буквы цифры и /")
     file = forms.FileField(label="Выберите файл")
+
+
+class SeminarFormset(BaseFormSet):
+    def clean(self):
+        if any(self.errors):
+            return
+        cleaned_data = self.forms[0].cleaned_data
+        receiver_username = cleaned_data.get("receiver")
+        date = cleaned_data.get('date')
+        block = cleaned_data.get('block')
+        attendance_block = AttendanceBlock.objects.get(name=block)
+        receiver = User.objects.get(username=receiver_username)
+        test_attendance = Attendance(related_transaction=None, receiver=receiver, value=0, type=None,
+                                     description='', counted=False, update_timestamp=None, date=date,
+                                     attendance_block=attendance_block)
+        if not test_attendance.is_valid():
+            self.forms[0].add_error('block', "Докладчик уже занимался чем-то в этот блок.\
+                            Может быть вы перепутали докладчика или блок? \
+                            Если все правильно, то обратитесь пожалуйста к банкиру, он разберется в чем дело.")
+
+        del test_attendance

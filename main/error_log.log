@@ -190,3 +190,53 @@ Traceback (most recent call last):
     ['receiver_' + x for x in self.receiver.account.full_info_headers_as_list()] + \
 TypeError: super() argument 1 must be type, not Money
 ERROR 2017-09-15 22:32:49,248 "GET /bank_api/money/ HTTP/1.1" 500 75199
+ERROR 2018-06-11 16:40:31,699 Internal Server Error: /bank/add_transaction/seminar/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 65, in add_transaction
+    if formset.is_valid():
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/forms/formsets.py", line 321, in is_valid
+    self.errors
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/forms/formsets.py", line 295, in errors
+    self.full_clean()
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/forms/formsets.py", line 366, in full_clean
+    self.clean()
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/forms.py", line 281, in clean
+    self.add_error('block', "Докладчик уже занимался чем-то в этот блок. Может быть вы перепутали докладчика или блок? \
+AttributeError: 'SeminarKernelFormFormSet' object has no attribute 'add_error'
+ERROR 2018-06-11 16:40:32,182 "POST /bank/add_transaction/seminar/ HTTP/1.1" 500 347398
+ERROR 2018-06-11 16:43:06,705 Internal Server Error: /bank/add_transaction/seminar/
+Traceback (most recent call last):
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/views.py", line 65, in add_transaction
+    if formset.is_valid():
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/forms/formsets.py", line 321, in is_valid
+    self.errors
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/forms/formsets.py", line 295, in errors
+    self.full_clean()
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/forms/formsets.py", line 366, in full_clean
+    self.clean()
+  File "/Users/Insolia/Code/Python/bank_2.0/bank_app/bank/forms.py", line 282, in clean
+    test_attendance.delete()
+  File "/Users/Insolia/Code/Python/bank_2.0/env/bank_2.0_venv/lib/python3.6/site-packages/django/db/models/base.py", line 967, in delete
+    (self._meta.object_name, self._meta.pk.attname)
+AssertionError: Attendance object can't be deleted because its id attribute is set to None.
+ERROR 2018-06-11 16:43:07,070 "POST /bank/add_transaction/seminar/ HTTP/1.1" 500 350864

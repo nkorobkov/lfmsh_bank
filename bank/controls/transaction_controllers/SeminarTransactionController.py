@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
+from django.forms import formset_factory
 
 from bank.constants import UserGroups, MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
-from bank.forms import SeminarKernelForm
+from bank.forms import SeminarKernelForm, SeminarFormset
 from bank.models import Transaction, Money, MoneyType, TransactionType, Attendance, AttendanceType
 
 
@@ -101,3 +102,9 @@ class SeminarTransactionController(TableTransactionController):
             return mark * 5
         else:
             return mark * 10
+
+    @classmethod
+    def get_blank_form(cls, creator_username):
+        students_query = __class__._get_student_query()
+        formset = formset_factory(cls._get_kernel_form(), max_num=len(students_query), formset=SeminarFormset)
+        return formset

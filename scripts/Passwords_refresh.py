@@ -1,12 +1,8 @@
 # coding=utf-8
 __author__ = 'Insolia'
 
-from bank.models import *
-import csv
-from transliterate import translit
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 import random
-from bank.constants import *
 import string
 
 

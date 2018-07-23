@@ -42,26 +42,27 @@ class P2PTransactionController(TransactionController):
     @staticmethod
     def build_transaction_from_api_request(api_request_body):
         creator = User.objects.get(username=api_request_body.get('creator'))
-        receiver = api_request_body.get('money')[0].get('receiver')
+        receiver_username = api_request_body.get('money')[0].get('receiver')
         value = api_request_body.get('money')[0].get('value')
         description = api_request_body.get('description')
         formset_data = [
             {'value': value,
-             'receiver_username': receiver,
+             'receiver_username': receiver_username,
              'creator_username': creator.username,
              'description': description}]
 
         # validation
         if value < 1 or value > creator.account.balance:
             raise P2PIllegalAmount(value)
-        if creator.username == receiver:
+        if creator.username == receiver_username:
             raise SelfMoneyTransfer()
         if description == '':
             raise EmptyDescriptionError()
-        receiver_q = User.objects.filter(username=receiver)
+        receiver_q = User.objects.filter(username=receiver_username)
         if receiver_q.count() != 1:
-            raise UserDoesNotExist(receiver)
-        receiver = receiver_q.first()
+            raise UserDoesNotExist(receiver_username)
+        receiver = User.objects.get(username=receiver_username)
+
         new_transaction = Transaction.new_transaction(creator,
                                                       TransactionType.objects.get(
                                                           name=TransactionTypeEnum.p2p.value),

@@ -63,6 +63,7 @@ class Money(AtomicTransaction):
             "receiver": self.receiver.account.long_name(),
             "creator": self.related_transaction.creator.account.long_name(),
             "counted": self.counted,
+            "state": self.related_transaction.state.readable_name,
             "description": self.description,
             "update_timestamp": self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
             "creation_timestamp": self.creation_timestamp.strftime("%d.%m.%Y %H:%M")

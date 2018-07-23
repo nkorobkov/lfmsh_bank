@@ -110,6 +110,19 @@ class Account(models.Model):
             self.balance
         ]
 
+    def full_info_as_map(self, with_balance=True):
+        m = {
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'middle_name': self.middle_name,
+            'username': self.user.username,
+            'party': self.party,
+            'grade': self.grade,
+        }
+        if with_balance:
+            m['balance'] = self.balance
+        return m
+
     def full_info_headers_as_list(self):
         return [
             'first_name',

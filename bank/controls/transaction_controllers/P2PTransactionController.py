@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import formset_factory
 
 from bank.constants import MoneyTypeEnum, TransactionTypeEnum
+from bank.constants.BankAPIExeptions import P2PIllegalAmount, SelfMoneyTransfer, EmptyDescriptionError, UserDoesNotExist
 from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.forms import P2PKernelForm
 from bank.models import Transaction, MoneyType, Money, TransactionType
@@ -15,7 +16,8 @@ class P2PTransactionController(TransactionController):
     @classmethod
     def get_blank_form(cls, creator_username):
         p2p_formset = formset_factory(
-            wraps(P2PKernelForm)(partial(P2PKernelForm, creator=User.objects.get(username=creator_username))), max_num=1)
+            wraps(P2PKernelForm)(partial(P2PKernelForm, creator=User.objects.get(username=creator_username))),
+            max_num=1)
         return p2p_formset
 
     @staticmethod
@@ -34,5 +36,41 @@ class P2PTransactionController(TransactionController):
         Money.new_money(receiver, first_form['value'],
                         MoneyType.objects.get(name=MoneyTypeEnum.p2p.value),
                         first_form['description'],
+                        new_transaction)
+        return new_transaction
+
+    @staticmethod
+    def build_transaction_from_api_request(api_request_body):
+        creator = User.objects.get(username=api_request_body.get('creator'))
+        receiver = api_request_body.get('money')[0].get('receiver')
+        value = api_request_body.get('money')[0].get('value')
+        description = api_request_body.get('description')
+        formset_data = [
+            {'value': value,
+             'receiver_username': receiver,
+             'creator_username': creator.username,
+             'description': description}]
+
+        # validation
+        if value < 1 or value > creator.account.balance:
+            raise P2PIllegalAmount(value)
+        if creator.username == receiver:
+            raise SelfMoneyTransfer()
+        if description == '':
+            raise EmptyDescriptionError()
+        receiver_q = User.objects.filter(username=receiver)
+        if receiver_q.count() != 1:
+            raise UserDoesNotExist(receiver)
+        receiver = receiver_q.first()
+        new_transaction = Transaction.new_transaction(creator,
+                                                      TransactionType.objects.get(
+                                                          name=TransactionTypeEnum.p2p.value),
+                                                      formset_data)
+
+
+
+        Money.new_money(receiver, value,
+                        MoneyType.objects.get(name=MoneyTypeEnum.p2p.value),
+                        description,
                         new_transaction)
         return new_transaction

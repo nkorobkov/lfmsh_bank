@@ -212,7 +212,7 @@ class P2PKernelForm(forms.Form):
 
     description = forms.CharField(max_length=1000, widget=forms.Textarea({'cols': '40', 'rows': '5'}),
                                   label='Комментарий',
-                                  help_text="Пожалуйста напишите за что вы перечисляете деньги,\
+                                  help_text="Пожалуйста максимально подробно опишите за что вы перечисляете деньги,\
                                    чтобы банкиру и вожатым было проще разобраться и одобрить перевод.",
                                   required=True)
     creator_username = forms.CharField(max_length=200)

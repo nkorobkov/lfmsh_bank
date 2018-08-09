@@ -147,6 +147,8 @@ def user(request, username):
          'can_see_counters': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'attendance'))})
     render_dict.update(_get_transactions_of_user_who_is(request.user, host, host_group.name))
     render_dict.update({'counters': get_counters_of_user_who_is(request.user, host, host_group)})
+    avatar_url = "bank/avatars/{} {}.jpg".format(host.last_name, host.first_name) if USE_PICS else DEFAULT_PIC_PATH
+    render_dict.update({'avatar_url': avatar_url})
     return render(request, 'bank/user_page.html', render_dict)
 
 

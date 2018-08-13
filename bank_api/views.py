@@ -51,11 +51,10 @@ def add_transaction(request):
 
 
 @csrf_exempt
-@login_required()
 def get_students(request):
     students_data = User.objects.filter(groups__name__contains=UserGroups.student.value).order_by('account__party',
                                                                                                   'last_name')
-    data = [u.account.full_info_as_map(False) for u in students_data]
+    data = [u.account.full_info_as_map(True) for u in students_data]
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 

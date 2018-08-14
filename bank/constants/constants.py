@@ -44,6 +44,9 @@ NUM_OF_PARTIES = 4
 BALANCE_DANGER = 0
 BALANCE_WARNING = 30
 
+USE_PICS = False
+DEFAULT_PIC_PATH = 'bank/avatars/default.jpg'
+
 
 TAX_FROM_DAY = {
     1: 0,

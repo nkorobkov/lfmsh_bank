@@ -9,10 +9,10 @@ BANKIR_USERNAME = 'bank_manager'
 
 PERMISSION_RESPONSIBLE_GROUPS = [UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]
 
-FIRST_DAY_DATE = datetime.datetime(2017, 8, 2, 0, 0).date()
+FIRST_DAY_DATE = datetime.datetime(2018, 8, 6, 0, 0).date()
 
 BOOK_CERTIFICATE_VALUE = 50
-INITIAL_MONEY = 130
+INITIAL_MONEY = 120
 INITIAL_MONEY_DESC = 'Поздравляем с началом экономической игры!'
 
 WORKOUT_BUDGET = 25.

@@ -46,13 +46,13 @@ INSTALLED_APPS = (
     'django_tables2',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 )
@@ -162,9 +162,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
-
 STATIC_URL = "/static/"
-
 
 # Default settings
 BOOTSTRAP3 = {

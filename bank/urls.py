@@ -3,6 +3,9 @@ from django.contrib.auth import views as auth_views
 
 from bank import views
 
+app_name = 'bank'
+
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
 

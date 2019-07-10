@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from bank_api import views
 
+app_name = 'bank_api'
+
 urlpatterns = [
     url(r'^user/$', views.get_user_transactions, name='user'),
     url(r'^add_transaction/$', views.add_transaction, name='add_transaction'),

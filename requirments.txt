@@ -1,10 +1,11 @@
 appdirs==1.4.3
-Django==1.11.1
-django-bootstrap3==8.2.3
-django-tables2==1.6.1
+Django==2.2.3
+django-bootstrap3==11.1.0
+django-tables2==2.0.6
 lorem-ipsum-generator==0.3
 packaging==16.8
 pyparsing==2.2.0
 pytz==2017.2
 six==1.10.0
+sqlparse==0.3.0
 transliterate==1.9

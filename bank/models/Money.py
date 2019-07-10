@@ -11,7 +11,7 @@ from .AtomicTransaction import AtomicTransaction
 class Money(AtomicTransaction):
     receiver = models.ForeignKey(User, related_name='received_money', on_delete=models.CASCADE, null=False)
 
-    type = models.ForeignKey(MoneyType)
+    type = models.ForeignKey(MoneyType, on_delete=models.PROTECT)
     related_transaction = models.ForeignKey(Transaction, on_delete=CASCADE, related_name='related_money_atomics')
 
     @classmethod

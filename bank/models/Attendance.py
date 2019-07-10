@@ -11,7 +11,7 @@ from .AttendanceType import AttendanceType
 class Attendance(AtomicTransaction):
     receiver = models.ForeignKey(User, related_name='received_attendance', on_delete=models.CASCADE, null=False)
 
-    type = models.ForeignKey(AttendanceType)
+    type = models.ForeignKey(AttendanceType, on_delete=models.PROTECT)
     attendance_block = models.ForeignKey(AttendanceBlock, on_delete=SET_NULL, null=True,
                                          related_name='attendances')
     date = models.DateField()

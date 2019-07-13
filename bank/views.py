@@ -1,7 +1,8 @@
 import logging
 import json
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from django.template import loader
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, JsonResponse
 from os import path
 import os
 from bank.controls.TransactionService import TransactionService
@@ -117,6 +118,22 @@ def my_transactions(request):
 
 
 @login_required
+def get_transaction_HTML(request):
+    transaction_id = request.GET.get('transaction_id', -1)
+    viewer_role = request.GET.get('viewer_role', -1)
+    transaction = Transaction.objects.get(id=transaction_id)  # if there is no transaction it fails, but it's ok.
+
+    group = 'self' if request.user == transaction.creator else get_used_user_group(transaction.creator)
+    if not request.user.has_perm(get_perm_name(Actions.see.value, group, 'created_transactions')):
+        return HttpResponseForbidden("У вас нет прав на просмотр этой транзакции")
+
+    html = loader.render_to_string('bank/transaction_lists/transaction.html',
+                                   {'transaction': transaction, 'viewer_role': viewer_role})
+    output_data = {'transaction_HTML': html}
+    return JsonResponse(output_data)
+
+
+@login_required
 def students(request):
     students_data = User.objects.filter(groups__name__contains=UserGroups.student.value).order_by('account__party',
                                                                                                   'last_name')
@@ -140,7 +157,7 @@ def staff(request):
 @login_required()
 def user(request, username):
     host = User.objects.get(username=username)
-    host_group = host.groups.get(name__in=[UserGroups.staff.value, UserGroups.student.value])
+    host_group = get_used_user_group(host)
     render_dict = {'host': host}
     render_dict.update(
         {'can_see_balance': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'balance')),
@@ -300,3 +317,8 @@ def user_can_decline(request, updated_transaction):
                 name__in=PERMISSION_RESPONSIBLE_GROUPS).name + " group. but tries to decline it")
 
     return False
+
+
+def get_used_user_group(user):
+    group = user.groups.get(name__in=[UserGroups.staff.value, UserGroups.student.value])
+    return group

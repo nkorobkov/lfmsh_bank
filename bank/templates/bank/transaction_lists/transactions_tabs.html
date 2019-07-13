@@ -33,7 +33,7 @@
             <tr>
                 <td>{{ transaction_info.transaction.get_creation_timestamp }}</td>
                 <td>
-                    <a onclick="showTransaction({{ transaction_info.transaction.id }})">{{ transaction_info.transaction.type }}</a>
+                    <a onclick="showTransaction({{ transaction_info.transaction.id }}, 'creator')">{{ transaction_info.transaction.type }}</a>
                 </td>
                 <td>{{ transaction_info.transaction.money_count_string }}</td>
                 <td>{{ transaction_info.transaction.receivers_count }}</td>

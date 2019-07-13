@@ -14,6 +14,8 @@ urlpatterns = [
         name='login'),
 
     url(r'^my_transactions/$', views.my_transactions, name='my_transactions'),
+    url(r'^getTransactionHTML/$', views.get_transaction_HTML, name='get_transaction_HTML'),
+
 
     url(r'^students$', views.students, name='students'),
     url(r'^staff$', views.staff, name='staff'),

@@ -14,6 +14,7 @@ main/__pycache__/__init__.cpython-36.pyc
 main/__pycache__/settings.cpython-36.pyc
 main/__pycache__/urls.cpython-36.pyc
 *.sqlite3
+.DS_Store
 bank/migrations
 main/__pycache__
 *.pyc
@@ -28,3 +29,5 @@ data_analysis/data
 .Rhistory
 report30.html
 .idea/
+main/error_log.log
+static/

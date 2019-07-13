@@ -33,7 +33,7 @@
             <tr>
                 <td>{{ transaction_info.transaction.get_creation_timestamp }}</td>
                 <td>
-                    <a onclick="$('#trans-info-{{ transaction_info.transaction.id }}').toggle()">{{ transaction_info.transaction.type }}</a>
+                    <a onclick="showTransaction({{ transaction_info.transaction.id }})">{{ transaction_info.transaction.type }}</a>
                 </td>
                 <td>{{ transaction_info.transaction.money_count_string }}</td>
                 <td>{{ transaction_info.transaction.receivers_count }}</td>
@@ -57,8 +57,8 @@
                 </td>
 
             </tr>
-            <tr style="display: none" id="trans-info-{{ transaction_info.transaction.id }}">
-                <td colspan="6"> {% include 'bank/transaction_lists/transaction.html' with transaction=transaction_info.transaction viewer_role='creator'%} </td>
+            <tr style="display: none" id="trans-info-{{ transaction_info.transaction.id }}" loaded = "false">
+                <td colspan="6">{#% include 'bank/transaction_lists/transaction.html' with transaction=transaction_info.transaction viewer_role='creator'%#}</td>
             </tr>
         {% endfor %}
     </table>

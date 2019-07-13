@@ -18,6 +18,7 @@ First edition can be found [here](https://github.com/insolia/lfmsh_bank)
 - add users  to DB with `  ./manage.py add_users`
 this command would print credentials for all users from student and staff  groups.  
 It will also create one user with extra privileges called bank_manager. 
+- collect static files from different apps to single folder `./manage.py collectstatic`
 - run test server  `  ./manage.py runserver`
 -  go to  <http://127.0.0.1:8000/bank>  and enter credentials printed in console to test app
 

@@ -30,4 +30,4 @@ data_analysis/data
 report30.html
 .idea/
 main/error_log.log
-static/
+/static/

@@ -9,3 +9,4 @@ pytz==2017.2
 six==1.10.0
 sqlparse==0.3.0
 transliterate==1.9
+uWSGI==2.0.18

@@ -6,6 +6,7 @@ First edition can be found [here](https://github.com/insolia/lfmsh_bank)
 ###  local startup  instructions
 
 - clone repo
+- to deploy test server locally we can only work with django code, so `cd django-app`
 - make migrations with:
 ```bash
   ./manage.py makemigrations

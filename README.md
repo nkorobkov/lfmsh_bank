@@ -7,7 +7,7 @@ First edition can be found [here](https://github.com/insolia/lfmsh_bank)
 before any installation, you'll  need  to clone the repo and  install  the requirements.
 You  may want to use virtual environment for this process.
 
-###  local startup  instructions
+###  Local startup  instructions
 
 - to deploy test server locally we can only work with django code, so `cd django-app`
 - make migrations with:
@@ -26,7 +26,7 @@ It will also create one user with extra privileges called bank_manager.
 - run test server  `  ./manage.py runserver`
 -  go to  <http://127.0.0.1:8000/bank>  and enter credentials printed in console to test app
 
-### building with docker
+### Building with docker
 
 build image for local hosting with
 `
@@ -36,3 +36,14 @@ and than run it with
 `docker run -d -p 1234:8000 django-bank:0.01`
 
 you can check bank is working on <http://127.0.0.1:1234/bank/>
+
+This approach requires you to make migrations and populate tables in advance. Before constructing  the image. 
+Alternatively, if image is already constructed, you can log in into running container with  
+`docker exec -it <YOUR_CONTAINER_ID> /bin/bash` and exec all commands needed to populate database from above. 
+All changes in db would be lost unless you commit  them to image. 
+
+To  use real database instead of SQLite provided by Django, we can run db in  separate container. 
+docker compose is set up for this. 
+Run `docker-compose up` to see the application starup with db and django app in separate containers. 
+
+All postgress data would be stored in `docker/postgres/volumes` and would persist container restart. 

@@ -8,13 +8,25 @@ services:
     volumes: 
       - ./docker/postgres/volumes:/var/lib/postgresql/data
 
-  web:
+  uwsgi:
     build:
       context: .
       dockerfile: ./docker/django-app/Dockerfile
-    ports:
-      - "1234:8000"
     environment:
       BANK_MODE: docker-prod
     depends_on:
+      - db
+    entrypoint: uwsgi --socket :1234 --module main.wsgi
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./django-app/main/uwsgi_params:/usr/share/nginx/uswgi_params:ro
+      - ./django-app/static:/usr/share/nginx/static
+      - ./django-app/media:/usr/share/nginx/media
+    ports:
+      - 80:8080
+    depends_on:
+      - uwsgi
       - db

@@ -14,17 +14,22 @@ services:
       dockerfile: ./docker/django-app/Dockerfile
     environment:
       BANK_MODE: docker-prod
+    volumes:
+      - ./docker/django-app/uwsgi.ini:/usr/src/django-app/main/uwsgi.ini:ro
+      - ./docker/socket:/usr/src/django-app/socket
+      - ./docker/django-app/logs:/usr/src/django-app/logs
     depends_on:
       - db
-    entrypoint: uwsgi --socket :1234 --module main.wsgi
+    entrypoint: uwsgi --ini /usr/src/django-app/main/uwsgi.ini
 
   nginx:
     image: nginx
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./django-app/main/uwsgi_params:/usr/share/nginx/uswgi_params:ro
+      - ./django-app/main/uwsgi_params:/usr/share/nginx/uwsgi_params:ro
       - ./django-app/static:/usr/share/nginx/static
       - ./django-app/media:/usr/share/nginx/media
+      - ./docker/socket:/usr/share/nginx/socket
     ports:
       - 80:8080
     depends_on:

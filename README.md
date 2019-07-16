@@ -32,18 +32,24 @@ build image for local hosting with
 `
 docker build -t django-bank:0.01  -f ./docker/django-app/Dockerfile .
 `
-and than run it with 
+and then run it with 
 `docker run -d -p 1234:8000 django-bank:0.01`
 
 you can check bank is working on <http://127.0.0.1:1234/bank/>
 
 This approach requires you to make migrations and populate tables in advance. Before constructing  the image. 
 Alternatively, if image is already constructed, you can log in into running container with  
-`docker exec -it <YOUR_CONTAINER_ID> /bin/bash` and exec all commands needed to populate database from above. 
-All changes in db would be lost unless you commit  them to image. 
+`docker exec -it <YOUR_CONTAINER_ID> /bin/bash` and exec all the commands needed to populate database from above. 
+All the changes in db would be lost after container restart unless you commit them to image. 
 
-To  use real database instead of SQLite provided by Django, we can run db in  separate container. 
-docker compose is set up for this. 
-Run `docker-compose up` to see the application starup with db and django app in separate containers. 
+Alternatively, there is a possibility to launch lfmsh bank in production like mode with real server and db. 
+Run `docker-compose up` to see the application stars up with postgres db, nginx server and django app in separate containers.   
+All postgress data would be stored in `docker/postgres/volumes` and would persist container restart.   
+After first startup, you  will still need to populate tables manually. Log in to uwsgi container   
+`docker exec -it lfmsh_bank_uwsgi_1 /bin/bash`   
+and run migrations and static data operations from above. 
 
-All postgress data would be stored in `docker/postgres/volumes` and would persist container restart. 
+In current configuration static data is not stored on github. So, to download it you'll still need to collectstatic manually
+Run `./django-app/manage.py collectstatic` from host machine, and nginx container will gain access to this  data automatically. 
+
+After this two operations (static collection and db population) you'll be able  to toggle bank on and off with single `docker-compose up/down` command.

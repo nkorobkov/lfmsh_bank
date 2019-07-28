@@ -62,7 +62,10 @@ class Command(BaseCommand):
             print(person)
             last_name = person[0]
             first_name = person[1]
-            middle_name = person[2]
+            if len(person)>2:
+                middle_name = person[2]
+            else:
+                middle_name=''
             if len(person) > 3:
                 party = person[3]
             else:
@@ -127,11 +130,11 @@ class Command(BaseCommand):
         return s
 
     @staticmethod
-    def generate_login(first_name, last_name, middle_name):
-        login = translit(first_name[0], 'ru', reversed=True) + translit(middle_name[0], 'ru',
-                                                                        reversed=True) + translit(last_name, 'ru',
+    def generate_login(first_name, last_name, middle_name=''):
+        middle_name_repr = translit(middle_name[0], 'ru',reversed=True) if  middle_name  else ''
+        login = translit(first_name, 'ru', reversed=True) +'.'+ middle_name_repr +'.'+ translit(last_name, 'ru',
                                                                                                   reversed=True)
-        login = ''.join(filter(str.isalpha, login))
+        login = ''.join(filter(lambda x: x.isalpha() or x ==  '.', login))
         return login.lower()
 
 

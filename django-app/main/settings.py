@@ -139,7 +139,7 @@ DATABASES = {
     }
 }
 
-if os.environ.get('BANK_MODE',  '') == 'docker-prod':
+if os.environ.get('BANK_MODE', '') == 'docker-prod':
     DATABASES = {
         #    'default': {
         #        'ENGINE': 'django.db.backends.sqlite3',
@@ -181,9 +181,16 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 STATIC_URL = "/static/"
 
 # Default settings
-BOOTSTRAP3 = {
+# The URL to the jQuery JavaScript file
+BOOTSTRAP3 ={
+    "css_url": {
+        "url": os.path.join(STATIC_URL, "bank", "django-bootstrap","bootstrap","css", "bootstrap.css"),
 
-    # The URL to the jQuery JavaScript file
+    },
+    "javascript_url": {
+        "url": os.path.join(STATIC_URL, "bank", "django-bootstrap","bootstrap", "js","bootstrap.js"),
+
+    },
     'jquery_url': os.path.join(STATIC_URL, "bank", "django-bootstrap", "jquery.js"),
     'base_url': os.path.join(STATIC_URL, "bank", "django-bootstrap", "bootstrap/")
 }

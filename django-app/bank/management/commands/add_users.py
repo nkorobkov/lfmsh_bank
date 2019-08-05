@@ -11,7 +11,7 @@ from bank.constants import UserGroups, BANKIR_USERNAME, TransactionTypeEnum, Mon
     INITIAL_MONEY_DESC
 from bank.models import Account, TransactionType, MoneyType, Transaction, Money
 from main.settings import BASE_DIR
-
+from django.db.utils import IntegrityError
 
 class Command(BaseCommand):
     args = 'No args'
@@ -37,8 +37,8 @@ class Command(BaseCommand):
         if self.flush_all_users():
 
             self.add_bank_user()
-            self.add_users(Command.STUDENT_DATA, Command.STUDENT_DATA_OUT, UserGroups.student.value)
             self.add_users(Command.STAFF_DATA, Command.STAFF_DATA_OUT, UserGroups.staff.value)
+            self.add_users(Command.STUDENT_DATA, Command.STUDENT_DATA_OUT, UserGroups.student.value)
             self.add_initial_money(UserGroups.student.value)
 
     @staticmethod
@@ -75,15 +75,24 @@ class Command(BaseCommand):
             else:
                 grade = 0
 
-            login = Command.generate_login(first_name, last_name, middle_name)
             password = Command.generate_password(8)
+            user_created = False
+            need_unique_login = False 
 
-            new_u = User.objects.create_user(first_name=first_name, last_name=last_name, username=login,
-                                             password=password)
-            new_u.save()
-            group.user_set.add(new_u)
-            new_a = Account(user=new_u, middle_name=middle_name, grade=grade, party=party)
-            new_a.save()
+            while not user_created:
+                try:
+                    login = Command.generate_login(first_name, last_name, middle_name, need_unique_login)
+    
+                    new_u = User.objects.create_user(first_name=first_name, last_name=last_name, username=login,
+                                                 password=password)
+                    new_u.save()
+                    group.user_set.add(new_u)
+                    new_a = Account(user=new_u, middle_name=middle_name, grade=grade, party=party)
+                    new_a.save()
+                    user_created = True
+                except IntegrityError as e:
+                    need_unique_login = True
+
 
             out.write('\n\n' + '-' * 20 + '\n')
             out.write(' '.join(person) + '\n')
@@ -130,12 +139,16 @@ class Command(BaseCommand):
         return s
 
     @staticmethod
-    def generate_login(first_name, last_name, middle_name=''):
-        middle_name_repr = translit(middle_name[0], 'ru',reversed=True) if  middle_name  else ''
-        login = translit(first_name, 'ru', reversed=True) +'.'+ middle_name_repr +'.'+ translit(last_name, 'ru',
-                                                                                                  reversed=True)
-        login = ''.join(filter(lambda x: x.isalpha() or x ==  '.', login))
-        return login.lower()
+    def generate_login(first_name, last_name, middle_name='', need_unique=False):
+        middle_name_repr = '.'+translit(middle_name[0], 'ru',reversed=True).lower()+'.' if  middle_name  else ''
+
+        first_name_processed = ''.join(filter(str.isalpha, translit(first_name, 'ru', reversed=True))).lower()
+        last_name_processed = ''.join(filter(str.isalpha, translit(last_name, 'ru', reversed=True))).lower()
+
+        if need_unique:
+            return last_name_processed+middle_name_repr+first_name_processed
+        else:
+            return last_name_processed
 
 
     @staticmethod

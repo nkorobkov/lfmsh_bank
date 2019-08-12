@@ -17,15 +17,15 @@
   {
     "name": "seminar_2",
     "readable_name": "Второй блок семинаров",
-    "start_time": "11:55:00",
-    "end_time": "12:30:00",
+    "start_time": "12:15:00",
+    "end_time": "12:45:00",
     "related_attendance_types": ["seminar_attend","seminar_pass"]
 
   },
   {
     "name": "seminar_3",
     "readable_name": "Третий блок семинаров",
-    "start_time": "12:31:00",
+    "start_time": "12:51:00",
     "end_time": "13:30:00",
     "related_attendance_types": ["seminar_attend","seminar_pass"]
 
@@ -41,15 +41,15 @@
   {
     "name": "fac_1",
     "readable_name": "Первый блок Факультативов",
-    "start_time": "11:30:00",
-    "end_time": "12:25:00",
+    "start_time": "11:15:00",
+    "end_time": "12:15:00",
     "related_attendance_types": ["fac_attend"]
 
   },
   {
     "name": "fac_2",
     "readable_name": "Второй блок Факультативов",
-    "start_time": "12:30:00",
+    "start_time": "12:25:00",
     "end_time": "13:25:00",
     "related_attendance_types": ["fac_attend"]
 

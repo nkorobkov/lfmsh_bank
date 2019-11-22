@@ -2,7 +2,7 @@
 
 Bank is a web application that holds individual accounts of more than 130 users with different permissions. It allows it’s users to issue and transfer money and live within the virtual economic system in the [Summer Physical and Mathematical School](https://ipfran.ru/training/summer-school).
 
-More detailed description of the project, architecture and technologies used can be found on [Bank Project Description Page] (https://nkorobkov.github.io/projects/bank)
+More detailed description of the project, architecture and technologies used can be found on [Bank Project Description Page](https://nkorobkov.github.io/projects/bank)
 
 ## Installation and running
 

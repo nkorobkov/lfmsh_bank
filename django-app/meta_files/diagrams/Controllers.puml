@@ -1,6 +1,13 @@
 @startuml
 title: Controllers
 
+
+skinparam class {
+	BackgroundColor #f5f5f5
+	ArrowColor #8d7edc
+	BorderColor #8d7edc
+}
+
 class TransactionService{
 TransactionControllerFactory transaction_controller_factory
 + update(Transaction transaction, Map new_creation_map)
@@ -11,7 +18,7 @@ TransactionControllerFactory transaction_controller_factory
 }
 
 class TransactionControllerFactory{
-- {static} Map<TransactionType, TransactionController> registred_transaction_controllers
+-  Map<TransactionType, TransactionController> registred_transaction_controllers
 
 + TransactionController get_controller_for(TransactionType)
 }

@@ -1,59 +1,66 @@
 @startuml
 
+skinparam class {
+	BackgroundColor #f5f5f5
+	ArrowColor #8d7edc
+	BorderColor #8d7edc
+}
+
 class Transaction  << (M,lightgreen) >>{
 
-User creator
-List<Money>
-List<Attendance>
-Map creation_map
-TransactionType type
+- User creator
+- Map creation_map
+- TransactionType type
 
-~ create(List<Money>, List<Attendance>, TransactionType type, ...)
-~ revert()
-~ apply()
++ new_transaction(User creator, TransactionType type, Map creation_map, Transaction update_of)
++ process()
++ decline()
++ substitute()
 
 }
 
 Class Money  << (M,lightgreen) >> {
-MoneyType type
+- MoneyType type
+- Transaction related_transaction
+
++ new_money(receiver, val, type, desc, trans)
+~ apply()
+~ undo()
 }
 
 Class Attendance  << (M,lightgreen) >> {
-AttendanceType type
-AttendanceBlock block
+- AttendanceType type
+- AttendanceBlock block
+- Transaction related_transaction
+
++ new_attendance(receiver, val, type, desc, date, trans)
+~ apply()
+~ undo()
+~ is_valid()
 }
 
 
 class AtomicTransaction{
- AtomicTransactionState status
- User receiver
- Date date_created
- Date date_updated
- Double value
- String description
+ ~ AtomicTransactionState state
+ ~ User receiver
+ ~ Date date_created
+ ~ Date date_updated
+ ~ Double value
+ ~ String description
+ # Boolean counted
 }
 
-ENUM AttendanceBlock{
-__values__
-LEC
-FAC1
-FAC2
-SEM1
-SEM2
-SEM3
-__fields__
-List<AttendanceBlock> conflictsWith
-__methods__
-conflicts(AttendanceBlock)
+class AttendanceBlock  << (M,orange) >>{
+
+-  List<AttendanceBlock> conflictsWith
+
++ is_in_conflict_with(AttendanceBlock x)
 }
 
 class TransactionType << (M,orange) >> {
-String id
-List<MoneyType>
-List<AttendanceType>
 }
 
-class AtomicType{
+class AbstractType{
 String group_general
 String group_local
 String id
@@ -63,11 +70,11 @@ String readable_group_local
 }
 
 class AttendanceType << (M,orange) >> {
-
+TransactionType related_type
 }
 
 class MoneyType << (M,orange) >> {
-
+TransactionType related_type
 }
 
 
@@ -77,26 +84,45 @@ List<AtomicTransactionState> possible_transitions
 
 }
 
+class User << (D,darkgreen) >>{
++ String first_name
++ String last_name
+}
 
+
+class Account << (M, green) >>{
++ int grade
++ int party
+~ float balance
+- User user
+}
 
 Money -up-|> AtomicTransaction
 Attendance -up-|> AtomicTransaction
 
 
-MoneyType -up-|> AtomicType
-AttendanceType -up-|> AtomicType
+MoneyType -up-|> AbstractType
+AttendanceType -up-|> AbstractType
+AttendanceBlock -up-|> AbstractType
+TransactionType -up-|> AbstractType
 
-MoneyType --* Money
-AttendanceType --* Attendance
-AtomicTransactionState --* AtomicTransaction
+
+Money --* MoneyType
+Attendance --* AttendanceType
+Attendance --* AttendanceBlock
+AtomicTransaction --* AtomicTransactionState
 
 Money --* Transaction
 Attendance --* Transaction
-TransactionType --* Transaction
+Transaction --* TransactionType
 
 
 MoneyType --* TransactionType
 AttendanceType --* TransactionType
+
+User --* Account
+User --* Transaction
+User --* AtomicTransaction
 
 
 @enduml

@@ -1,6 +1,8 @@
-## LFMSH Bank 2.0
-Second version of web application to hold economics game in [Summer Physical and Mathematical School](http://lfmsh.ru/)  
-First edition can be found [here](https://github.com/insolia/lfmsh_bank)  
+## Bank SPMS
+
+Bank is a web application that holds individual accounts of more than 130 users with different permissions. It allows it’s users to issue and transfer money and live within the virtual economic system in the [Summer Physical and Mathematical School](https://ipfran.ru/training/summer-school).
+
+More detailed description of the project, architecture and technologies used can be found on [Bank Project Description Page] (https://nkorobkov.github.io/projects/bank)
 
 ## Installation and running
 
@@ -29,6 +31,7 @@ It will also create one user with extra privileges called bank_manager.
 ### Building with docker
 
 build image for local hosting with
+
 `
 docker build -t django-bank:0.01  -f ./docker/django-app/Dockerfile .
 `
@@ -42,7 +45,14 @@ Alternatively, if image is already constructed, you can log in into running cont
 `docker exec -it <YOUR_CONTAINER_ID> /bin/bash` and exec all the commands needed to populate database from above. 
 All the changes in db would be lost after container restart unless you commit them to image. 
 
+### Docker Compose
 Alternatively, there is a possibility to launch lfmsh bank in production like mode with real server and db. 
+
+`docker-compose.yml` file contains configuration for deployment of following schema:
+
+![](https://nkorobkov.github.io/assets/bank/deployment-pic.png)
+
+
 Run `docker-compose up` to see the application stars up with postgres db, nginx server and django app in separate containers.   
 All postgress data would be stored in `docker/postgres/volumes` and would persist container restart.   
 After first startup, you  will still need to populate tables manually. Log in to uwsgi container   
@@ -53,3 +63,8 @@ In current configuration static data is not stored on github. So, to download it
 Run `./django-app/manage.py collectstatic` from host machine, and nginx container will gain access to this  data automatically. 
 
 After this two operations (static collection and db population) you'll be able  to toggle bank on and off with single `docker-compose up/down` command.
+
+
+### History
+
+This is a second version of Bank application. First version was developed in 2016 and contained in another repo [here](https://github.com/insolia/lfmsh_bank).  

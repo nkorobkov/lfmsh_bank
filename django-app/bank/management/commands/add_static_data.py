@@ -6,7 +6,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management import BaseCommand
 
 from bank.constants import UserGroups, Actions, PERMISSION_RESPONSIBLE_GROUPS
-from bank.models import TransactionState, MoneyType, AttendanceType, TransactionType, AttendanceBlock
+from bank.models.TransactionType import TransactionType
+from bank.models.AttendanceBlock import AttendanceBlock
+from bank.models.TransactionState import TransactionState
+from bank.models.AttendanceType import AttendanceType
+from bank.models.MoneyType import MoneyType
+
+
+
 from main.settings import BASE_DIR
 
 

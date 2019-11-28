@@ -7,7 +7,11 @@ from bank.constants import MoneyTypeEnum, TransactionTypeEnum
 from bank.constants.BankAPIExeptions import P2PIllegalAmount, SelfMoneyTransfer, EmptyDescriptionError, UserDoesNotExist
 from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.forms import P2PKernelForm
-from bank.models import Transaction, MoneyType, Money, TransactionType
+from bank.models.Money import Money
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
+from bank.models.TransactionType import TransactionType
+
 
 
 class P2PTransactionController(TransactionController):

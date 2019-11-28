@@ -9,7 +9,12 @@ from transliterate import translit
 
 from bank.constants import UserGroups, BANKIR_USERNAME, TransactionTypeEnum, MoneyTypeEnum, INITIAL_MONEY, \
     INITIAL_MONEY_DESC
-from bank.models import Account, TransactionType, MoneyType, Transaction, Money
+from bank.models.Money import Money
+from bank.models.TransactionType import TransactionType
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
+from bank.models.Account import Account
+
 from main.settings import BASE_DIR
 from django.db.utils import IntegrityError
 

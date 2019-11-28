@@ -1,11 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models import CASCADE
 from django.utils.timezone import now
 
-from bank.constants import *
-from bank.models import Transaction
-from . import TransactionState
 
 
 class AtomicTransaction(models.Model):

@@ -3,8 +3,10 @@ from django.core.management import BaseCommand
 
 from bank.constants import UserGroups, BANKIR_USERNAME, TransactionTypeEnum, MoneyTypeEnum
 from bank.helper_functions import get_session_day, get_tax_from_session_day
-from bank.models import TransactionType, Transaction, MoneyType, Money
-
+from bank.models.Money import Money
+from bank.models.TransactionType import TransactionType
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
 
 class Command(BaseCommand):
     args = 'No args'

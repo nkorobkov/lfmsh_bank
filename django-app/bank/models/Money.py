@@ -4,7 +4,8 @@ from django.db.models import CASCADE
 from django.utils.timezone import now
 
 from bank.constants import SIGN
-from bank.models import MoneyType, Transaction
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
 from .AtomicTransaction import AtomicTransaction
 
 

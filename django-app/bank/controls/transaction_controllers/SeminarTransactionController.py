@@ -4,7 +4,12 @@ from django.forms import formset_factory
 from bank.constants import UserGroups, MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
 from bank.forms import SeminarKernelForm, SeminarFormset
-from bank.models import Transaction, Money, MoneyType, TransactionType, Attendance, AttendanceType
+from bank.models.Money import Money
+from bank.models.TransactionType import TransactionType
+from bank.models.Attendance import Attendance
+from bank.models.AttendanceType import AttendanceType
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
 
 
 class SeminarTransactionController(TableTransactionController):

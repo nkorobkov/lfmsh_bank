@@ -1,4 +1,4 @@
-from bank.models import AttendanceType
+from bank.models.AttendanceType import AttendanceType
 from bank.models.AbstractType import AbstractType
 from django.db import models
 

@@ -4,8 +4,12 @@ from bank.constants import TransactionTypeEnum, MoneyTypeEnum, ACTIVITY_REWARD, 
     AttendanceTypeEnum
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
 from bank.forms import ActivityKernelForm
-from bank.models import Transaction, TransactionType, MoneyType, Money, Attendance, AttendanceType
-
+from bank.models.Money import Money
+from bank.models.TransactionType import TransactionType
+from bank.models.Attendance import Attendance
+from bank.models.AttendanceType import AttendanceType
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
 
 class ActivityTransactionController(TableTransactionController):
     template_url = 'bank/add/add_activity.html'

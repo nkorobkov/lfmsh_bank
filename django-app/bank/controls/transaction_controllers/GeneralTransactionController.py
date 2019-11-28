@@ -1,9 +1,12 @@
 from django.contrib.auth.models import User
 
-from bank.constants import UserGroups, MoneyTypeEnum, TransactionTypeEnum
+from bank.constants import MoneyTypeEnum, TransactionTypeEnum
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
 from bank.forms import GeneralMoneyKernelForm
-from bank.models import Transaction, Money, MoneyType, TransactionType
+from bank.models.Money import Money
+from bank.models.TransactionType import TransactionType
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
 
 
 class GeneralTransactionController(TableTransactionController):

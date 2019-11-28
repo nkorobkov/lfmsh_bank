@@ -5,7 +5,13 @@ import logging
 from bank.constants import UserGroups, Actions, States, AttendanceTypeEnum, OBL_STUDY_NEEDED, BALANCE_DANGER, \
     BALANCE_WARNING
 from bank.helper_functions import get_perm_name
-from bank.models import Account, Transaction, Attendance, AttendanceType
+
+from bank.models.Attendance import Attendance
+from bank.models.AttendanceType import AttendanceType
+from bank.models.Transaction import Transaction
+from bank.models.Account import Account
+
+
 import statistics
 
 log = logging.getLogger("unexpected_things_logger")

@@ -11,7 +11,9 @@ from bank.helper_functions import get_perm_name, get_students_markup
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 
-from bank.models import *
+from bank.models.Money import Money
+from bank.models.TransactionType import TransactionType
+from bank.models.Transaction import Transaction
 from main.settings import MEDIA_ROOT
 from .forms import *
 from django_tables2 import RequestConfig

@@ -13,7 +13,9 @@ from bank.constants.BankAPIExeptions import *
 from bank.controls.TransactionService import TransactionService
 from bank.controls.stats_controller import get_counters_of_user_who_is
 from bank.helper_functions import get_perm_name, TransactionTypeEnum
-from bank.models import Money, Attendance, TransactionType, Account
+from bank.models.TransactionType import TransactionType
+from bank.models.Money import Money
+from bank.models.Attendance import Attendance
 
 log = logging.getLogger("bank_api_log")
 

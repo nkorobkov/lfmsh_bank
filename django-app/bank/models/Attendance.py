@@ -3,7 +3,8 @@ from django.db import models
 from django.db.models import CASCADE, SET_NULL
 from django.utils.timezone import now
 
-from bank.models import Transaction, AttendanceBlock
+from bank.models.AttendanceBlock import AttendanceBlock
+from bank.models.Transaction import Transaction
 from .AtomicTransaction import AtomicTransaction
 from .AttendanceType import AttendanceType
 

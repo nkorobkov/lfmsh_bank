@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
-from django.forms import formset_factory
 
 from bank.constants import TransactionTypeEnum, AttendanceTypeEnum, AttendanceBlockEnum, WORKOUT_BUDGET, MoneyTypeEnum
 from bank.controls.transaction_controllers.TableTransactionController import TableTransactionController
-from bank.forms import FacAttendForm, WorkoutForm
-from bank.models import Transaction, TransactionType, Attendance, AttendanceType, Money, MoneyType
-
+from bank.forms import WorkoutForm
+from bank.models.TransactionType import TransactionType
+from bank.models.Money import Money
+from bank.models.Attendance import Attendance
+from bank.models.AttendanceType import AttendanceType
+from bank.models.MoneyType import MoneyType
+from bank.models.Transaction import Transaction
 
 class WorkoutTransactionController(TableTransactionController):
     template_url = 'bank/add/add_workout.html'

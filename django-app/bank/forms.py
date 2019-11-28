@@ -11,7 +11,9 @@ from transliterate.utils import _
 
 from bank.constants import UserGroups, AttendanceTypeEnum
 from bank.constants.TransactionTypeEnum import TransactionTypeEnum
-from bank.models import MoneyType, AttendanceBlock, Attendance
+from bank.models.MoneyType import MoneyType
+from bank.models.AttendanceBlock import AttendanceBlock
+from bank.models.Attendance import Attendance
 
 
 # -*- coding: utf-8 -*-

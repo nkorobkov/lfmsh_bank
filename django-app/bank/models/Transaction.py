@@ -5,8 +5,8 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 
 from bank.constants import States, SIGN
-from bank.models import TransactionType, TransactionState
-
+from bank.models.TransactionState import TransactionState
+from bank.models.TransactionType import TransactionType
 
 class Transaction(models.Model):
     creator = models.ForeignKey(User, related_name='created_transactions', on_delete=models.CASCADE, null=False)

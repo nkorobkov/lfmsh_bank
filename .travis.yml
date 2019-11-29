@@ -4,5 +4,9 @@ python:
 cache: pip
 install:
   - pip install -r requirements.txt
+before_script:
+  - python3 django-app/manage.py makemigrations
+  - python3 django-app/manage.py makemigrations bank
+  - python3 django-app/manage.py migrate
 script:
   - python3 django-app/manage.py test

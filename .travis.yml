@@ -5,4 +5,4 @@ cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - python3 manage.py test
+  - python3 django-app/manage.py test

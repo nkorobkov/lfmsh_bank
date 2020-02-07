@@ -33,18 +33,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.add_static_data()
 
-    def add_static_data(self):
+    def add_static_data(self, silent=False):
         self.add_transaction_states()
-        self.add_atomic_types(MoneyType, Command.MONEY_TYPES_DATA)
-        self.add_atomic_types(AttendanceType, Command.ATTENDANCE_TYPES_DATA)
-        self.add_transaction_types()
+        self.add_atomic_types(MoneyType, Command.MONEY_TYPES_DATA, silent)
+        self.add_atomic_types(AttendanceType, Command.ATTENDANCE_TYPES_DATA, silent)
+        self.add_transaction_types(silent)
         self.add_user_groups()
 
-        self.add_transaction_permissions()
+        self.add_transaction_permissions(silent)
         self.add_groups_permissions()
-        self.add_permissions_to_groups()
+        self.add_permissions_to_groups(silent)
 
-        self.add_attendance_blocks()
+        self.add_attendance_blocks(silent)
 
     @staticmethod
     def add_transaction_states():
@@ -64,7 +64,7 @@ class Command(BaseCommand):
             s.save()
 
     @staticmethod
-    def add_atomic_types(model, path):
+    def add_atomic_types(model, path, silent=False):
 
         types = Command.read_file_as_json(path)
 
@@ -80,7 +80,7 @@ class Command(BaseCommand):
                     if type_name == 'readable_local':
                         continue
                     if model.objects.filter(name=type_name).exists():
-                        print('changing atomic type', type_name)
+                        if not silent: print('changing atomic type', type_name)
                         atomic_type = model.objects.get(name=type_name)
                         setattr(atomic_type, 'group_general', general_group_name)
                         setattr(atomic_type, 'group_local', local_group_name)
@@ -88,7 +88,7 @@ class Command(BaseCommand):
                         setattr(atomic_type, 'readable_group_general', general_group_readable_name)
                         setattr(atomic_type, 'readable_name', type_readable_name)
                     else:
-                        print('creating atomic type', type_name)
+                        if not silent: print('creating atomic type', type_name)
                         atomic_type = model.objects.create(group_general=general_group_name,
                                                            group_local=local_group_name,
                                                            readable_group_local=local_group_readable_name,
@@ -97,14 +97,14 @@ class Command(BaseCommand):
                     atomic_type.save()
 
     @staticmethod
-    def add_transaction_types():
+    def add_transaction_types(silent):
         types = Command.read_file_as_json(Command.TRANSACTION_TYPES_DATA)
 
         for trans_type in types:
             new_type, created = TransactionType.objects.get_or_create(name=trans_type['name'],
                                                                       readable_name=trans_type['readable_name'])
             new_type.save()
-            print(trans_type)
+            if not silent: print(trans_type)
             Command.add_type_to_atomic_type(trans_type['money'], new_type, MoneyType)
             Command.add_type_to_atomic_type(trans_type['attendance'], new_type, AttendanceType)
 
@@ -114,13 +114,13 @@ class Command(BaseCommand):
             Group.objects.get_or_create(name=group.value)
 
     @staticmethod
-    def add_transaction_permissions():
+    def add_transaction_permissions(silent=False):
         per_trans_type_permissions = [Actions.create, Actions.decline, Actions.process, Actions.update]
         types = Command.read_file_as_json(Command.TRANSACTION_TYPES_DATA)
         for trans_type in types:
             for perm in per_trans_type_permissions:
                 name = Command.make_perm_name(perm.value, 'self', trans_type['name'])
-                print(name)
+                if not silent: print(name)
                 content_type = ContentType.objects.get_for_model(TransactionType)
                 new_perm = Permission.objects.get_or_create(codename=name, name=name, content_type=content_type)[0]
                 new_perm.save()
@@ -146,7 +146,7 @@ class Command(BaseCommand):
                 new_perm.save()
 
     @staticmethod
-    def add_permissions_to_groups():
+    def add_permissions_to_groups(silent):
         groups = Command.read_file_as_json(Command.GROUPS_DATA)
         for group in groups:
             name = group['name']
@@ -157,7 +157,7 @@ class Command(BaseCommand):
             for action, per_action_perm in permissions.items():
                 for target, perm_list in per_action_perm.items():
                     for perm in perm_list:
-                        print(Command.make_perm_name(action, target, perm))
+                        if not silent: print(Command.make_perm_name(action, target, perm))
                         name = Command.make_perm_name(action, target, perm)
                         p = Permission.objects.get_or_create(name=name, codename=name, content_type=content_type)[0]
                         group_model.permissions.add(p)
@@ -165,7 +165,7 @@ class Command(BaseCommand):
             group_model.save()
 
     @staticmethod
-    def add_attendance_blocks():
+    def add_attendance_blocks(silent):
         blocks_data = Command.read_file_as_json(Command.BLOCKS_DATA)
         for block_data in blocks_data:
 
@@ -183,7 +183,7 @@ class Command(BaseCommand):
                     block.related_attendance_types.add(att_type)
                 block.save()
             else:
-                print('creating att block', block_data['name'])
+                if not silent: print('creating att block', block_data['name'])
                 block, created = AttendanceBlock.objects.get_or_create(name=block_data['name'],
                                                                        readable_name=block_data['readable_name'],
                                                                        start_time=Command.time_from_string(

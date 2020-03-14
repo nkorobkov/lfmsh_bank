@@ -30,6 +30,13 @@ It will also create one user with extra privileges called bank_manager.
 - run test server  `  ./manage.py runserver`
 -  go to  <http://127.0.0.1:8000/bank>  and enter credentials printed in console to test app
 
+### Local testing
+
+```bash
+cd django-app
+python ./manage.py test
+```
+
 ### Building with docker
 
 build image for local hosting with

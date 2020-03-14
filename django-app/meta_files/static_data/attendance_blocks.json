@@ -12,7 +12,6 @@
     "start_time": "11:15:00",
     "end_time": "11:50:00",
     "related_attendance_types": ["seminar_attend","seminar_pass"]
-
   },
   {
     "name": "seminar_2",

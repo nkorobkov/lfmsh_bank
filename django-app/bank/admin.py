@@ -21,7 +21,6 @@ admin.site.register(TransactionType)
 admin.site.register(TransactionState)
 admin.site.register(AttendanceBlock)
 
-
 admin.site.register(AttendanceType)
 admin.site.register(MoneyType)
 admin.site.register(Money)

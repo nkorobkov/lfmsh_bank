@@ -52,10 +52,9 @@ class Command(BaseCommand):
   @staticmethod
   def flush_all_users():
 
-    a = input(
-        'this command will delete all existing users'
-        'and transactions info and create new ones'
-        'are you sure you want to continue ? (print yes to proceed)')
+    a = input('this command will delete all existing users'
+              'and transactions info and create new ones'
+              'are you sure you want to continue ? (print yes to proceed)')
     if a == 'yes':
       Account.objects.all().delete()
       User.objects.all().delete()

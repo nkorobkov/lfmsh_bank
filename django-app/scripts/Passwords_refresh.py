@@ -8,12 +8,11 @@ import string
 
 def get_pd(leng):
 
-    a = random.sample(string.printable[:62], leng)
-    s = ''
-    for c in a:
-        s = s+c
-    return s
-
+  a = random.sample(string.printable[:62], leng)
+  s = ''
+  for c in a:
+    s = s + c
+  return s
 
 
 p_out = open('meta_files/new_passwords.txt', 'w')
@@ -31,15 +30,13 @@ for u in User.objects.filter(groups__name='pioner'):
     p_out.write('\n ' + '--'*30 +' \n\n')
 '''
 for u in User.objects.filter(groups__name='pedsostav'):
-    
-    pd = get_pd(12)
-    u.set_password(pd)
-    u.save()
 
-    print(('login: ' + u.username + ' password: ' + pd))
-    info =  '\n' + 'login: ' +  u.username + ' password: ' + pd
+  pd = get_pd(12)
+  u.set_password(pd)
+  u.save()
 
-    p_out.write(info.encode('utf-8'))
-    p_out.write('\n ' + '--'*30 +' \n\n')
+  print(('login: ' + u.username + ' password: ' + pd))
+  info = '\n' + 'login: ' + u.username + ' password: ' + pd
 
-
+  p_out.write(info.encode('utf-8'))
+  p_out.write('\n ' + '--' * 30 + ' \n\n')

@@ -3,7 +3,6 @@ __author__ = 'Insolia'
 
 from django.contrib.auth.models import User
 
-
 #p_out = open('meta_files/new_passwords.txt', 'w')
 '''
 for u in User.objects.filter(groups__name='pioner'):
@@ -19,14 +18,11 @@ for u in User.objects.filter(groups__name='pioner'):
     p_out.write('\n ' + '--'*30 +' \n\n')
 '''
 for u in User.objects.filter(groups__name='student'):
-    
-    a = u.account
-    g = a.party
-    c = a.grade
-    a.party = c
-    a.grade = g
-    a.save()
-    u.save()
 
-
-
+  a = u.account
+  g = a.party
+  c = a.grade
+  a.party = c
+  a.grade = g
+  a.save()
+  u.save()

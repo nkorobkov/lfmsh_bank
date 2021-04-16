@@ -1,5 +1,5 @@
 # coding=utf-8
-from bank.constants.UserGroups import UserGroups
+from bank.constants.user_groups import UserGroups
 import datetime
 
 __author__ = 'Insolia'

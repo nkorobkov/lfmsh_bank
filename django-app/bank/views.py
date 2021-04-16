@@ -31,7 +31,7 @@ def index(request):
     transaction_types = TransactionType.objects.all()
     transaction_type_info = [
         {"name": t.name, "readable_name": t.readable_name,
-         "can_create": request.user.has_perm(get_perm_name(Actions.create.value, "self", t.name))} for t in
+         "can_create": request.user.has_perm(get_perm_name(Actions.CREATE.value, "self", t.name))} for t in
         transaction_types]
     counters = get_counters_of_user_who_is(request.user, request.user, 'self')
     return render(request, 'bank/indexx.html',
@@ -41,7 +41,7 @@ def index(request):
 
 @login_required
 def add_transaction(request, type_name, update_of=None, from_template=None):
-    if not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
+    if not request.user.has_perm(get_perm_name(Actions.CREATE.value, 'self', type_name)):
         log.warning(request.user.get_username() + ' access denied on add trans ' + type_name)
         return HttpResponseForbidden()
 
@@ -74,7 +74,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
             created_transaction = controller.get_transaction_from_form_data(formset.cleaned_data, update_of)
             log.info("Valid add transaction from {}, update={}, transaction={}".format(request.user.account.long_name(),
                                                                                        update_of, created_transaction))
-            if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
+            if request.user.has_perm(get_perm_name(Actions.PROCESS.value, 'self', type_name)):
                 # process transaction if have rights to do so
                 created_transaction.process()  # update should be inside.
             return render(request, 'bank/add/success.html', {'transaction': created_transaction,
@@ -126,7 +126,7 @@ def get_transaction_HTML(request):
     transaction = Transaction.objects.get(id=transaction_id)  # if there is no transaction it fails, but it's ok.
 
     group = 'self' if request.user == transaction.creator else get_used_user_group(transaction.creator)
-    if not request.user.has_perm(get_perm_name(Actions.see.value, group, 'created_transactions')):
+    if not request.user.has_perm(get_perm_name(Actions.SEE.value, group, 'created_transactions')):
         return HttpResponseForbidden("У вас нет прав на просмотр этой транзакции")
 
     html = loader.render_to_string('bank/transaction_lists/transaction.html',
@@ -142,7 +142,7 @@ def students(request):
     render_dict = get_students_markup(students_data)
     render_dict.update({'students': students_data})
     render_dict.update({'can_see_balance': request.user.has_perm(
-        get_perm_name(Actions.see.value, UserGroups.student.value, 'balance'))})
+        get_perm_name(Actions.SEE.value, UserGroups.student.value, 'balance'))})
 
     return render(request, 'bank/user_lists/students.html', render_dict)
 
@@ -152,7 +152,7 @@ def staff(request):
     staff_data = User.objects.filter(groups__name__contains=UserGroups.staff.value).order_by('last_name')
     render_dict = {'staff': staff_data}
     render_dict.update({'can_see_balance': request.user.has_perm(
-        get_perm_name(Actions.see.value, UserGroups.staff.value, 'balance'))})
+        get_perm_name(Actions.SEE.value, UserGroups.staff.value, 'balance'))})
     return render(request, 'bank/user_lists/staff.html', render_dict)
 
 
@@ -162,8 +162,8 @@ def user(request, username):
     host_group = get_used_user_group(host)
     render_dict = {'host': host}
     render_dict.update(
-        {'can_see_balance': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'balance')),
-         'can_see_counters': request.user.has_perm(get_perm_name(Actions.see.value, host_group.name, 'attendance'))})
+        {'can_see_balance': request.user.has_perm(get_perm_name(Actions.SEE.value, host_group.name, 'balance')),
+         'can_see_counters': request.user.has_perm(get_perm_name(Actions.SEE.value, host_group.name, 'attendance'))})
     render_dict.update(_get_transactions_of_user_who_is(request.user, host, host_group.name))
     render_dict.update({'counters': get_counters_of_user_who_is(request.user, host, host_group)})
     avatar_url = "bank/avatars/{} {}.jpg".format(host.last_name, host.first_name) if USE_PICS else DEFAULT_PIC_PATH
@@ -173,9 +173,9 @@ def user(request, username):
 
 def manage(request, user_group, to_decline=None, to_process=None):
     can_process = request.user.has_perm(
-        get_perm_name(Actions.process.value, user_group, 'created_transactions'))
+        get_perm_name(Actions.PROCESS.value, user_group, 'created_transactions'))
     can_decline = request.user.has_perm(
-        get_perm_name(Actions.decline.value, user_group, 'created_transactions'))
+        get_perm_name(Actions.DECLINE.value, user_group, 'created_transactions'))
     if not (can_decline or can_process):
         return HttpResponseForbidden()
 
@@ -200,7 +200,7 @@ def manage(request, user_group, to_decline=None, to_process=None):
     return render(request, 'bank/transaction_lists/manage.html', render_dict)
 
 
-@permission_required(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions"),
+@permission_required(get_perm_name(Actions.SEE.value, UserGroups.staff.value, "created_transactions"),
                      login_url='bank:index')
 def monitor_table(request):
     table = TransTable(Transaction.objects.all(), order_by='-date_created')
@@ -209,7 +209,7 @@ def monitor_table(request):
     return render(request, 'bank/monitor_table.html', {'trans': table})
 
 
-@permission_required(get_perm_name(Actions.upload.value, "self", "files"), login_url='bank:index')
+@permission_required(get_perm_name(Actions.UPLOAD.value, "self", "files"), login_url='bank:index')
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -251,7 +251,7 @@ def _get_transactions_of_user_who_is(user, target_user, group):
     created_transactions = []
     received_money = []
     received_counters = []
-    if user.has_perm(get_perm_name(Actions.see.value, group, 'created_transactions')):
+    if user.has_perm(get_perm_name(Actions.SEE.value, group, 'created_transactions')):
         for trans in Transaction.objects.filter(creator=target_user).order_by('-creation_timestamp').all():
             trans_info = {'transaction': trans}
             if group == 'self':
@@ -259,18 +259,18 @@ def _get_transactions_of_user_who_is(user, target_user, group):
             else:
                 target_transaction_identifier = 'created_transactions'
             trans_info.update(
-                {'update': user.has_perm(get_perm_name(Actions.update.value, group,
+                {'update': user.has_perm(get_perm_name(Actions.UPDATE.value, group,
                                                        target_transaction_identifier)) and trans.state.possible_transitions.filter(
                     name=States.substituted.value).exists()})
             trans_info.update(
-                {'decline': user.has_perm(get_perm_name(Actions.decline.value, group,
+                {'decline': user.has_perm(get_perm_name(Actions.DECLINE.value, group,
                                                         target_transaction_identifier)) and trans.state.possible_transitions.filter(
                     name=States.declined.value).exists()})
             trans_info.update(
-                {'create': user.has_perm(get_perm_name(Actions.create.value, group, target_transaction_identifier))})
+                {'create': user.has_perm(get_perm_name(Actions.CREATE.value, group, target_transaction_identifier))})
             created_transactions.append(trans_info)
 
-    if user.has_perm(get_perm_name(Actions.see.value, group, 'received_transactions')):
+    if user.has_perm(get_perm_name(Actions.SEE.value, group, 'received_transactions')):
         received_money = Money.objects.filter(receiver=target_user).filter(counted=True).order_by('-creation_timestamp')
         received_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True).order_by(
             '-creation_timestamp')
@@ -285,14 +285,14 @@ def user_can_update(request, updated_transaction):
     if not updated_transaction.can_be_transitioned_to(States.substituted.value):
         return False
     if updated_transaction.creator.username == request.user.username:
-        return request.user.has_perm(get_perm_name(Actions.update.value, 'self', updated_transaction.type.name))
+        return request.user.has_perm(get_perm_name(Actions.UPDATE.value, 'self', updated_transaction.type.name))
     else:
         return False
 
 
 def user_can_use_template(request, template_trans):
     if template_trans.creator.username == request.user.username:
-        return request.user.has_perm(get_perm_name(Actions.create.value, 'self', template_trans.type.name))
+        return request.user.has_perm(get_perm_name(Actions.CREATE.value, 'self', template_trans.type.name))
     else:
         return False
 
@@ -303,14 +303,14 @@ def user_can_decline(request, updated_transaction):
             request.user.account.long_name() + " cant decline transaction because transaction can not be transitioned to declined state")
         return False
     if updated_transaction.creator.username == request.user.username:
-        if request.user.has_perm(get_perm_name(Actions.decline.value, 'self', updated_transaction.type.name)):
+        if request.user.has_perm(get_perm_name(Actions.DECLINE.value, 'self', updated_transaction.type.name)):
             return True
         log.warning(
             request.user.account.long_name() + " cant decline transaction because user do not have rights to decline self created " + updated_transaction.type.name)
 
     else:
 
-        if request.user.has_perm(get_perm_name(Actions.decline.value, updated_transaction.creator.groups.get(
+        if request.user.has_perm(get_perm_name(Actions.DECLINE.value, updated_transaction.creator.groups.get(
                 name__in=PERMISSION_RESPONSIBLE_GROUPS).name,
                                                'created_transactions')):
             return True

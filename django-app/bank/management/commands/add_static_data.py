@@ -126,7 +126,7 @@ class Command(BaseCommand):
   @staticmethod
   def add_transaction_permissions(silent=False):
     per_trans_type_permissions = [
-        Actions.create, Actions.decline, Actions.process, Actions.update
+        Actions.CREATE, Actions.DECLINE, Actions.PROCESS, Actions.UPDATE
     ]
     types = Command.read_file_as_json(Command.TRANSACTION_TYPES_DATA)
     for trans_type in types:
@@ -141,7 +141,7 @@ class Command(BaseCommand):
 
   @staticmethod
   def add_groups_permissions():
-    per_group_permissions = [Actions.see, Actions.process, Actions.decline]
+    per_group_permissions = [Actions.SEE, Actions.PROCESS, Actions.DECLINE]
     targets = PERMISSION_RESPONSIBLE_GROUPS + ['self']
     for target in targets:
       for perm in per_group_permissions:
@@ -156,7 +156,7 @@ class Command(BaseCommand):
               codename=name, name=name, content_type=content_type)[0]
           new_perm.save()
       for info in ['balance', 'attendance']:
-        name = Command.make_perm_name(Actions.see.value, target, info)
+        name = Command.make_perm_name(Actions.SEE.value, target, info)
         content_type = ContentType.objects.get_for_model(TransactionType)
         new_perm = Permission.objects.get_or_create(
             codename=name, name=name, content_type=content_type)[0]

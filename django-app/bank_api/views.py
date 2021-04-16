@@ -26,8 +26,8 @@ def get_user_transactions(request):
     user = request.user
     log.info('api user info call from {}'.format(user.account.long_name()))
 
-    if not (user.has_perm(get_perm_name(Actions.see.value, "self", "balance")) and user.has_perm(
-            get_perm_name(Actions.see.value, "self", "attendance"))):
+    if not (user.has_perm(get_perm_name(Actions.SEE.value, "self", "balance")) and user.has_perm(
+            get_perm_name(Actions.SEE.value, "self", "attendance"))):
         return HttpResponseForbidden("user do not have perm to see this info")
 
     data = {"balance": user.account.balance,
@@ -78,7 +78,7 @@ def make_transaction(request):
         raise CreatorDoNotMatchRequestOwner()
 
     # check user can create such transactions
-    if not request.user.has_perm(get_perm_name(Actions.create.value, 'self', type_name)):
+    if not request.user.has_perm(get_perm_name(Actions.CREATE.value, 'self', type_name)):
         log.warning(request.user.get_username() + ' access denied on add trans ' + type_name + 'through API')
         raise CantCreateThisType(type_name)
 
@@ -86,7 +86,7 @@ def make_transaction(request):
     controller = TransactionService.get_controller_for(type_name)
     transaction = controller.build_transaction_from_api_request(trans_data)
     # check if user can process this transaction
-    if request.user.has_perm(get_perm_name(Actions.process.value, 'self', type_name)):
+    if request.user.has_perm(get_perm_name(Actions.PROCESS.value, 'self', type_name)):
         # process transaction if have rights to do so
         transaction.process()
         # if can -- process, return success result.
@@ -118,7 +118,7 @@ def get_session(request):
 
 @csrf_exempt
 def get_students_money(request):
-    if not request.user.has_perm(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions")):
+    if not request.user.has_perm(get_perm_name(Actions.SEE.value, UserGroups.staff.value, "created_transactions")):
         return HttpResponseForbidden()
 
     return get_csv_for_model(Money, "money")
@@ -126,7 +126,7 @@ def get_students_money(request):
 
 @csrf_exempt
 def get_students_counters(request):
-    if not request.user.has_perm(get_perm_name(Actions.see.value, UserGroups.staff.value, "created_transactions")):
+    if not request.user.has_perm(get_perm_name(Actions.SEE.value, UserGroups.staff.value, "created_transactions")):
         return HttpResponseForbidden()
 
     return get_csv_for_model(Attendance, "counters")

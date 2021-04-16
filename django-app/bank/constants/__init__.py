@@ -1,9 +1,8 @@
 from .constants import *
-from .UserGroups import UserGroups
-from .Actions import Actions
-from .AttendanceTypeEnum import AttendanceTypeEnum
-from .AttendanceBlockEnum import AttendanceBlockEnum
-from .TransactionTypeEnum import TransactionTypeEnum
-from .MoneyTypeEnum import MoneyTypeEnum
-from .States import States
-
+from .user_groups import UserGroups
+from .actions import Actions
+from .attendance_type_enum import AttendanceTypeEnum
+from .attendance_block_enum import AttendanceBlockEnum
+from .transaction_typeEnum import TransactionTypeEnum
+from .money_type_enum import MoneyTypeEnum
+from .states import States

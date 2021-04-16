@@ -20,7 +20,7 @@ log = logging.getLogger("unexpected_things_logger")
 def get_student_stats(user):
     stats = {}
 
-    if user.has_perm(get_perm_name(Actions.see.value, UserGroups.student.value, "balance")):
+    if user.has_perm(get_perm_name(Actions.SEE.value, UserGroups.student.value, "balance")):
         student_accounts = Account.objects.filter(user__groups__name__contains=UserGroups.student.value)
         balances = [a.balance for a in student_accounts]
         stats.update({
@@ -28,11 +28,11 @@ def get_student_stats(user):
             'mean_money': int(statistics.mean(balances))
         })
 
-    if user.has_perm(get_perm_name(Actions.process.value, UserGroups.student.value, "created_transactions")):
+    if user.has_perm(get_perm_name(Actions.PROCESS.value, UserGroups.student.value, "created_transactions")):
         stats.update({'created_students_len': Transaction.objects.filter(
             creator__groups__name__in=[UserGroups.student.value]).filter(state__name=States.created.value).__len__()})
 
-    if user.has_perm(get_perm_name(Actions.process.value, UserGroups.staff.value, "created_transactions")):
+    if user.has_perm(get_perm_name(Actions.PROCESS.value, UserGroups.staff.value, "created_transactions")):
         stats.update({'created_staff_len': Transaction.objects.filter(
             creator__groups__name__in=[UserGroups.staff.value]).filter(state__name=States.created.value).__len__()})
 
@@ -42,7 +42,7 @@ def get_student_stats(user):
 def get_report_student_stats(user):
     stats = {}
 
-    if user.has_perm(get_perm_name(Actions.see.value, UserGroups.student.value, "balance")):
+    if user.has_perm(get_perm_name(Actions.SEE.value, UserGroups.student.value, "balance")):
         student_accounts = Account.objects.filter(user__groups__name__contains=UserGroups.student.value).order_by(
             'party',
             'user__last_name')
@@ -130,7 +130,7 @@ def get_balance_change_from_money_list(money_list, username):
 
 
 def get_counters_of_user_who_is(user, target_user, group):
-    if not user.has_perm(get_perm_name(Actions.see.value, group, "attendance")):
+    if not user.has_perm(get_perm_name(Actions.SEE.value, group, "attendance")):
         return None
 
     all_counters = Attendance.objects.filter(receiver=target_user).filter(counted=True)

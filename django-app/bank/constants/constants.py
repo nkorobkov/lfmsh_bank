@@ -7,7 +7,9 @@ __author__ = 'Insolia'
 SIGN = '@'
 BANKIR_USERNAME = 'bank_manager'
 
-PERMISSION_RESPONSIBLE_GROUPS = [UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value]
+PERMISSION_RESPONSIBLE_GROUPS = [
+    UserGroups.staff.value, UserGroups.student.value, UserGroups.admin.value
+]
 
 FIRST_DAY_DATE = datetime.datetime(2018, 8, 6, 0, 0).date()
 
@@ -17,12 +19,20 @@ INITIAL_MONEY_DESC = 'Поздравляем с началом экономич�
 
 WORKOUT_BUDGET = 25.
 EXAM_BUDGET = 80.
-ACTIVITY_REWARD = {'sport_activity': {'single': [20., 15., 10., 5.]},
-                   'evening_activity': {'single': [20., 15., 10.], 'team': [120., 100., 80.]},
-                   'day_activity': {'single': [20., 15., 10.], 'team': [120., 100., 80.]}}
-DS_REWARD = {
-    'potato': 60., "bread_cut": 60., "serving": 60.
+ACTIVITY_REWARD = {
+    'sport_activity': {
+        'single': [20., 15., 10., 5.]
+    },
+    'evening_activity': {
+        'single': [20., 15., 10.],
+        'team': [120., 100., 80.]
+    },
+    'day_activity': {
+        'single': [20., 15., 10.],
+        'team': [120., 100., 80.]
+    }
 }
+DS_REWARD = {'potato': 60., "bread_cut": 60., "serving": 60.}
 
 OBL_STUDY_NEEDED = 18
 LAB_PASS_NEEDED = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}
@@ -34,10 +44,8 @@ LECTURE_PENALTY_STEP = 20  # for each missed on new miss
 FAC_PENALTY = 100  # for each not attended fac
 SEM_NOT_READ_PEN = 100
 
-
-INITIAL_STEP_OBL_STD = 15 # for first
+INITIAL_STEP_OBL_STD = 15  # for first
 STEP_OBL_STD = 5  # cumulative constant for each next
-
 
 NUM_OF_PARTIES = 4
 
@@ -46,7 +54,6 @@ BALANCE_WARNING = 30
 
 USE_PICS = False
 DEFAULT_PIC_PATH = 'bank/avatars/default.jpg'
-
 
 TAX_FROM_DAY = {
     1: 0,

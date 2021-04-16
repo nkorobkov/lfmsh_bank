@@ -16,3 +16,6 @@ report30.html
 main/error_log.log
 django-app/static/
 /docker/postgres/volumes
+.vscode/
+venv/
+

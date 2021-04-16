@@ -1,0 +1,3 @@
+[style]
+[yapf]
+based_on_style = yapf

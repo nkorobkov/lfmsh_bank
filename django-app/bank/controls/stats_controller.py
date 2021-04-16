@@ -13,14 +13,14 @@ from bank.models.Account import Account
 
 import statistics
 
-log = logging.getLogger("unexpected_things_logger")
+log = logging.getLogger('unexpected_things_logger')
 
 
 def get_student_stats(user):
   stats = {}
 
   if user.has_perm(
-      get_perm_name(Actions.SEE.value, UserGroups.student.value, "balance")):
+      get_perm_name(Actions.SEE.value, UserGroups.student.value, 'balance')):
     student_accounts = Account.objects.filter(
         user__groups__name__contains=UserGroups.student.value)
     balances = [a.balance for a in student_accounts]
@@ -31,7 +31,7 @@ def get_student_stats(user):
 
   if user.has_perm(
       get_perm_name(Actions.PROCESS.value, UserGroups.student.value,
-                    "created_transactions")):
+                    'created_transactions')):
     stats.update({
         'created_students_len':
             Transaction.objects.filter(
@@ -41,7 +41,7 @@ def get_student_stats(user):
 
   if user.has_perm(
       get_perm_name(Actions.PROCESS.value, UserGroups.staff.value,
-                    "created_transactions")):
+                    'created_transactions')):
     stats.update({
         'created_staff_len':
             Transaction.objects.filter(
@@ -56,7 +56,7 @@ def get_report_student_stats(user):
   stats = {}
 
   if user.has_perm(
-      get_perm_name(Actions.SEE.value, UserGroups.student.value, "balance")):
+      get_perm_name(Actions.SEE.value, UserGroups.student.value, 'balance')):
     student_accounts = Account.objects.filter(
         user__groups__name__contains=UserGroups.student.value).order_by(
             'party', 'user__last_name')
@@ -115,7 +115,7 @@ def get_report_student_stats(user):
       accounts_info.append(acc_info)
       if math.fabs(acc_info['balance_calculated'] -
                    acc_info['balance_stored']) > 10:
-        log.warning("balances for {} differs more than {}".format(acc, 10))
+        log.warning('balances for {} differs more than {}'.format(acc, 10))
 
     best_activity = max(
         get_list_from_dict_list_by_key(accounts_info, 'earned_activity'))
@@ -145,25 +145,25 @@ def get_report_student_stats(user):
       else:
         acc_info['row_class'] = ''
 
-    stats.update({"accounts_info": accounts_info})
+    stats.update({'accounts_info': accounts_info})
     counters_list = get_list_from_dict_list_by_key(accounts_info, 'counters')
     stats.update({
-        "sum_lab":
+        'sum_lab':
             sum([
                 t['val'][AttendanceTypeEnum.lab_pass.value]
                 for t in counters_list
             ]),
-        "sum_fac":
+        'sum_fac':
             sum([
                 t['val'][AttendanceTypeEnum.fac_attend.value]
                 for t in counters_list
             ]),
-        "sum_sem_pass":
+        'sum_sem_pass':
             sum([
                 t['val'][AttendanceTypeEnum.seminar_pass.value]
                 for t in counters_list
             ]),
-        "sum_sem_attend":
+        'sum_sem_attend':
             sum([
                 t['val'][AttendanceTypeEnum.seminar_attend.value]
                 for t in counters_list
@@ -190,27 +190,27 @@ def get_balance_change_from_money_list(money_list, username):
 
 
 def get_counters_of_user_who_is(user, target_user, group):
-  if not user.has_perm(get_perm_name(Actions.SEE.value, group, "attendance")):
+  if not user.has_perm(get_perm_name(Actions.SEE.value, group, 'attendance')):
     return None
 
   all_counters = Attendance.objects.filter(receiver=target_user).filter(
       counted=True)
   info = {
-      "study_needed": OBL_STUDY_NEEDED,
-      "fac_pass_needed": target_user.account.fac_needed(),
-      "lab_pass_needed": target_user.account.lab_needed()
+      'study_needed': OBL_STUDY_NEEDED,
+      'fac_pass_needed': target_user.account.fac_needed(),
+      'lab_pass_needed': target_user.account.lab_needed()
   }
   counters_val = {}
   for counter_type in AttendanceType.objects.all():
     counter_sum = sum([c.value for c in all_counters.filter(type=counter_type)])
     counters_val.update({counter_type.name: int(counter_sum)})
   info.update({
-      "study":
+      'study':
           counters_val.get(AttendanceTypeEnum.fac_attend.value) +
           counters_val.get(AttendanceTypeEnum.seminar_attend.value)
   })
   info.update({
-      "next_missed_lec_fine": target_user.account.get_next_missed_lec_penalty(),
-      "expected_fine": target_user.account.get_final_study_fine()
+      'next_missed_lec_fine': target_user.account.get_next_missed_lec_penalty(),
+      'expected_fine': target_user.account.get_final_study_fine()
   })
-  return {"val": counters_val, "info": info}
+  return {'val': counters_val, 'info': info}

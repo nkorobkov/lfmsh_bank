@@ -13,7 +13,7 @@ from bank.models.Transaction import Transaction
 class ExamTransactionController(TableTransactionController):
   template_url = 'bank/add/add_exam.html'
   value_show_name = 'Баллы за экзамен'
-  header = "Экзамен"
+  header = 'Экзамен'
 
   @staticmethod
   def _get_kernel_form():

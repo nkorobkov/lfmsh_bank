@@ -11,7 +11,7 @@ class TransactionTypeNotSupported(BankAPIExeption):
 
   def __init__(self, type_name):
     super().__init__()
-    self.message = "Adding {} transactions through API is not supported in the moment".format(
+    self.message = 'Adding {} transactions through API is not supported in the moment'.format(
         type_name)
     self.code = 461
 
@@ -36,7 +36,7 @@ class CreatorDoNotMatchRequestOwner(BankAPIExeption):
 
   def __init__(self):
     super().__init__()
-    self.message = "CreatorDoNotMatchRequestOwner"
+    self.message = 'CreatorDoNotMatchRequestOwner'
     self.code = 464
 
 
@@ -44,7 +44,7 @@ class CantCreateThisType(BankAPIExeption):
 
   def __init__(self, type_name):
     super().__init__()
-    self.message = "User Cant create {} transactions".format(type_name)
+    self.message = 'User Cant create {} transactions'.format(type_name)
     self.code = 465
 
 
@@ -52,7 +52,7 @@ class TransactionTypeNotRecognized(BankAPIExeption):
 
   def __init__(self):
     super().__init__()
-    self.message = "TransactionTypeNotRecognized"
+    self.message = 'TransactionTypeNotRecognized'
     self.code = 466
 
 
@@ -60,7 +60,7 @@ class UserDoesNotExist(BankAPIExeption):
 
   def __init__(self, username):
     super().__init__()
-    self.message = "User with username {} does not exist".format(username)
+    self.message = 'User with username {} does not exist'.format(username)
     self.code = 467
 
 

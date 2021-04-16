@@ -12,7 +12,7 @@ from bank.models.Transaction import Transaction
 class FineTransactionController(TableTransactionController):
   template_url = 'bank/add/add_fine.html'
   value_show_name = 'Штраф'
-  header = "Штраф"
+  header = 'Штраф'
 
   @staticmethod
   def _get_kernel_form():

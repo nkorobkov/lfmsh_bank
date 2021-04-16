@@ -32,7 +32,7 @@ ACTIVITY_REWARD = {
         'team': [120., 100., 80.]
     }
 }
-DS_REWARD = {'potato': 60., "bread_cut": 60., "serving": 60.}
+DS_REWARD = {'potato': 60., 'bread_cut': 60., 'serving': 60.}
 
 OBL_STUDY_NEEDED = 18
 LAB_PASS_NEEDED = {7: 3, 8: 3, 9: 2, 10: 2, 11: 2}

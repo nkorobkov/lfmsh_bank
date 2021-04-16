@@ -13,6 +13,6 @@ class TransactionTypeEnum(Enum):
   fac_pass = 'fac_pass'
   exam = 'exam'
   activity = 'activity'
-  lab = "lab"
+  lab = 'lab'
   ds = 'dining_services'
   tax = 'tax'

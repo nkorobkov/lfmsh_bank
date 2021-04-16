@@ -31,7 +31,7 @@ class Money(AtomicTransaction):
     return new_money
 
   def __str__(self):
-    return "{}@ за {}".format(self.value, self.type)
+    return '{}@ за {}'.format(self.value, self.type)
 
   def apply(self):
     self._switch_counted(True)
@@ -65,17 +65,17 @@ class Money(AtomicTransaction):
 
   def to_python(self):
     return {
-        "general_group": self.type.readable_group_general,
-        "local_group": self.type.readable_group_local,
-        "type": self.type.readable_name,
-        "value": self.value,
-        "receiver": self.receiver.account.long_name(),
-        "creator": self.related_transaction.creator.account.long_name(),
-        "counted": self.counted,
-        "state": self.related_transaction.state.readable_name,
-        "description": self.description,
-        "update_timestamp": self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
-        "creation_timestamp": self.creation_timestamp.strftime("%d.%m.%Y %H:%M")
+        'general_group': self.type.readable_group_general,
+        'local_group': self.type.readable_group_local,
+        'type': self.type.readable_name,
+        'value': self.value,
+        'receiver': self.receiver.account.long_name(),
+        'creator': self.related_transaction.creator.account.long_name(),
+        'counted': self.counted,
+        'state': self.related_transaction.state.readable_name,
+        'description': self.description,
+        'update_timestamp': self.update_timestamp.strftime('%d.%m.%Y %H:%M'),
+        'creation_timestamp': self.creation_timestamp.strftime('%d.%m.%Y %H:%M')
     }
 
   def full_info_as_list(self):

@@ -15,7 +15,7 @@ class WorkoutTransactionController(TableTransactionController):
   template_url = 'bank/add/add_workout.html'
 
   value_show_name = 'Посетил'
-  header = "Зарядка"
+  header = 'Зарядка'
 
   @staticmethod
   def _get_kernel_form():

@@ -26,7 +26,7 @@ class Account(models.Model):
         ]))
 
   def __str__(self):
-    return self.short_name() + self.get_balance() if self.balance else ""
+    return self.short_name() + self.get_balance() if self.balance else ''
 
   def name_with_balance(self):
     return '{} {} {}'.format(self.user.last_name, self.user.first_name,

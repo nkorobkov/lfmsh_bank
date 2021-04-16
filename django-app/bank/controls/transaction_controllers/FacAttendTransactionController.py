@@ -12,7 +12,7 @@ from bank.models.Transaction import Transaction
 class FacAttendTransactionController(TableTransactionController):
   template_url = 'bank/add/add_fac_attend.html'
   value_show_name = 'Посетил'
-  header = "Занятие факультатива"
+  header = 'Занятие факультатива'
 
   @staticmethod
   def _get_kernel_form():

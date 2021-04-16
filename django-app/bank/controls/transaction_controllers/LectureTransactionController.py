@@ -14,7 +14,7 @@ from bank.models.Transaction import Transaction
 class LectureTransactionController(TableTransactionController):
   template_url = 'bank/add/add_lecture.html'
   value_show_name = 'Посетил'
-  header = "Лекция"
+  header = 'Лекция'
 
   @staticmethod
   def _get_kernel_form():

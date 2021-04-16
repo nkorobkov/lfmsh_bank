@@ -16,13 +16,13 @@ class TransTable(tables.Table):
       'bank:user',
       args=[A('creator.username')],
       accessor='creator.account.long_name',
-      verbose_name="Cоздатель")
-  type = Column(accessor='type.readable_name', verbose_name="Тип")
-  state = Column(accessor='state.readable_name', verbose_name="Состояние")
+      verbose_name='Cоздатель')
+  type = Column(accessor='type.readable_name', verbose_name='Тип')
+  state = Column(accessor='state.readable_name', verbose_name='Состояние')
   date_created = Column(
       accessor='get_creation_timestamp',
-      verbose_name="Дата создания",
-      order_by="creation_timestamp")
-  value = Column(accessor='money_count', verbose_name="Сумма", orderable=False)
+      verbose_name='Дата создания',
+      order_by='creation_timestamp')
+  value = Column(accessor='money_count', verbose_name='Сумма', orderable=False)
   receivers = Column(
-      accessor='receivers_count', verbose_name="Получателей", orderable=False)
+      accessor='receivers_count', verbose_name='Получателей', orderable=False)

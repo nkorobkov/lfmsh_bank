@@ -7,8 +7,8 @@ from bank.helper_functions import get_students_markup
 
 
 class TableTransactionController(TransactionController):
-  value_show_name = "Посетил"
-  header = "Транзакция"
+  value_show_name = 'Посетил'
+  header = 'Транзакция'
 
   @classmethod
   def get_render_map_update(cls):
@@ -50,4 +50,4 @@ class TableTransactionController(TransactionController):
 
   @staticmethod
   def _get_kernel_form():
-    raise NotImplementedError("get kernel form not implemented")
+    raise NotImplementedError('get kernel form not implemented')

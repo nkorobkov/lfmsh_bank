@@ -14,7 +14,7 @@ from bank.models.Transaction import Transaction
 class FacPassTransactionController(TableTransactionController):
   template_url = 'bank/add/add_fac_pass.html'
   value_show_name = 'Баксы за зачет'
-  header = "Зачет по факультативу"
+  header = 'Зачет по факультативу'
 
   @staticmethod
   def _get_kernel_form():

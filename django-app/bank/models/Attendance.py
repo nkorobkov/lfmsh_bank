@@ -67,10 +67,10 @@ class Attendance(AtomicTransaction):
     return True
 
   def get_counted(self):
-    return "Засчитан" if self.counted else "Не засчитан"
+    return 'Засчитан' if self.counted else 'Не засчитан'
 
   def get_date(self):
-    return self.date.strftime("%d.%m")
+    return self.date.strftime('%d.%m')
 
   def get_value(self):
     if self.value >= 0:
@@ -78,38 +78,38 @@ class Attendance(AtomicTransaction):
     return '{}'.format(str(int(self.value)))
 
   def __str__(self):
-    return "{} {} {} {}".format(
+    return '{} {} {} {}'.format(
         str(self.attendance_block), str(self.receiver), str(self.date),
         str(self.counted))
 
   def to_python(self):
     return {
-        "type":
+        'type':
             self.type.readable_name,
-        "value":
+        'value':
             self.value,
-        "receiver":
+        'receiver':
             self.receiver.account.long_name(),
-        "counted":
+        'counted':
             self.counted,
-        "description":
+        'description':
             self.description,
-        "update_timestamp":
-            self.update_timestamp.strftime("%d.%m.%Y %H:%M"),
-        "creation_timestamp":
-            self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
-        "attendance_block":
+        'update_timestamp':
+            self.update_timestamp.strftime('%d.%m.%Y %H:%M'),
+        'creation_timestamp':
+            self.creation_timestamp.strftime('%d.%m.%Y %H:%M'),
+        'attendance_block':
             self.attendance_block.readable_name
-            if self.attendance_block else "null",
-        "date":
-            self.date.strftime("%d.%m"),
+            if self.attendance_block else 'null',
+        'date':
+            self.date.strftime('%d.%m'),
     }
 
   def full_info_as_list(self):
     at_block_info = self.attendance_block.full_info_as_list(
-    ) if self.attendance_block else ["NA"]
+    ) if self.attendance_block else ['NA']
     return self.type.full_info_as_list() + \
-           [self.date.strftime("%d.%m.%Y")] + \
+           [self.date.strftime('%d.%m.%Y')] + \
            at_block_info + \
            super(Attendance, self).full_info_as_list() + \
            self.receiver.account.full_info_as_list() + \
@@ -117,7 +117,7 @@ class Attendance(AtomicTransaction):
 
   def full_info_headers_as_list(self):
     return self.type.full_info_headers_as_list() + \
-           ["date"] + \
+           ['date'] + \
            ['attendance_block_' + x for x in self.attendance_block.full_info_headers_as_list()] + \
            super(Attendance, self).full_info_headers_as_list() + \
            ['receiver_' + x for x in self.receiver.account.full_info_headers_as_list()] + \

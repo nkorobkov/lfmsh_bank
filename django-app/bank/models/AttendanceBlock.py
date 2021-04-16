@@ -7,7 +7,7 @@ class AttendanceBlock(AbstractType):
   start_time = models.TimeField()
   end_time = models.TimeField()
   related_attendance_types = models.ManyToManyField(
-      AttendanceType, related_name="related_attendance_blocks")
+      AttendanceType, related_name='related_attendance_blocks')
 
   def clashes_with(self, other_block):
     if other_block:

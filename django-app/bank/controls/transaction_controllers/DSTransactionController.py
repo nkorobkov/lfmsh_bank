@@ -15,7 +15,7 @@ class DSTransactionController(TableTransactionController):
   template_url = 'bank/add/add_ds.html'
 
   value_show_name = 'Дежурил'
-  header = "Дежурство по столовой"
+  header = 'Дежурство по столовой'
 
   @staticmethod
   def _get_kernel_form():

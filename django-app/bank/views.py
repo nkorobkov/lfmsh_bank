@@ -20,24 +20,24 @@ from django_tables2 import RequestConfig
 from .tables import *
 from .constants import *
 
-log = logging.getLogger("bank_log")
+log = logging.getLogger('bank_log')
 
 
 # Create your views here.
 @login_required
 def index(request):
-  log.info("index page request from {}".format(
+  log.info('index page request from {}'.format(
       request.user.account.long_name()))
   student_stats = get_student_stats(request.user)
   transaction_types = TransactionType.objects.all()
   transaction_type_info = [{
-      "name":
+      'name':
           t.name,
-      "readable_name":
+      'readable_name':
           t.readable_name,
-      "can_create":
+      'can_create':
           request.user.has_perm(
-              get_perm_name(Actions.CREATE.value, "self", t.name))
+              get_perm_name(Actions.CREATE.value, 'self', t.name))
   } for t in transaction_types]
   counters = get_counters_of_user_who_is(request.user, request.user, 'self')
   return render(
@@ -62,14 +62,14 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
 
     if update_of and not user_can_update(request, updated_transaction):
       return HttpResponseForbidden(
-          "У вас нет прав на изменение этой транзакции")
+          'У вас нет прав на изменение этой транзакции')
     if from_template and not user_can_use_template(request,
                                                    updated_transaction):
       return HttpResponseForbidden(
-          "Эту транзакцию нельзя использовать как шаблон")
+          'Эту транзакцию нельзя использовать как шаблон')
     if not updated_transaction.type.name == type_name:
       return HttpResponseBadRequest(
-          "Тип транзакции из шаблона не совпадает с типом указанным в адресной строке"
+          'Тип транзакции из шаблона не совпадает с типом указанным в адресной строке'
       )
 
   controller = TransactionService.get_controller_for(type_name)
@@ -92,7 +92,7 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
       created_transaction = controller.get_transaction_from_form_data(
           formset.cleaned_data, update_of)
       log.info(
-          "Valid add transaction from {}, update={}, transaction={}".format(
+          'Valid add transaction from {}, update={}, transaction={}'.format(
               request.user.account.long_name(), update_of, created_transaction))
       if request.user.has_perm(
           get_perm_name(Actions.PROCESS.value, 'self', type_name)):
@@ -127,11 +127,11 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
 @login_required()
 def decline(request, transaction_id):
   declined_transaction = get_object_or_404(Transaction, id=transaction_id)
-  log.info("Decline transaction from {}, transaction={}".format(
+  log.info('Decline transaction from {}, transaction={}'.format(
       request.user.account.long_name(), declined_transaction))
 
   if not user_can_decline(request, declined_transaction):
-    return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")
+    return HttpResponseForbidden('У вас нет прав отменить эту транзакцию')
   if request.method == 'POST':
     declined_transaction.decline()
     return render(
@@ -163,7 +163,7 @@ def get_transaction_HTML(request):
       transaction.creator)
   if not request.user.has_perm(
       get_perm_name(Actions.SEE.value, group, 'created_transactions')):
-    return HttpResponseForbidden("У вас нет прав на просмотр этой транзакции")
+    return HttpResponseForbidden('У вас нет прав на просмотр этой транзакции')
 
   html = loader.render_to_string('bank/transaction_lists/transaction.html', {
       'transaction': transaction,
@@ -221,7 +221,7 @@ def user(request, username):
       _get_transactions_of_user_who_is(request.user, host, host_group.name))
   render_dict.update(
       {'counters': get_counters_of_user_who_is(request.user, host, host_group)})
-  avatar_url = "bank/avatars/{} {}.jpg".format(
+  avatar_url = 'bank/avatars/{} {}.jpg'.format(
       host.last_name, host.first_name) if USE_PICS else DEFAULT_PIC_PATH
   render_dict.update({'avatar_url': avatar_url})
   return render(request, 'bank/user_page.html', render_dict)
@@ -240,17 +240,17 @@ def manage(request, user_group, to_decline=None, to_process=None):
     if transaction.creator.groups.filter(name__in=[user_group]).exists():
       transaction.decline()
     else:
-      return HttpResponseForbidden("У вас нет прав отменить эту транзакцию")
+      return HttpResponseForbidden('У вас нет прав отменить эту транзакцию')
 
   if to_process and can_process:
     transaction = get_object_or_404(Transaction, id=to_process)
     if transaction.creator.groups.filter(name__in=[user_group]).exists():
       transaction.process()
     else:
-      return HttpResponseForbidden("У вас нет прав начислить эту транзакцию")
+      return HttpResponseForbidden('У вас нет прав начислить эту транзакцию')
 
   render_dict = {
-      "transactions":
+      'transactions':
           Transaction.objects.filter(creator__groups__name__in=[user_group]
                                     ).filter(state__name=States.created.value)
   }
@@ -261,7 +261,7 @@ def manage(request, user_group, to_decline=None, to_process=None):
 
 @permission_required(
     get_perm_name(Actions.SEE.value, UserGroups.staff.value,
-                  "created_transactions"),
+                  'created_transactions'),
     login_url='bank:index')
 def monitor_table(request):
   table = TransTable(Transaction.objects.all(), order_by='-date_created')
@@ -271,7 +271,7 @@ def monitor_table(request):
 
 
 @permission_required(
-    get_perm_name(Actions.UPLOAD.value, "self", "files"),
+    get_perm_name(Actions.UPLOAD.value, 'self', 'files'),
     login_url='bank:index')
 def upload_file(request):
   if request.method == 'POST':
@@ -280,16 +280,16 @@ def upload_file(request):
       f = request.FILES['file']
       local_path = form.cleaned_data['path'].strip('/')
       user_path = path.join(MEDIA_ROOT, local_path, f.name)
-      log.info("file uploaded by {},path={}".format(
+      log.info('file uploaded by {},path={}'.format(
           request.user.account.long_name(), user_path))
       os.makedirs(path.dirname(user_path), exist_ok=True)
       with open(user_path, 'wb+') as destination:
         for chunk in f.chunks():
           destination.write(chunk)
       return render(request, 'bank/files/success_upload.html',
-                    {"filename": f.name})
+                    {'filename': f.name})
   else:
-    form = UploadFileForm(initial={"path": request.user.username + "/"})
+    form = UploadFileForm(initial={'path': request.user.username + '/'})
   return render(request, 'bank/files/file_upload.html', {'form': form})
 
 
@@ -390,7 +390,7 @@ def user_can_decline(request, updated_transaction):
   if not updated_transaction.can_be_transitioned_to(States.declined.value):
     log.warning(
         request.user.account.long_name() +
-        " cant decline transaction because transaction can not be transitioned to declined state"
+        ' cant decline transaction because transaction can not be transitioned to declined state'
     )
     return False
   if updated_transaction.creator.username == request.user.username:
@@ -400,7 +400,7 @@ def user_can_decline(request, updated_transaction):
       return True
     log.warning(
         request.user.account.long_name() +
-        " cant decline transaction because user do not have rights to decline self created "
+        ' cant decline transaction because user do not have rights to decline self created '
         + updated_transaction.type.name)
 
   else:
@@ -414,10 +414,10 @@ def user_can_decline(request, updated_transaction):
       return True
     log.warning(
         request.user.account.long_name() +
-        " is not owner of transaction and do not have rights to decline " +
+        ' is not owner of transaction and do not have rights to decline ' +
         updated_transaction.creator.groups.get(
             name__in=PERMISSION_RESPONSIBLE_GROUPS).name +
-        " group. but tries to decline it")
+        ' group. but tries to decline it')
 
   return False
 

@@ -79,33 +79,33 @@ class ValueKernelForm(TableKernelForm):
 
 class GeneralMoneyKernelForm(ValueKernelForm):
   money_type = AtomicTypeField(
-      label="Тип",
+      label='Тип',
       queryset=MoneyType.objects.filter(
           related_transaction_type__name=TransactionTypeEnum.general_money.value
       ),
       required=True,
       empty_label=None,
-      to_field_name="name")
+      to_field_name='name')
 
 
 class FineKernelForm(ValueKernelForm):
   money_type = AtomicTypeField(
-      label="Тип",
+      label='Тип',
       queryset=MoneyType.objects.filter(
           related_transaction_type__name=TransactionTypeEnum.fine.value),
       required=True,
       empty_label=None,
-      to_field_name="name")
+      to_field_name='name')
 
 
 class PurchaseKernelForm(ValueKernelForm):
   money_type = AtomicTypeField(
-      label="Вид",
+      label='Вид',
       queryset=MoneyType.objects.filter(
           related_transaction_type__name=TransactionTypeEnum.purchase.value),
       required=True,
       empty_label=None,
-      to_field_name="name")
+      to_field_name='name')
 
 
 class ActivityKernelForm(TableKernelForm):
@@ -118,16 +118,16 @@ class ActivityKernelForm(TableKernelForm):
       label='Описание',
       required=True)
 
-  date = MyDateField(initial=datetime.date.today, label="Дата проведения")
+  date = MyDateField(initial=datetime.date.today, label='Дата проведения')
   money_type = AtomicTypeField(
-      label="Вид",
+      label='Вид',
       queryset=MoneyType.objects.filter(
           related_transaction_type__name=TransactionTypeEnum.activity.value),
       required=True,
       empty_label=None,
-      to_field_name="name")
+      to_field_name='name')
   cert = forms.BooleanField(required=False)
-  place_choices = [(1, "1"), (2, "2"), (3, "3"), (4, "Участник"), (5, "-")]
+  place_choices = [(1, '1'), (2, '2'), (3, '3'), (4, 'Участник'), (5, '-')]
   place = forms.ChoiceField(
       widget=PlaceWidget, choices=place_choices, required=False)
 
@@ -137,7 +137,7 @@ class ExamKernelForm(ValueKernelForm):
 
 
 class FacPassKernelForm(ValueKernelForm):
-  date = MyDateField(initial=datetime.date.today, label="Дата проведения")
+  date = MyDateField(initial=datetime.date.today, label='Дата проведения')
 
 
 class AttendKernelForm(TableKernelForm):
@@ -153,7 +153,7 @@ class AttendKernelForm(TableKernelForm):
       label='Описание',
       required=True)
 
-  date = MyDateField(initial=datetime.date.today, label="Дата проведения")
+  date = MyDateField(initial=datetime.date.today, label='Дата проведения')
 
 
 class FacAttendForm(AttendKernelForm):
@@ -178,23 +178,23 @@ class WorkoutForm(AttendKernelForm):
 
 class DSKernelForm(AttendKernelForm):
   money_type = AtomicTypeField(
-      label="Вид Дежурства",
+      label='Вид Дежурства',
       queryset=MoneyType.objects.filter(
           related_transaction_type__name=TransactionTypeEnum.ds.value),
       required=True,
       empty_label=None,
-      to_field_name="name")
+      to_field_name='name')
 
 
 class SeminarKernelForm(AttendKernelForm):
   # fields that will be used only once from first instance of formset.
   receiver = ReceiverField(
-      label="Докладчик",
+      label='Докладчик',
       queryset=User.objects.filter(
           groups__name__in=[UserGroups.student.value]).order_by(
               'account__party', 'last_name'),
-      empty_label="Жертва",
-      to_field_name="username")
+      empty_label='Жертва',
+      to_field_name='username')
 
   block = MyBlockField(
       label='Блок семинара',
@@ -208,74 +208,74 @@ class SeminarKernelForm(AttendKernelForm):
 
   # marks
 
-  content_quality_choices = [(-1, "Нет"), (0, "Не очень"), (1, "Да")]
+  content_quality_choices = [(-1, 'Нет'), (0, 'Не очень'), (1, 'Да')]
   content_quality = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=content_quality_choices,
-      label="1. Соответствует ли содержание заявленной теме?")
+      label='1. Соответствует ли содержание заявленной теме?')
 
-  knowledge_quality_choices = [(-1, "Отсутствует"), (0, "Поверхностная"),
-                               (1, "Средняя"), (2, "Хорошая"), (3, "Высокая")]
+  knowledge_quality_choices = [(-1, 'Отсутствует'), (0, 'Поверхностная'),
+                               (1, 'Средняя'), (2, 'Хорошая'), (3, 'Высокая')]
   knowledge_quality = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=knowledge_quality_choices,
-      label="2. Степень ознакомленности рассказчика с темой семинара, степень понимания материала:"
+      label='2. Степень ознакомленности рассказчика с темой семинара, степень понимания материала:'
   )
 
   presentation_quality_choices = [
-      (-1, "Отсутствует"), (0, "Прослеживается с Трудом"),
-      (1, "Прослеживается, но существуют явные недочеты"),
-      (2, "Явных недочетов нет"), (3, "Недочетов нет вовсе")
+      (-1, 'Отсутствует'), (0, 'Прослеживается с Трудом'),
+      (1, 'Прослеживается, но существуют явные недочеты'),
+      (2, 'Явных недочетов нет'), (3, 'Недочетов нет вовсе')
   ]
   presentation_quality = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=presentation_quality_choices,
-      label="3. Последовательность и логичность изложения:")
+      label='3. Последовательность и логичность изложения:')
 
   presentation_quality_2_choices = [
-      (-1, "Тема не раскрыта"), (0, "Тема Раскрыта не полностью"),
-      (1, "Тема раскрыта не полностью, но присутствуют интересные факты"),
-      (2, "Тема раскрыта"), (3, "Тема раскрыта, интересные факты присутствуют")
+      (-1, 'Тема не раскрыта'), (0, 'Тема Раскрыта не полностью'),
+      (1, 'Тема раскрыта не полностью, но присутствуют интересные факты'),
+      (2, 'Тема раскрыта'), (3, 'Тема раскрыта, интересные факты присутствуют')
   ]
   presentation_quality_2 = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=presentation_quality_2_choices,
-      label=" 4. Степень того, насколько рассказчик раскрыл тему, наличие интересных фактов:"
+      label=' 4. Степень того, насколько рассказчик раскрыл тему, наличие интересных фактов:'
   )
 
-  presentation_quality_3_choices = [(0, "Нет"), (1, "Да")]
+  presentation_quality_3_choices = [(0, 'Нет'), (1, 'Да')]
   presentation_quality_3 = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=presentation_quality_3_choices,
-      label="5.а Считаете ли Вы, что докладчик продемонстрировал неординарные ораторские способности?"
+      label='5.а Считаете ли Вы, что докладчик продемонстрировал неординарные ораторские способности?'
   )
 
-  materials_choices = [(0, "Отсутствует"), (1, "Присутствует"),
-                       (2, "Присутствует в разных формах")]
+  materials_choices = [(0, 'Отсутствует'), (1, 'Присутствует'),
+                       (2, 'Присутствует в разных формах')]
   materials = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=materials_choices,
-      label="5.б Наличие иллюстирующего материала: ")
+      label='5.б Наличие иллюстирующего материала: ')
 
-  unusual_things_choices = [(0, "Нет или почти нет"), (1, "Да")]
+  unusual_things_choices = [(0, 'Нет или почти нет'), (1, 'Да')]
   unusual_things = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=unusual_things_choices,
-      label="5.в Можете ли Вы отметить что-то необычное в форме проведения семинара?"
+      label='5.в Можете ли Вы отметить что-то необычное в форме проведения семинара?'
   )
 
-  discussion_choices = [(0, "Нет или почти нет"), (1, "Непродолжительное"),
-                        (2, "Продолжительное")]
+  discussion_choices = [(0, 'Нет или почти нет'), (1, 'Непродолжительное'),
+                        (2, 'Продолжительное')]
   discussion = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=discussion_choices,
-      label="6. Вызвал ли семинар обсуждение среди слушателей?")
+      label='6. Вызвал ли семинар обсуждение среди слушателей?')
 
-  general_choices = [(-1, "-1"), (0, "0"), (1, "1"), (2, "2"), (3, "3")]
+  general_choices = [(-1, '-1'), (0, '0'), (1, '1'), (2, '2'), (3, '3')]
   general_quality = forms.ChoiceField(
       widget=forms.RadioSelect,
       choices=general_choices,
-      label="7. Дополнительные баллы на ваше усмотрение.")
+      label='7. Дополнительные баллы на ваше усмотрение.')
 
 
 class P2PKernelForm(forms.Form):
@@ -284,7 +284,7 @@ class P2PKernelForm(forms.Form):
     super(P2PKernelForm, self).__init__(*args, **kwargs)
     self.fields['value'] = forms.IntegerField(
         max_value=creator.account.balance,
-        label="Сумма",
+        label='Сумма',
         min_value=1,
         required=True)
     self.fields['receiver_username'] = ReceiverField(
@@ -293,9 +293,9 @@ class P2PKernelForm(forms.Form):
                 username=creator.username).order_by('account__party',
                                                     'last_name'),
         required=True,
-        empty_label="Выберите получателя",
-        to_field_name="username",
-        label="Получатель")
+        empty_label='Выберите получателя',
+        to_field_name='username',
+        label='Получатель')
 
   description = forms.CharField(
       max_length=1000,
@@ -304,8 +304,8 @@ class P2PKernelForm(forms.Form):
           'rows': '5'
       }),
       label='Комментарий',
-      help_text="Пожалуйста максимально подробно опишите за что вы перечисляете деньги,\
-                                   чтобы банкиру и вожатым было проще разобраться и одобрить перевод.",
+      help_text='Пожалуйста максимально подробно опишите за что вы перечисляете деньги,\
+                                   чтобы банкиру и вожатым было проще разобраться и одобрить перевод.',
       required=True)
   creator_username = forms.CharField(max_length=200)
 
@@ -320,17 +320,17 @@ class LabKernelForm(forms.Form):
           groups__name__in=[UserGroups.student.value]).order_by(
               'account__party', 'last_name'),
       required=True,
-      empty_label="Первый Пионер",
-      to_field_name="username",
-      label="Первый пионер")
+      empty_label='Первый Пионер',
+      to_field_name='username',
+      label='Первый пионер')
   receiver_username_2 = ReceiverField(
       queryset=User.objects.filter(
           groups__name__in=[UserGroups.student.value]).order_by(
               'account__party', 'last_name'),
       required=True,
-      empty_label="Второй пионер",
-      to_field_name="username",
-      label="Второй пионер")
+      empty_label='Второй пионер',
+      to_field_name='username',
+      label='Второй пионер')
 
   description = forms.CharField(
       max_length=1000,
@@ -341,29 +341,29 @@ class LabKernelForm(forms.Form):
       label='Описание',
       required=True)
 
-  date = MyDateField(initial=datetime.date.today, label="Дата cдачи отчета")
+  date = MyDateField(initial=datetime.date.today, label='Дата cдачи отчета')
 
   creator_username = forms.CharField(max_length=200)
 
   def clean(self):
     cleaned_data = super(LabKernelForm, self).clean()
-    receiver_username_1 = cleaned_data.get("receiver_username_1")
-    receiver_username_2 = cleaned_data.get("receiver_username_2")
+    receiver_username_1 = cleaned_data.get('receiver_username_1')
+    receiver_username_2 = cleaned_data.get('receiver_username_2')
 
     if receiver_username_1 and receiver_username_2 and receiver_username_1 == receiver_username_2:
       self.add_error(
           'receiver_username_2',
-          "Пожалуйста выберите разных пионеров как партнеров по лабе")
+          'Пожалуйста выберите разных пионеров как партнеров по лабе')
       self.add_error(
           'receiver_username_1',
-          "Пожалуйста выберите разных пионеров как партнеров по лабе")
+          'Пожалуйста выберите разных пионеров как партнеров по лабе')
 
 
 class RelativePathField(forms.CharField):
 
   def validate(self, value):
     super(forms.CharField, self).validate(value)
-    allowed = string.ascii_letters + string.digits + "/"
+    allowed = string.ascii_letters + string.digits + '/'
     for c in value:
       if c not in allowed:
         raise ValidationError(
@@ -375,9 +375,9 @@ class RelativePathField(forms.CharField):
 class UploadFileForm(forms.Form):
   path = RelativePathField(
       max_length=100,
-      label="Путь",
-      help_text="В пути допускаются только английские буквы цифры и /")
-  file = forms.FileField(label="Выберите файл")
+      label='Путь',
+      help_text='В пути допускаются только английские буквы цифры и /')
+  file = forms.FileField(label='Выберите файл')
 
 
 class SeminarFormset(BaseFormSet):
@@ -386,7 +386,7 @@ class SeminarFormset(BaseFormSet):
     if any(self.errors):
       return
     cleaned_data = self.forms[0].cleaned_data
-    receiver_username = cleaned_data.get("receiver")
+    receiver_username = cleaned_data.get('receiver')
     date = cleaned_data.get('date')
     block = cleaned_data.get('block')
     attendance_block = AttendanceBlock.objects.get(name=block)
@@ -403,9 +403,9 @@ class SeminarFormset(BaseFormSet):
         attendance_block=attendance_block)
     if not test_attendance.is_valid():
       self.forms[0].add_error(
-          'block', "Докладчик уже занимался чем-то в этот блок.\
+          'block', 'Докладчик уже занимался чем-то в этот блок.\
                             Может быть вы перепутали докладчика или блок? \
-                            Если все правильно, то обратитесь пожалуйста к банкиру, он разберется в чем дело."
+                            Если все правильно, то обратитесь пожалуйста к банкиру, он разберется в чем дело.'
       )
 
     del test_attendance

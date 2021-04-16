@@ -48,9 +48,9 @@ class LabTransactionController(TransactionController):
     receiver_2 = User.objects.get(username=first_form['receiver_username_2'])
 
     description = first_form['description']
-    description_1 = "{} \nПартнер: {}".format(description,
+    description_1 = '{} \nПартнер: {}'.format(description,
                                               receiver_2.account.long_name())
-    description_2 = "{} \nПартнер: {}".format(description,
+    description_2 = '{} \nПартнер: {}'.format(description,
                                               receiver_1.account.long_name())
 
     Money.new_money(receiver_1, first_form['value_1'], money_type,

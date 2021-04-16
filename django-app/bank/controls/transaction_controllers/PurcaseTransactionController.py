@@ -16,7 +16,7 @@ from bank.models.Transaction import Transaction
 class PurchaseTransactionController(TableTransactionController):
   template_url = 'bank/add/add_purchase.html'
   value_show_name = 'Сумма'
-  header = "Покупка"
+  header = 'Покупка'
 
   @staticmethod
   def _get_kernel_form():

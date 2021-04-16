@@ -12,7 +12,7 @@ from bank.models.Transaction import Transaction
 class GeneralTransactionController(TableTransactionController):
   template_url = 'bank/add/add_general_money.html'
   value_show_name = 'Сумма'
-  header = "Начисление за все подряд"
+  header = 'Начисление за все подряд'
 
   @staticmethod
   def _get_kernel_form():

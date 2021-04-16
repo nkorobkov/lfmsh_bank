@@ -20,7 +20,7 @@ class Transaction(models.Model):
   type = models.ForeignKey(
       TransactionType, on_delete=models.PROTECT, null=False)
   state = models.ForeignKey(TransactionState, on_delete=models.PROTECT)
-  update_of = models.ForeignKey("self", null=True, on_delete=models.PROTECT)
+  update_of = models.ForeignKey('self', null=True, on_delete=models.PROTECT)
 
   @classmethod
   def new_transaction(cls, creator, type, creation_map, update_of=None):
@@ -28,7 +28,7 @@ class Transaction(models.Model):
         Transaction, id=update_of) if update_of else None
     if update_of:
       if updated.creator != creator or updated.type != type:
-        raise ValueError("Попытка изменить тип или создателя транзакции")
+        raise ValueError('Попытка изменить тип или создателя транзакции')
 
     create_state = TransactionState.objects.get(name=States.created.value)
 
@@ -84,7 +84,7 @@ class Transaction(models.Model):
     return self.state.possible_transitions.filter(name=state_name).exists()
 
   def __str__(self):
-    return "{}@ для {} пионеров".format(
+    return '{}@ для {} пионеров'.format(
         sum([a.value for a in list(self.related_money_atomics.all())]),
         len(self.related_money_atomics.values_list()))
 
@@ -102,27 +102,27 @@ class Transaction(models.Model):
     return '{} {}'.format(str(self.money_count()), SIGN)
 
   def get_creation_timestamp(self):
-    return self.creation_timestamp.strftime("%d.%m, %H:%M")
+    return self.creation_timestamp.strftime('%d.%m, %H:%M')
 
   def to_python(self):
     return {
-        "creator":
+        'creator':
             self.creator.account.long_name(),
-        "creation_timestamp":
-            self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
-        "state":
+        'creation_timestamp':
+            self.creation_timestamp.strftime('%d.%m.%Y %H:%M'),
+        'state':
             self.state.readable_name,
-        "type":
+        'type':
             self.type.readable_name,
-        "money": [t.to_python() for t in self.related_money_atomics.all()],
-        "counters": [
+        'money': [t.to_python() for t in self.related_money_atomics.all()],
+        'counters': [
             t.to_python() for t in self.related_attendance_atomics.all()
         ],
     }
 
   def full_info_as_list(self):
     return self.creator.account.full_info_as_list() + [
-        self.creation_timestamp.strftime("%d.%m.%Y %H:%M"),
+        self.creation_timestamp.strftime('%d.%m.%Y %H:%M'),
         self.state.readable_name, self.state.counted
     ] + self.type.full_info_as_list()
 

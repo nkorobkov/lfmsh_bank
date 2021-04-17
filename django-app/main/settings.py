@@ -87,19 +87,17 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
-
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, "main/", "warning_log.log"),
+            'filename': os.path.join(BASE_DIR, 'main/', 'warning_log.log'),
             'formatter': 'simple'
-
         },
         'errors_file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, "main/", "error_log.log"),
+            'filename': os.path.join(BASE_DIR, 'main/', 'error_log.log'),
             'formatter': 'simple'
         }
     },
@@ -110,19 +108,15 @@ LOGGING = {
         },
         'bank_log': {
             'handlers': ['console'],
-            'level': "INFO",
-
+            'level': 'INFO',
         },
         'bank_api_log': {
             'handlers': ['console'],
-            'level': "INFO",
-
+            'level': 'INFO',
         },
-
         'unexpected_things_logger': {
             'handlers': ['file'],
-            'level': "WARNING",
-
+            'level': 'WARNING',
         }
     },
 }
@@ -140,20 +134,16 @@ DATABASES = {
 }
 
 if os.environ.get('BANK_MODE', '') == 'docker-prod':
-    DATABASES = {
-        #    'default': {
-        #        'ENGINE': 'django.db.backends.sqlite3',
-        #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        #   },
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'PASSWORD': 'docker',
-            'HOST': 'db',
-            'PORT': 5432,
-        }
-    }
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.postgresql',
+          'NAME': 'postgres',
+          'USER': 'postgres',
+          'PASSWORD': 'docker',
+          'HOST': 'db',
+          'PORT': 5432,
+      }
+  }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -173,24 +163,28 @@ LOGIN_URL = 'bank:login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
-STATIC_URL = "/static/"
+STATIC_URL = '/static/'
 
 # Default settings
 # The URL to the jQuery JavaScript file
-BOOTSTRAP3 ={
-    "css_url": {
-        "url": os.path.join(STATIC_URL, "bank", "django-bootstrap","bootstrap","css", "bootstrap.css"),
-
+BOOTSTRAP3 = {
+    'css_url': {
+        'url':
+            os.path.join(STATIC_URL, 'bank', 'django-bootstrap', 'bootstrap',
+                         'css', 'bootstrap.css'),
     },
-    "javascript_url": {
-        "url": os.path.join(STATIC_URL, "bank", "django-bootstrap","bootstrap", "js","bootstrap.js"),
-
+    'javascript_url': {
+        'url':
+            os.path.join(STATIC_URL, 'bank', 'django-bootstrap', 'bootstrap',
+                         'js', 'bootstrap.js'),
     },
-    'jquery_url': os.path.join(STATIC_URL, "bank", "django-bootstrap", "jquery.js"),
-    'base_url': os.path.join(STATIC_URL, "bank", "django-bootstrap", "bootstrap/")
+    'jquery_url':
+        os.path.join(STATIC_URL, 'bank', 'django-bootstrap', 'jquery.js'),
+    'base_url':
+        os.path.join(STATIC_URL, 'bank', 'django-bootstrap', 'bootstrap/')
 }

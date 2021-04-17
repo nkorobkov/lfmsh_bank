@@ -2,10 +2,9 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 
 from bank.constants import States
-from bank.constants.constants import *
-from bank.constants.transaction_type_enum import *
-
-from bank.constants.attendance_type_enum import *
+from bank.constants.constants import INITIAL_STEP_OBL_STD, SEM_NOT_READ_PEN, LAB_PASS_NEEDED, FAC_PENALTY, LAB_PENALTY, STEP_OBL_STD, OBL_STUDY_NEEDED
+from bank.constants.transaction_type_enum import TransactionTypeEnum
+from bank.constants.attendance_type_enum import AttendanceTypeEnum
 
 from bank.models.TransactionType import TransactionType
 from bank.models.TransactionState import TransactionState

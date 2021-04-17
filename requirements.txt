@@ -11,11 +11,15 @@ packaging==16.8
 psycopg2==2.8.3
 pylint==2.7.4
 pyparsing==2.2.0
+python-dotenv==0.17.0
 pytz==2017.2
+rope==0.18.0
 six==1.10.0
 sqlparse==0.3.0
 toml==0.10.2
 transliterate==1.9
+unify==0.5
+untokenize==0.1.1
 uWSGI==2.0.18
 wrapt==1.12.1
 yapf==0.31.0

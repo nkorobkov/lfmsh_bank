@@ -4,7 +4,7 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: docker
+      POSTGRES_PASSWORD: $BANK_POSTGRESS_PASSWORD
     volumes: 
       - ./docker/postgres/volumes:/var/lib/postgresql/data
 

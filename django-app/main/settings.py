@@ -12,18 +12,18 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from django.utils.timezone import now
+import dotenv
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+dotenv.load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bfryo(aj_3=r2-&j!ine44c(abng&b)ya1*i8(7o+zx^m53m8)'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.environ['BANK_SECRET_KEY']
 
 ALLOWED_HOSTS = ['.c9users.io', '.localhost', '127.0.0.1']
 
@@ -133,17 +133,21 @@ DATABASES = {
     }
 }
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
 if os.environ.get('BANK_MODE', '') == 'docker-prod':
   DATABASES = {
       'default': {
           'ENGINE': 'django.db.backends.postgresql',
           'NAME': 'postgres',
           'USER': 'postgres',
-          'PASSWORD': 'docker',
+          'PASSWORD': os.environ['BANK_POSTGRESS_PASSWORD'],
           'HOST': 'db',
           'PORT': 5432,
       }
   }
+  DEBUG = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

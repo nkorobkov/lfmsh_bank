@@ -14,6 +14,8 @@ A more detailed description of the project, architecture and technologies used c
 Before any installation, you'll need to clone the repo and install the requirements.
 You may want to use a [virtual environment](https://docs.python.org/3/tutorial/venv.html) for this process.
 
+Run `cp .env.template .env` to create .env file with configurations. Update secret values accordingly (especially if you are planning to deploy).
+
 ### Local startup instructions
 
 - to deploy test server locally we can only work with django code, so `cd django-app`

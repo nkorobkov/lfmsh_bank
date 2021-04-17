@@ -7,7 +7,6 @@ from bank.test.seeder import seed_db
 class AttendanceBlockTestCase(TestCase):
 
   def setUp(self):
-    print('seeding db for attendance block tests')
     seed_db()
 
   def test_seeder_worked(self):

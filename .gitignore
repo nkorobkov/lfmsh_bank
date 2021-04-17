@@ -18,4 +18,4 @@ django-app/static/
 /docker/postgres/volumes
 .vscode/
 venv/
-
+.env

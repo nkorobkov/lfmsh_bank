@@ -27,7 +27,7 @@ Run `cp .env.template .env` to create .env file with configurations. Update secr
 - apply migrations: `  ./manage.py migrate`
 - create a superuser for admin actions: `  ./manage.py createsuperuser`
 - populate static tables: `  ./manage.py add_static_data`
-- prepare users' info and place it in `meta_files/users_data`
+- prepare users' info and place it in `meta_files/users_data` You may use example files for testing `cp django-app/meta_files/users_data/student_example.csv django-app/meta_files/users_data/student.csv & cp django-app/meta_files/users_data/staff_example.csv django-app/meta_files/users_data/staff.csv`.
 - add users to the DB with `  ./manage.py add_users`
 This command will print credentials for all users from student and staff groups.  
 It will also create one user with extra privileges called `bank_manager`.

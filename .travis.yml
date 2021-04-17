@@ -5,6 +5,7 @@ cache: pip
 install:
   - pip install -r requirements.txt
 before_script:
+  - cp .env.template .env
   - python3 django-app/manage.py makemigrations
   - python3 django-app/manage.py makemigrations bank
   - python3 django-app/manage.py migrate

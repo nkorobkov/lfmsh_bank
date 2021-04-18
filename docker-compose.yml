@@ -14,6 +14,8 @@ services:
       dockerfile: ./docker/django-app/Dockerfile
     environment:
       BANK_MODE: docker-prod
+      BANK_POSTGRESS_PASSWORD: $BANK_POSTGRESS_PASSWORD
+      BANK_SECRET_KEY: $BANK_SECRET_KEY
     volumes:
       - ./docker/django-app/uwsgi.ini:/usr/src/django-app/main/uwsgi.ini:ro
       - ./docker/socket:/usr/src/django-app/socket

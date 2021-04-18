@@ -2,18 +2,7 @@
 __author__ = 'Insolia'
 
 from django.contrib.auth.models import User
-import random
-import string
-
-
-def get_pd(leng):
-
-  a = random.sample(string.printable[:62], leng)
-  s = ''
-  for c in a:
-    s = s + c
-  return s
-
+from bank.helper_functions import generate_password
 
 p_out = open('meta_files/new_passwords.txt', 'w')
 '''
@@ -31,7 +20,7 @@ for u in User.objects.filter(groups__name='pioner'):
 '''
 for u in User.objects.filter(groups__name='pedsostav'):
 
-  pd = get_pd(12)
+  pd = generate_password(12)
   u.set_password(pd)
   u.save()
 

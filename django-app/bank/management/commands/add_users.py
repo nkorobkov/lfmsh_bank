@@ -1,9 +1,7 @@
 import csv
-import string
 
 from django.contrib.auth.models import User, Group
 from django.core.management import BaseCommand
-from django.utils.crypto import random
 from django.db.utils import IntegrityError
 
 from transliterate import translit
@@ -15,6 +13,7 @@ from bank.models.TransactionType import TransactionType
 from bank.models.MoneyType import MoneyType
 from bank.models.Transaction import Transaction
 from bank.models.Account import Account
+from bank.helper_functions import generate_password
 
 from main.settings import BASE_DIR
 
@@ -84,7 +83,7 @@ class Command(BaseCommand):
       else:
         grade = 0
 
-      password = Command.generate_password(8)
+      password = generate_password(8)
       user_created = False
       need_unique_login = False
 
@@ -115,7 +114,7 @@ class Command(BaseCommand):
   @staticmethod
   def add_bank_user():
     login = BANKIR_USERNAME
-    password = Command.generate_password(8)
+    password = generate_password(8)
     new_u = User.objects.create_user(
         first_name='Банкир',
         last_name='ЛФМШ',
@@ -143,16 +142,6 @@ class Command(BaseCommand):
       Money.new_money(student, INITIAL_MONEY, money_type, INITIAL_MONEY_DESC,
                       new_transaction)
     new_transaction.process()
-
-  @staticmethod
-  def generate_password(length):
-    s = ''
-    for _ in range(length):
-      a = random.sample(
-          string.printable[:62].replace('l', '').replace('1', '').replace(
-              'I', '').replace('i', ''), 1)
-      s = s + a[0]
-    return s
 
   @staticmethod
   def generate_login(first_name, last_name, middle_name='', need_unique=False):

@@ -1,6 +1,9 @@
 # coding=utf-8
 from .constants import *
 
+import string
+import secrets
+
 
 def get_students_markup(students):
   endtable = []
@@ -32,3 +35,10 @@ def get_tax_from_session_day(day):
 def get_perm_name(*args):
   args = map(str, args)
   return 'bank.' + '_'.join(args)
+
+
+def generate_password(n):
+  alphanumeric = string.printable[:62]
+  without_hard_to_read_chars = alphanumeric.translate(
+      {ord(c): None for c in 'l1Iio0O'})
+  return ''.join(secrets.choice(without_hard_to_read_chars) for i in range(n))

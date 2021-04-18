@@ -1,6 +1,7 @@
 # coding=utf-8
-from .constants import *
+from .constants.constants import NUM_OF_PARTIES, FIRST_DAY_DATE, TAX_FROM_DAY
 
+import datetime
 import string
 import secrets
 

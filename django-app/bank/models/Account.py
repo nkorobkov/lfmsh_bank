@@ -38,7 +38,7 @@ class Account(models.Model):
   def short_name(self):
     if len(self.user.first_name) > 0 and len(self.user.account.middle_name) > 0:
       return self.user.last_name + ' ' + self.user.first_name[
-          0] + '. ' + self.middle_name[0] + '.'
+          0] + '. ' + str(self.middle_name)[0] + '.'
     else:
       return self.user.last_name
 
@@ -89,7 +89,7 @@ class Account(models.Model):
         self.get_counter(AttendanceTypeEnum.fac_attend.value))))
     single_fine = INITIAL_STEP_OBL_STD
     fine = 0
-    for i in range(deficit):
+    for _ in range(deficit):
       fine += single_fine
       single_fine += STEP_OBL_STD
     return fine

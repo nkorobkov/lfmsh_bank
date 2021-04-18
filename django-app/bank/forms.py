@@ -305,7 +305,7 @@ class P2PKernelForm(forms.Form):
       }),
       label='Комментарий',
       help_text='Пожалуйста максимально подробно опишите за что вы перечисляете деньги,\
-                                   чтобы банкиру и вожатым было проще разобраться и одобрить перевод.',
+                  чтобы банкиру и вожатым было проще разобраться и одобрить перевод.',
       required=True)
   creator_username = forms.CharField(max_length=200)
 
@@ -350,7 +350,8 @@ class LabKernelForm(forms.Form):
     receiver_username_1 = cleaned_data.get('receiver_username_1')
     receiver_username_2 = cleaned_data.get('receiver_username_2')
 
-    if receiver_username_1 and receiver_username_2 and receiver_username_1 == receiver_username_2:
+    if receiver_username_1 and receiver_username_2 and \
+       receiver_username_1 == receiver_username_2:
       self.add_error(
           'receiver_username_2',
           'Пожалуйста выберите разных пионеров как партнеров по лабе')
@@ -362,7 +363,7 @@ class LabKernelForm(forms.Form):
 class RelativePathField(forms.CharField):
 
   def validate(self, value):
-    super(forms.CharField, self).validate(value)
+    super().validate(value)
     allowed = string.ascii_letters + string.digits + '/'
     for c in value:
       if c not in allowed:

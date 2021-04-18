@@ -1,1 +1,1 @@
-__author__ = 'Insolia'
+__author__ = 'nkorobkov'

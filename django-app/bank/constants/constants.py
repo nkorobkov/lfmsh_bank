@@ -2,7 +2,7 @@
 from bank.constants.user_groups import UserGroups
 import datetime
 
-__author__ = 'Insolia'
+__author__ = 'nkorobkov'
 
 SIGN = '@'
 BANKIR_USERNAME = 'bank_manager'

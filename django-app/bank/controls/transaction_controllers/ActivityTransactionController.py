@@ -44,7 +44,7 @@ class ActivityTransactionController(TableTransactionController):
         formset_data, update_of)
 
     places = {
-        key: list(filter(lambda t: t['place'] == str(key), formset_data))
+        key: list(filter(lambda t, k=key: t['place'] == str(k), formset_data))
         for key in range(1, 5)
     }
     for place in places:

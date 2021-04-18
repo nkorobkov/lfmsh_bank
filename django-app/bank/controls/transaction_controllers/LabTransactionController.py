@@ -1,8 +1,7 @@
-from bank.forms import LabKernelForm
-
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 
+from bank.forms import LabKernelForm
 from bank.constants import MoneyTypeEnum, TransactionTypeEnum, AttendanceTypeEnum
 from bank.controls.transaction_controllers.TransactionController import TransactionController
 from bank.models.Money import Money
@@ -17,7 +16,7 @@ class LabTransactionController(TransactionController):
   template_url = 'bank/add/add_lab.html'
 
   @classmethod
-  def get_blank_form(cls, creator_username):
+  def get_blank_form(cls, _):
     lab_formset = formset_factory(LabKernelForm, max_num=1)
     return lab_formset
 

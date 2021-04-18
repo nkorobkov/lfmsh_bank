@@ -1,5 +1,5 @@
 # coding=utf-8
-__author__ = 'Insolia'
+__author__ = 'nkorobkov'
 
 from django.contrib.auth.models import User
 from bank.helper_functions import generate_password

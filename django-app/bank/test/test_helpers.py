@@ -1,6 +1,5 @@
-from django.test import TestCase, SimpleTestCase
-from bank.helper_functions import *
-import bank.constants
+from django.test import SimpleTestCase
+from bank.helper_functions import get_perm_name
 
 
 class TestPermName(SimpleTestCase):

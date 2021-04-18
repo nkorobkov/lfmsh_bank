@@ -1,33 +1,35 @@
 import logging
 import json
+from os import path
+import os
 from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.http import HttpResponseForbidden, HttpResponseBadRequest, JsonResponse
-from os import path
-import os
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required, permission_required
+from django_tables2 import RequestConfig
+
 from bank.controls.TransactionService import TransactionService
 from bank.controls.stats_controller import get_student_stats, get_report_student_stats, get_counters_of_user_who_is
 from bank.helper_functions import get_perm_name, get_students_markup
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required, permission_required
-
 from bank.models.Money import Money
 from bank.models.TransactionType import TransactionType
 from bank.models.Transaction import Transaction
 from main.settings import MEDIA_ROOT
 from .forms import *
-from django_tables2 import RequestConfig
 from .tables import *
 from .constants import *
 
 log = logging.getLogger('bank_log')
 
 
-# Create your views here.
 @login_required
 def index(request):
-  log.info('index page request from {}'.format(
-      request.user.account.long_name()))
+  """Home page for a user. 
+  Lists avaliable get transactions and add transactios menues
+  Shows user's current balace (student) or general stats (staff)
+  """
+  log.info('index page request from %s', request.user.account.long_name())
   student_stats = get_student_stats(request.user)
   transaction_types = TransactionType.objects.all()
   transaction_type_info = [{
@@ -50,9 +52,18 @@ def index(request):
 
 @login_required
 def add_transaction(request, type_name, update_of=None, from_template=None):
+  """Generic view to serve a form to add/update new transactions of any type
+  Get's transaction type
+  Checks user permissions to create transactions of that type
+  If GET: Returns the form template
+  If POST: Validates the form data and creates a new transaction
+
+  Uses strategy pattern to insert transaction-type-specific logic
+  from transaction controllers
+  """
   if not request.user.has_perm(
       get_perm_name(Actions.CREATE.value, 'self', type_name)):
-    log.warning(request.user.get_username() + ' access denied on add trans ' +
+    log.warning('%s access denied on add trans %s', request.user.get_username(),
                 type_name)
     return HttpResponseForbidden()
 
@@ -62,41 +73,39 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
 
     if update_of and not user_can_update(request, updated_transaction):
       return HttpResponseForbidden(
-          'У вас нет прав на изменение этой транзакции')
+          'You dont have permissions to update this transaction')
     if from_template and not user_can_use_template(request,
                                                    updated_transaction):
       return HttpResponseForbidden(
-          'Эту транзакцию нельзя использовать как шаблон')
+          'This transaction can not be used as a template')
     if not updated_transaction.type.name == type_name:
       return HttpResponseBadRequest(
-          'Тип транзакции из шаблона не совпадает с типом указанным в адресной строке'
-      )
+          'Transaction type from template does not match the type from the URL')
 
   controller = TransactionService.get_controller_for(type_name)
-  TransactionFormset = controller.get_blank_form(
+  transaction_formset = controller.get_blank_form(
       creator_username=request.user.username)
   if update_of or from_template:
     source = update_of if update_of else from_template
     initial = json.loads(get_object_or_404(Transaction, id=source).creation_map)
   else:
     initial = controller.get_initial_form_data(request.user.username)
-  if request.method == 'POST':
-    formset = TransactionFormset(request.POST, initial=initial)
+  if request.method == 'POST': # We received some data in the form
+    formset = transaction_formset(request.POST, initial=initial)
     if formset.is_valid():
       if update_of:
         try:
           get_object_or_404(Transaction, id=update_of).substitute()
-        except AttributeError:
+        except AttributeError as e:
           raise AttributeError(
-              'Попытка изменить транзакцию которую нельзя изменить')
+              'Attempt to update transaction that can not be updated') from e
       created_transaction = controller.get_transaction_from_form_data(
           formset.cleaned_data, update_of)
-      log.info(
-          'Valid add transaction from {}, update={}, transaction={}'.format(
-              request.user.account.long_name(), update_of, created_transaction))
+      log.info('Valid add transaction from %s, update=%s, transaction=%s',
+               request.user.account.long_name(), update_of, created_transaction)
       if request.user.has_perm(
           get_perm_name(Actions.PROCESS.value, 'self', type_name)):
-        # process transaction if have rights to do so
+        # Process transaction if have rights to do so.
         created_transaction.process()  # update should be inside.
       return render(
           request, 'bank/add/success.html', {
@@ -110,9 +119,9 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
                   user_can_decline(request, created_transaction)
           })
 
-  else:  # if GET
-    # prepare empty form
-    formset = TransactionFormset(initial=initial)
+  else: # If GET
+    # Prepare empty form
+    formset = transaction_formset(initial=initial)
   # if GET or if form was invalid
   render_map = {
       'formset': formset,
@@ -126,9 +135,10 @@ def add_transaction(request, type_name, update_of=None, from_template=None):
 
 @login_required()
 def decline(request, transaction_id):
+  """Cancel a transaction by id"""
   declined_transaction = get_object_or_404(Transaction, id=transaction_id)
-  log.info('Decline transaction from {}, transaction={}'.format(
-      request.user.account.long_name(), declined_transaction))
+  log.info('Decline transaction from %s, transaction=%s',
+           request.user.account.long_name(), declined_transaction)
 
   if not user_can_decline(request, declined_transaction):
     return HttpResponseForbidden('У вас нет прав отменить эту транзакцию')
@@ -159,8 +169,8 @@ def get_transaction_HTML(request):
   transaction = Transaction.objects.get(
       id=transaction_id)  # if there is no transaction it fails, but it's ok.
 
-  group = 'self' if request.user == transaction.creator else get_used_user_group(
-      transaction.creator)
+  group = 'self' if request.user == transaction.creator else \
+    get_used_user_group(transaction.creator)
   if not request.user.has_perm(
       get_perm_name(Actions.SEE.value, group, 'created_transactions')):
     return HttpResponseForbidden('У вас нет прав на просмотр этой транзакции')
@@ -280,8 +290,8 @@ def upload_file(request):
       f = request.FILES['file']
       local_path = form.cleaned_data['path'].strip('/')
       user_path = path.join(MEDIA_ROOT, local_path, f.name)
-      log.info('file uploaded by {},path={}'.format(
-          request.user.account.long_name(), user_path))
+      log.info('file uploaded by %s,path=%s', request.user.account.long_name(),
+               user_path)
       os.makedirs(path.dirname(user_path), exist_ok=True)
       with open(user_path, 'wb+') as destination:
         for chunk in f.chunks():
@@ -310,15 +320,16 @@ def study_stats(request):
   return render(request, 'bank/study_stats.html', render_dict)
 
 
-def media(request):
+def media(_):
+  """View to redirect to media folder served by nginx"""
   return redirect('/media/')
 
 
-def _get_transactions_of_user_who_is(user, target_user, group):
+def _get_transactions_of_user_who_is(request_owner, target_user, group):
   created_transactions = []
   received_money = []
   received_counters = []
-  if user.has_perm(
+  if request_owner.has_perm(
       get_perm_name(Actions.SEE.value, group, 'created_transactions')):
     for trans in Transaction.objects.filter(
         creator=target_user).order_by('-creation_timestamp').all():
@@ -329,7 +340,7 @@ def _get_transactions_of_user_who_is(user, target_user, group):
         target_transaction_identifier = 'created_transactions'
       trans_info.update({
           'update':
-              user.has_perm(
+              request_owner.has_perm(
                   get_perm_name(Actions.UPDATE.value, group,
                                 target_transaction_identifier))
               and trans.state.possible_transitions.filter(
@@ -337,7 +348,7 @@ def _get_transactions_of_user_who_is(user, target_user, group):
       })
       trans_info.update({
           'decline':
-              user.has_perm(
+              request_owner.has_perm(
                   get_perm_name(Actions.DECLINE.value, group,
                                 target_transaction_identifier))
               and trans.state.possible_transitions.filter(
@@ -345,13 +356,13 @@ def _get_transactions_of_user_who_is(user, target_user, group):
       })
       trans_info.update({
           'create':
-              user.has_perm(
+              request_owner.has_perm(
                   get_perm_name(Actions.CREATE.value, group,
                                 target_transaction_identifier))
       })
       created_transactions.append(trans_info)
 
-  if user.has_perm(
+  if request_owner.has_perm(
       get_perm_name(Actions.SEE.value, group, 'received_transactions')):
     received_money = Money.objects.filter(receiver=target_user).filter(
         counted=True).order_by('-creation_timestamp')
@@ -389,9 +400,8 @@ def user_can_use_template(request, template_trans):
 def user_can_decline(request, updated_transaction):
   if not updated_transaction.can_be_transitioned_to(States.declined.value):
     log.warning(
-        request.user.account.long_name() +
-        ' cant decline transaction because transaction can not be transitioned to declined state'
-    )
+        '%s cant decline transaction because transaction can not be transitioned to declined state',
+        request.user.account.long_name())
     return False
   if updated_transaction.creator.username == request.user.username:
     if request.user.has_perm(
@@ -413,16 +423,15 @@ def user_can_decline(request, updated_transaction):
             'created_transactions')):
       return True
     log.warning(
-        request.user.account.long_name() +
-        ' is not owner of transaction and do not have rights to decline ' +
+        '%s is not owner of transaction and do not have rights to decline %s group.'
+        ' but tries to decline it', request.user.account.long_name(),
         updated_transaction.creator.groups.get(
-            name__in=PERMISSION_RESPONSIBLE_GROUPS).name +
-        ' group. but tries to decline it')
+            name__in=PERMISSION_RESPONSIBLE_GROUPS).name)
 
   return False
 
 
-def get_used_user_group(user):
-  group = user.groups.get(
+def get_used_user_group(user_with_group):
+  group = user_with_group.groups.get(
       name__in=[UserGroups.staff.value, UserGroups.student.value])
   return group

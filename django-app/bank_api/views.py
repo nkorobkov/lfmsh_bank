@@ -8,11 +8,12 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 
-from bank.constants import Actions, UserGroups
-from bank.constants.bank_api_exeptions import *
+from bank.constants import Actions, UserGroups, TransactionTypeEnum
+from bank.constants.bank_api_exeptions import BankAPIExeption, TransactionTypeNotRecognized, \
+  CantCreateThisType, CreatorDoNotMatchRequestOwner
 from bank.controls.TransactionService import TransactionService
 from bank.controls.stats_controller import get_counters_of_user_who_is
-from bank.helper_functions import get_perm_name, TransactionTypeEnum
+from bank.helper_functions import get_perm_name
 from bank.models.TransactionType import TransactionType
 from bank.models.Money import Money
 from bank.models.Attendance import Attendance
@@ -24,7 +25,7 @@ log = logging.getLogger('bank_api_log')
 @login_required()
 def get_user_transactions(request):
   user = request.user
-  log.info('api user info call from {}'.format(user.account.long_name()))
+  log.info('api user info call from %s', user.account.long_name())
 
   if not (user.has_perm(get_perm_name(Actions.SEE.value, 'self', 'balance')) and
           user.has_perm(get_perm_name(Actions.SEE.value, 'self',
@@ -61,7 +62,7 @@ def add_transaction(request):
 
 
 @csrf_exempt
-def get_students(request):
+def get_students(_):
   students_data = User.objects.filter(
       groups__name__contains=UserGroups.student.value).order_by(
           'account__party', 'last_name')
@@ -71,7 +72,7 @@ def get_students(request):
 
 def make_transaction(request):
   user = request.user
-  log.info('api add transaction call from {}'.format(user.account.long_name()))
+  log.info('api add transaction call from %s', user.account.long_name())
 
   trans_data = json.loads(str(request.body, 'utf-8'))
 
@@ -90,11 +91,12 @@ def make_transaction(request):
   # check user can create such transactions
   if not request.user.has_perm(
       get_perm_name(Actions.CREATE.value, 'self', type_name)):
-    log.warning(request.user.get_username() + ' access denied on add trans ' +
-                type_name + 'through API')
+    log.warning('%s access denied on add trans %s through API',
+                request.user.get_username(), type_name)
     raise CantCreateThisType(type_name)
 
-  # if can -- call transaction controller to create transaction instance from request body
+  # if can -- call transaction controller to create
+  # transaction instance from request body
   controller = TransactionService.get_controller_for(type_name)
   transaction = controller.build_transaction_from_api_request(trans_data)
   # check if user can process this transaction

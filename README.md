@@ -12,7 +12,12 @@ A more detailed description of the project, architecture and technologies used c
 ## Installation and running
 
 Before any installation, you'll need to clone the repo and install the requirements.
-You may want to use a [virtual environment](https://docs.python.org/3/tutorial/venv.html) for this process.
+You may want to use a [virtual environment](https://docs.python.org/3/tutorial/venv.html) for this process. Here are example steps to do that: 
+```
+> python3 -m venv venv`
+> source venv/bin/activate
+> pip3 install -r requirements.txt
+```
 
 Run `cp .env.template .env` to create .env file with configurations. Update secret values accordingly (especially if you are planning to deploy).
 

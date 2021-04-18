@@ -189,7 +189,8 @@ class Command(BaseCommand):
     for block_data in blocks_data:
 
       if AttendanceBlock.objects.filter(name=block_data['name']).exists():
-        print('changing att block', block_data['name'])
+        if not silent:
+          print('changing att block', block_data['name'])
         block = AttendanceBlock.objects.get(name=block_data['name'])
 
         setattr(block, 'readable_name', block_data['readable_name'])

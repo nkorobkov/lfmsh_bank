@@ -12,7 +12,7 @@ class AbstractType(models.Model):
     return ['type_readable_name']
 
   def __str__(self):
-    return self.readable_name
+    return str(self.readable_name)
 
   class Meta:
     abstract = True

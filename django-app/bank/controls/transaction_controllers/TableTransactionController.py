@@ -44,7 +44,7 @@ class TableTransactionController(TransactionController):
             'account__party', 'last_name', 'first_name')
 
   @classmethod
-  def get_blank_form(cls, _):
+  def get_blank_form(cls, creator_username):
     students_query = cls._get_student_query()
     return formset_factory(cls._get_kernel_form(), max_num=len(students_query))
 

@@ -16,7 +16,7 @@ class LabTransactionController(TransactionController):
   template_url = 'bank/add/add_lab.html'
 
   @classmethod
-  def get_blank_form(cls, _):
+  def get_blank_form(cls, creator_username):
     lab_formset = formset_factory(LabKernelForm, max_num=1)
     return lab_formset
 

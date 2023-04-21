@@ -15,7 +15,7 @@ python-dotenv==0.17.0
 pytz==2017.2
 rope==0.18.0
 six==1.10.0
-sqlparse==0.3.0
+sqlparse==0.4.4
 toml==0.10.2
 transliterate==1.9
 unify==0.5
